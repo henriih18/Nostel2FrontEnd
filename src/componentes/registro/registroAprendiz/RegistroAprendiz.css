@@ -1,0 +1,98 @@
+/* Estilos generales */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: var(--background);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* Contenedor del formulario */
+.registro-container {
+    /*width: 100%;*/
+    width: 50vw;
+    max-width: 600px;
+    background: var(--backgroundContainer);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+/* Título */
+.registro-container h1 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #333;
+}
+
+/* Estilos del formulario */
+.registro-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+/* Hacer que los inputs ocupen toda la columna cuando sea necesario */
+.registro-form div {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Etiquetas */
+.registro-form label {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    text-align: left;
+}
+
+/* Campos de entrada */
+.registro-form input,
+.registro-form select {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    transition: border 0.3s ease-in-out;
+}
+
+/* Efecto hover y focus */
+.registro-form input:focus,
+.registro-form select:focus {
+    border-color: var(--boton);
+    outline: none;
+}
+
+/* Botón de envío */
+.registro-form button {
+    grid-column: span 2;
+    background: var(--boton);
+    color: white;
+    padding: 12px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out;
+}
+
+/* Efecto hover en el botón */
+.registro-form button:hover {
+    background: var(--botonesHover);
+}
+
+/* Diseño responsivo */
+@media (max-width: 600px) {
+    .registro-form {
+        grid-template-columns: 1fr;
+    }
+
+    .registro-form button {
+        grid-column: span 1;
+    }
+}
+

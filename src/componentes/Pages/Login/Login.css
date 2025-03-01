@@ -1,0 +1,94 @@
+/* Estilos generales */
+
+
+/* Contenedor principal */
+.PrincipalContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Contenedor del formulario */
+.loginContainer {
+    background: var(--backgroundContainer);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    width: 350px;
+    text-align: center;
+}
+
+/* Título */
+h1 {
+
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #333;
+
+}
+
+/* Formulario */
+.loginForm {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Inputs */
+.loginForm label {
+    font-weight: bold;
+    text-align: left;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.loginForm input,
+.loginForm select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    transition: border 0.3s ease-in-out;
+}
+
+.loginForm input:focus,
+.loginForm select:focus {
+    border-color: var(--boton);
+    outline: none;
+}
+
+/* Botón */
+button {
+    background-color: var(--boton);
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s ease;
+}
+
+button:hover {
+    background-color: var(--botonesHover);
+}
+
+/* Enlace de registro */
+.registro {
+    list-style: none;
+    padding: 0;
+    margin-top: 15px;
+
+}
+
+.registro li a {
+    text-decoration: none;
+    color: var(--boton);
+    font-weight: bold;
+}
+
+.registro li a:hover {
+    text-decoration: underline;
+}

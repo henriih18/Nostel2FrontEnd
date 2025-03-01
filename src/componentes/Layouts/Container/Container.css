@@ -1,0 +1,23 @@
+/* .container {
+  width: 90vw;
+  height: 100vh;
+  background-color: #2e9e0c;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 5rem;
+  animation: changeColor 5s infinite;
+} */
+
+.content {
+  margin: .3rem;
+  width: 100vw;
+  border: solid 1px #000;
+  background: #ececec;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+}
+
+

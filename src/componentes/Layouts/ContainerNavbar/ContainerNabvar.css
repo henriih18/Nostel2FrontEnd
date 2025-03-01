@@ -1,0 +1,7 @@
+.container-navbar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2rem;
+  animation: changeColor 5s infinite;
+}
