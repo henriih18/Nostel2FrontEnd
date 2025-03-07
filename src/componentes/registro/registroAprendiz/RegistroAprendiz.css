@@ -13,8 +13,8 @@ body {
 /* Contenedor del formulario */
 .registro-container {
     /*width: 100%;*/
-    width: 50vw;
-    max-width: 600px;
+    width: 60vw;
+    max-width: 700px;
     background: var(--backgroundContainer);
     padding: 30px;
     border-radius: 10px;
@@ -40,6 +40,8 @@ body {
 .registro-form div {
     display: flex;
     flex-direction: column;
+    position: relative;
+
 }
 
 /* Etiquetas */
@@ -95,4 +97,153 @@ body {
         grid-column: span 1;
     }
 }
+
+.opciones {
+
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+.docNumber::-webkit-outer-spin-button,
+.docNumber::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.docNumber {
+    -moz-appearance: textfield;
+}
+
+.tipoDoc {
+    display: grid !important ;/* Forzar grid */
+    grid-template-columns: repeat(2, 1fr); /* Label al ancho natural | Select ocupa resto */
+    align-items: center;
+
+
+    width: 100%;
+
+}
+
+.tipoDoc label {
+    display: flex;
+    width: auto ;/* Resetear el 30% */
+
+}
+
+.tipoDocSel {
+    width: 100% ;/* Forzar ancho completo dentro de la celda grid */
+    height: 2.2rem;
+
+    margin-bottom: .5rem;
+
+}
+
+/*!* Mensajes de error *!
+.error {
+    color: red;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+!* Estilo para inputs con error *!
+.registro-form input.error,
+.registro-form select.error {
+    border: 2px solid red;
+}
+
+!* Resaltar input en focus cuando hay error *!
+.registro-form input.error:focus,
+.registro-form select.error:focus {
+    border-color: darkred;
+    outline: none;
+    box-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
+}*/
+.error {
+    position: absolute;
+    top: calc(100% + 3px);
+    left: 0;
+    padding: 8px 12px;
+    background: #FFF0F2;
+    color: #D80027;
+    border: 1px solid #FFD1D9;
+    border-radius: 6px;
+    font-size: 0.85em;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    z-index: 2;
+    white-space: nowrap;
+    opacity: 0;
+    transform: translateY(-10px);
+    animation: errorAppear 0.3s ease forwards;
+    pointer-events: none;
+}
+
+.error::before {
+    content: "";
+    position: absolute;
+    bottom: 100%;
+    left: 12px;
+    border-width: 0 8px 8px;
+    border-style: solid;
+    border-color: transparent transparent #FFF0F2;
+}
+
+.error::after {
+    content: "⚠";
+    position: absolute;
+    left: -28px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.2em;
+    color: #D80027;
+}
+
+@keyframes errorAppear {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Campos con error */
+.registro-form input.error-input,
+.registro-form select.error-input {
+    border-color: #FF6B7C !important;
+    background: #FFF9FA;
+    animation: inputErrorShake 0.4s ease;
+}
+
+@keyframes inputErrorShake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-3px); }
+    75% { transform: translateX(3px); }
+}
+
+/* Ajustes para selects */
+select + .error {
+    top: calc(100% + 5px);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .error {
+        white-space: normal;
+        width: 100%;
+        top: calc(100% + 5px);
+    }
+
+    .error::after {
+        display: none;
+    }
+}
+
+
+
+
+
+
+
 
