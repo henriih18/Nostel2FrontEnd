@@ -198,7 +198,7 @@ export const RegistroAprendiz = () => {
         let erroresNuevos = {};
 
         if (!formData.tipoDocumento) erroresNuevos.tipoDocumento = "Seleccione un tipo de documento.";
-        if (!formData.documento.trim()) erroresNuevos.documento = "Ingrese un número de documento.";
+        if (!formData.documento) erroresNuevos.documento = "Ingrese un número de documento.";
         if (!formData.nombres.trim()) erroresNuevos.nombres = "Ingrese su nombre.";
         if (!formData.apellidos.trim()) erroresNuevos.apellidos = "Ingrese sus apellidos.";
         if (!formData.fechaNacimiento) erroresNuevos.fechaNacimiento = "Seleccione su fecha de nacimiento.";
@@ -277,7 +277,7 @@ export const RegistroAprendiz = () => {
                         <label htmlFor="tipoDocumento">Documento</label>
                         <select id="tipoDocumento" name="tipoDocumento" value={formData.tipoDocumento}
                                 onChange={handleChange} onFocus={handleFocus} /*required*/ className="tipoDocSel">
-                            <option value="" disabled>Seleccione el tipo de documento</option>
+                            <option value="" disabled>Tipo de documento</option>
                             <option value="CEDULA_CIUDADANIA">Cédula de Ciudadanía</option>
                             <option value="TARJETA_IDENTIDAD">Tarjeta de Identidad</option>
                             <option value="CEDULA_EXTRANJERIA">Cédula de Extranjería</option>
