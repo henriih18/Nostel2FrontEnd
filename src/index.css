@@ -7,6 +7,8 @@
     --botonesHover: #388E3C;
     --background: rgb(193, 196, 195);
     --backgroundContainer: #ececec;
+    --war: #ff4444;
+    --warHover: #cc0000;
 }
 
 body {

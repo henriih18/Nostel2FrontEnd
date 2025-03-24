@@ -1,0 +1,139 @@
+/* Estilos para GestionAprendices basados en RegistroAprendices.css */
+
+.gestion-aprendices-container {
+    max-width: 100%;
+    height: 100%;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f5f5f5;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.gestion-aprendices-container h2 {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+.aprendices-list {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+  flex-wrap: wrap;
+width: 100%;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    gap: 2rem;
+}
+
+.aprendiz-item {
+    text-align: center;
+    background-color: white;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.2s;
+    width: 12rem;
+    gap: .5rem;
+}
+
+.aprendiz-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.aprendiz-item strong {
+    color: var(--boton);
+    font-weight: 600;
+}
+
+.aprendiz-item span {
+    display: flex;
+    flex-wrap: wrap;
+    text-align: start;
+}
+
+.ficha-info {
+    background-color: #ecf0f1;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 14px;
+    color: #7f8c8d;
+}
+
+.error-message {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.loading-container {
+    text-align: center;
+    padding: 20px;
+    color: #7f8c8d;
+}
+
+/* Estilos para filtros o búsqueda (opcional) */
+.filtros-container {
+    margin-bottom: 20px;
+    display: flex;
+    gap: 10px;
+}
+
+.filtros-container input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.filtros-container button {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.filtros-container button:hover {
+    background-color: #2980b9;
+}
+
+/* Mensaje cuando no hay aprendices */
+.no-aprendices {
+    text-align: center;
+    padding: 30px;
+    color: #7f8c8d;
+    font-style: italic;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .gestion-aprendices-container {
+        padding: 15px;
+    }
+
+    .aprendiz-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .ficha-info {
+        margin-top: 8px;
+        align-self: flex-start;
+    }
+}

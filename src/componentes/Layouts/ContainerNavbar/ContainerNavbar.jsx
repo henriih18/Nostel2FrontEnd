@@ -5,7 +5,7 @@ import "./ContainerNabvar.css";
 const ContainerNavbar = () => {
   return (
     <div className="container-navbar">
-      <Navbar />
+      <Navbar  />
     </div>
   );
 };

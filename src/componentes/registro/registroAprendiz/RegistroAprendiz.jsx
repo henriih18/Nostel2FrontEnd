@@ -177,7 +177,7 @@ export const RegistroAprendiz = () => {
         contrasena: "",
         telefono: "",
         residencia: "",
-        ficha: ""
+        numeroFicha: ""
     });
 
     const handleChange = (e) => {
@@ -223,7 +223,7 @@ export const RegistroAprendiz = () => {
 
         if (!formData.genero) erroresNuevos.genero = "Seleccione un género.";
         if (!formData.residencia.trim()) erroresNuevos.residencia = "Ingrese su dirección de residencia.";
-        if (!formData.ficha) erroresNuevos.ficha = "Seleccione una ficha.";
+        if (!formData.numeroFicha) erroresNuevos.numeroFicha = "Seleccione una ficha.";
 
         setErrores(erroresNuevos);
         // Enfocar el primer campo con error
@@ -247,20 +247,19 @@ export const RegistroAprendiz = () => {
             navigate("/login");
         } catch (error) {
             if (error.response) {
-                if (error.response.data.error) {
-                    if (error.response.data.error.includes("correo")) {
-                        setErrores({correo: error.response.data.error});
-                    } else if (error.response.data.error.includes("documento")) {
-                        setErrores({documento: error.response.data.error});
-                    } else {
-                        setErrores({general: error.response.data.error});
-                    }
-                } else {
-                    setErrores(error.response.data);
-                }
+                const data = error.response.data;
 
+                if (data.correo) {
+                    setErrores({ correo: data.correo }); // Mensaje del backend
+                } else if (data.documento) {
+                    setErrores({ documento: data.documento });
+                } else if (data.general) {
+                    setErrores({ general: data.general });
+                } else {
+                    setErrores({ general: "Ocurrió un error desconocido." });
+                }
             } else {
-                setErrores({general: "No se pudo conectar al servidor."});
+                setErrores({ general: "No se pudo conectar al servidor." });
             }
         }
         setLoading(false);
@@ -348,15 +347,18 @@ export const RegistroAprendiz = () => {
 
                 <div>
                     <label>Ficha</label>
-                    <select name="ficha" value={formData.ficha} onChange={handleChange} onFocus={handleFocus} /*required*/
+                    <select name="numeroFicha" value={formData.numeroFicha} onChange={handleChange} onFocus={handleFocus} /*required*/
                             className="opciones">
                         <option value="" disabled>Seleccione su ficha</option>
+
                         {fichas.map(ficha => (
-                            <option key={ficha.idFicha} value={ficha.idFicha}
+                            <option key={ficha.idFicha} value={ficha.numeroFicha}
                                     className="opciones">{`${ficha.numeroFicha} ${ficha.nombrePrograma}`}</option>
                         ))}
+
+
                     </select>
-                    {errores.ficha && <p className="error">{errores.ficha}</p>}
+                    {errores.numeroFicha && <p className="error">{errores.numeroFicha}</p>}
                 </div>
 
                 {errores.general && <p className="error">{errores.general}</p>}
