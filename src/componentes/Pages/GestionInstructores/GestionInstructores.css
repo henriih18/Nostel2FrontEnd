@@ -1,0 +1,139 @@
+/* Estilos para GestionInstructores */
+
+.gestion-instructores-container {
+    max-width: 100%;
+    height: 100%;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f5f5f5;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.gestion-instructores-container h2 {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+.instructores-list {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    gap: 2rem;
+}
+
+.instructor-item {
+    text-align: center;
+    background-color: white;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.2s;
+    width: 12rem;
+    gap: .5rem;
+}
+
+.instructor-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.instructor-nombre {
+    color: var(--boton);
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.instructor-especialidad {
+    display: flex;
+    flex-wrap: wrap;
+    text-align: start;
+    font-size: 14px;
+    color: #7f8c8d;
+}
+
+.error-message {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.loading-container {
+    text-align: center;
+    padding: 20px;
+    color: #7f8c8d;
+}
+
+.no-instructores {
+    text-align: center;
+    padding: 30px;
+    color: #7f8c8d;
+    font-style: italic;
+}
+
+/* Estilos para depuración */
+.debug-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.debug-container h2 {
+    color: #343a40;
+    margin-bottom: 15px;
+}
+
+.debug-container pre {
+    background-color: #e9ecef;
+    padding: 15px;
+    border-radius: 5px;
+    overflow-x: auto;
+    font-size: 14px;
+    color: #212529;
+    margin-bottom: 20px;
+}
+
+.debug-container button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.debug-container button:hover {
+    background-color: #0069d9;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .gestion-instructores-container,
+    .debug-container {
+        padding: 15px;
+    }
+
+    .instructor-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
