@@ -6,7 +6,7 @@ export const Navbar = () => {
 
   const handleLogout = () => {
     console.log("Cerrando sesión...");
-    localStorage.removeItem("token"); // Eliminar el token
+    sessionStorage.removeItem("token"); // Eliminar el token
     window.location.reload(); // Recargar la página para volver al login
   };
   return (

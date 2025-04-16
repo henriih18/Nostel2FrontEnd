@@ -11,11 +11,13 @@ import { AgregarFicha } from "./componentes/Pages/GestionFichas/AgregarFicha.jsx
 import {GestionInstructores} from "./componentes/Pages/GestionInstructores/GestionInstructores.jsx";
 import { AgregarInstructor } from "./componentes/Pages/GestionInstructores/AgregarInstructor.jsx";
 import {GestionAprendices} from "./componentes/Pages/GestionAprendices/GestionAprendices.jsx";
+import { AgregarActividadComplementaria } from "./componentes/Pages/GestionAprendices/Actividades/AgregarActividadComplementaria.jsx"
 import ContainerNavbar from "./componentes/Layouts/ContainerNavbar/ContainerNavbar";
+import Aprendiz from "./componentes/Pages/GestionAprendices/Aprendiz/Aprendiz";
 
 function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(() => {
-        return localStorage.getItem("token") ? true : false;
+        return sessionStorage.getItem("token") ? true : false;
     });
     const [data, setData] = useState(null);
 
@@ -31,7 +33,7 @@ function App() {
 
     // Función para manejar el login y guardar la sesión
     const handleLogin = (token) => {
-        localStorage.setItem("token", token);
+        sessionStorage.setItem("token", token);
         setIsAuthenticated(true);
     };
 
@@ -46,12 +48,15 @@ function App() {
                 <Routes>
                     <Route path="/" element={<Home/>}/>
                     <Route path="/gestion-programas" element={<GestionProgramas/>}/>
+                    <Route path="/agregar-actividad-complementaria" element={<AgregarActividadComplementaria/>}/>
                     <Route path="/agregar-programa" element={<AgregarPrograma />} />
                     <Route path="/gestion-fichas" element={<GestionFichas/>}/>
                     <Route path="/agregar-ficha" element={<AgregarFicha />} />
                     <Route path="/gestion-instructores" element={<GestionInstructores/>}/>
                     <Route path="/agregar-instructor" element={<AgregarInstructor />} />
                     <Route path="/gestion-aprendices" element={<GestionAprendices/>}/>
+                    <Route path="/aprendices/:id" element={<Aprendiz />} />
+
                     <Route path="/AboutUs" element={<AboutUs/>}/>
                 </Routes>
             </Container>
@@ -61,4 +66,89 @@ function App() {
     );
 }
 
-export default App;
+ export default App;
+
+/*
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { Login } from './componentes/Pages/Login/Login';
+import Navbar from './componentes/Layout/Navbar/Navbar';
+// Importa tus otros componentes aquí
+
+function App() {
+  const [token, setToken] = useState(sessionStorage.getItem('token'));
+
+  // Función para manejar el inicio de sesión exitoso
+  const handleLogin = (newToken) => {
+    setToken(newToken);
+  };
+
+  // Componente para rutas protegidas
+  const ProtectedRoute = ({ children, allowedRoles }) => {
+    const userToken = sessionStorage.getItem('token');
+    const userRole = sessionStorage.getItem('rol');
+    
+    if (!userToken) {
+      return <Navigate to="/" replace />;
+    }
+    
+    if (allowedRoles && !allowedRoles.includes(userRole)) {
+      return <Navigate to="/" replace />;
+    }
+    
+    return children;
+  };
+
+  return (
+    <Router>
+      El Navbar se mostrará en todas las páginas 
+      <Navbar />
+      
+      <Routes>
+         Ruta pública - Login 
+        <Route path="/" element={!token ? <Login onLogin={handleLogin} /> : 
+          <Navigate to={
+            sessionStorage.getItem('rol') === "ROLE_APRENDIZ" ? "/aprendices" : 
+            sessionStorage.getItem('rol') === "ROLE_INSTRUCTOR" ? "/instructor" : 
+            sessionStorage.getItem('rol') === "ROLE_ADMIN" ? "/admin" : "/"
+          } />
+        } />
+        
+         Ruta de registro 
+        <Route path="/registroAprendiz" element={<RegistroAprendiz />} />
+        
+        Rutas protegidas 
+        <Route path="/aprendices" element={
+          <ProtectedRoute allowedRoles={["ROLE_APRENDIZ"]}>
+            <DashboardAprendiz />
+          </ProtectedRoute>
+        } />
+        
+        <Route path="/instructor" element={
+          <ProtectedRoute allowedRoles={["ROLE_INSTRUCTOR"]}>
+            <DashboardInstructor />
+          </ProtectedRoute>
+        } />
+        
+        <Route path="/admin" element={
+          <ProtectedRoute allowedRoles={["ROLE_ADMIN"]}>
+            <DashboardAdmin />
+          </ProtectedRoute>
+        } />
+        
+         Ruta para página no encontrada
+        <Route path="*" element={<PaginaNoEncontrada />} />
+      </Routes>
+    </Router>
+  );
+}
+
+// Componentes temporales para las rutas que no has implementado aún
+// Reemplaza estos con tus componentes reales
+const DashboardAprendiz = () => <div>Dashboard Aprendiz</div>;
+const DashboardInstructor = () => <div>Dashboard Instructor</div>;
+const DashboardAdmin = () => <div>Dashboard Admin</div>;
+const RegistroAprendiz = () => <div>Registro de Aprendiz</div>;
+const PaginaNoEncontrada = () => <div>Página no encontrada</div>;
+
+export default App; */

@@ -12,19 +12,21 @@ export const Login = ({ onLogin }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // URL correcta con el context-path configurado
+     
       const response = await axios.post("http://localhost:8080/api/auth/login", {
         correo: correo,
         contrasena: contrasena,
       });
 
-      const { token, rol, correo: correoResp, nombreCompleto } = response.data;
+      const { token, rol, correo: correoResp, nombreCompleto, id } = response.data;
 
       if (token && rol) {
         sessionStorage.setItem("token", token);
         sessionStorage.setItem("rol", rol);
         sessionStorage.setItem("correo", correoResp);
         sessionStorage.setItem("nombre", nombreCompleto);
+        sessionStorage.setItem("idUsuario", id);
+
 
         onLogin(token);
 
