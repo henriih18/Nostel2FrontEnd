@@ -22,7 +22,7 @@ export const GestionInstructores = () => {
       console.log("Iniciando fetchInstructores...");
 
       // Obtener token del localStorage
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       if (!token) {
         console.error('No hay token de autenticación');
         setError('Sesión no válida. Por favor inicie sesión nuevamente.');

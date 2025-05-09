@@ -22,7 +22,7 @@ export const GestionProgramas = () => {
   const obtenerProgramas = async () => {
     try {
       // Obtener el token del localStorage
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
 
       if (!token) {
         console.error('No hay token de autenticación');

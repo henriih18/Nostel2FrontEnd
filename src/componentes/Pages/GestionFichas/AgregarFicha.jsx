@@ -32,7 +32,7 @@ export const AgregarFicha = () => {
         e.preventDefault();
 
         try {
-            const token = localStorage.getItem('token');
+            const token = sessionStorage.getItem('token');
 
             if (!token) {
                 console.error('No hay token de autenticación');

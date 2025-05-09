@@ -1,0 +1,269 @@
+/* ===== Contenedor principal ===== */
+.formato-sena-container {
+  font-family: 'Arial', sans-serif;
+  max-width: 100%;
+  max-height: 100%;
+  margin: 0 auto;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+}
+
+/* ===== Título del documento y encabezado ===== */
+.document-title {
+  text-align: center;
+  font-size: 1rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #2c3e50;
+  line-height: 1.4;
+}
+
+.document-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.875rem;
+  margin-bottom: 20px;
+}
+
+/* ===== Estructura del formulario ===== */
+.sena-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-section {
+  border: 1px solid #ddd;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+  padding: 12px;
+}
+
+.form-section h3 {
+  margin: 0 0 8px;
+  font-size: 1rem;
+  color: #2c3e50;
+  border-bottom: 2px solid #3498db;
+  padding-bottom: 5px;
+}
+
+/* ===== Filas y campos del formulario ===== */
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.form-group {
+  flex: 1;
+  min-width: 200px;
+  margin-bottom: 8px;
+}
+
+.form-group.wide {
+  flex: 100%;
+}
+
+label {
+  display: block;
+  margin-bottom: 3px;
+  font-weight: bold;
+  font-size: 0.875rem;
+  color: #2c3e50;
+}
+
+input[type="text"],
+input[type="date"],
+input[type="time"],
+select,
+textarea {
+  width: 100%;
+  padding: 6px;
+  font-size: 0.875rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+input[readonly] {
+  background-color: #f0f0f0;
+  cursor: not-allowed;
+}
+
+/* ===== Radios y checkboxes ===== */
+.radio-group,
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  cursor: pointer;
+}
+
+.radio-group {
+  margin-top: 3px;
+  gap: 12px;
+}
+
+.checkbox-label {
+  margin: 0 12px 6px 0;
+  font-weight: normal;
+}
+
+/* ===== ReactQuill ===== */
+.ql-toolbar {
+  border: 1px solid #ddd !important;
+  border-radius: 4px 4px 0 0;
+}
+
+.ql-container {
+  border: 1px solid #ddd !important;
+  border-radius: 0 0 4px 4px;
+  height: 120px;
+  max-height: 120px;
+  overflow-y: auto;
+}
+
+/* ===== Competencias y evidencias ===== */
+.competencies-grid,
+.valoracion-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+  overflow-y: auto;
+}
+
+.competencies-grid {
+  max-height: 200px;
+}
+
+.valoracion-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  max-height: 300px;
+  gap: 12px;
+}
+
+.valoracion-item {
+  background-color: #fff;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+/* ===== Textos y firmas ===== */
+.commitment-text {
+  font-style: italic;
+  color: #555;
+  border-top: 1px solid #ddd;
+  padding-top: 8px;
+  margin-bottom: 12px;
+}
+
+/* ===== Botones ===== */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 15px;
+}
+
+.submit-button,
+.cancel-button {
+  padding: 8px 16px;
+  border: none;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.submit-button {
+  background-color: #27ae60;
+  color: white;
+}
+
+.submit-button:hover {
+  background-color: #219955;
+}
+
+.submit-button:disabled {
+  background-color: #95a5a6;
+  cursor: not-allowed;
+}
+
+.cancel-button {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.cancel-button:hover {
+  background-color: #c0392b;
+}
+
+/* ===== Mensajes ===== */
+.error-message,
+.success-message {
+  padding: 8px;
+  margin-top: 12px;
+  border-radius: 4px;
+  border: 1px solid;
+}
+
+.error-message {
+  color: #e74c3c;
+  background-color: #fadbd8;
+  border-color: #f5b7b1;
+}
+
+.success-message {
+  color: #27ae60;
+  background-color: #d5f5e3;
+  border-color: #a3e4d7;
+}
+
+/* ===== Colores por secciones ===== */
+.institutional   { background-color: #eaf2f8; border-color: #3498db; }
+.general-info    { background-color: #e8f8f5; border-color: #1abc9c; }
+.personal-data   { background-color: #fef9e7; border-color: #f39c12; }
+.results         { background-color: #f5eef8; border-color: #9b59b6; }
+.activities      { background-color: #ebf5fb; border-color: #5dade2; }
+.signatures      { background-color: #fdedec; border-color: #e74c3c; }
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .formato-sena-container {
+    padding: 15px;
+    max-height: 100vh;
+  }
+
+  .form-row {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .form-group {
+    min-width: 100%;
+  }
+
+  .radio-group {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .valoracion-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ql-container {
+    height: 100px;
+  }
+
+  .competencies-grid,
+  .valoracion-grid {
+    max-height: 250px;
+  }
+}

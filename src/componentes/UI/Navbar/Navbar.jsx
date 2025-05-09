@@ -18,7 +18,7 @@ export const Navbar = () => {
         <li><NavLink to='/gestion-instructores'>Instructores</NavLink></li>
         <li><NavLink to='/gestion-programas'>Programas</NavLink></li>
         <li><NavLink to='/aboutUs'>Acerca de Nosotros</NavLink></li>
-        <button onClick={handleLogout}>Cerrar Sesión</button>
+        <button className='botonSalir' onClick={handleLogout}>Cerrar Sesión</button>
       </ul>
 
     </nav>

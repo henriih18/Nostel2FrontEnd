@@ -14,6 +14,9 @@ import {GestionAprendices} from "./componentes/Pages/GestionAprendices/GestionAp
 import { AgregarActividadComplementaria } from "./componentes/Pages/GestionAprendices/Actividades/AgregarActividadComplementaria.jsx"
 import ContainerNavbar from "./componentes/Layouts/ContainerNavbar/ContainerNavbar";
 import Aprendiz from "./componentes/Pages/GestionAprendices/Aprendiz/Aprendiz";
+import AgregarPlanMejoramiento from "./componentes/Pages/GestionAprendices/PlanesMejoramiento/AgregarPlanMejoramiento.jsx";
+import AgregarComentario from "./componentes/Pages/GestionAprendices/Comentarios/AgregarComentario.jsx";
+import EditarComentario from "./componentes/Pages/GestionAprendices/Comentarios/EditarComentario.jsx";
 
 function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(() => {
@@ -48,14 +51,21 @@ function App() {
                 <Routes>
                     <Route path="/" element={<Home/>}/>
                     <Route path="/gestion-programas" element={<GestionProgramas/>}/>
-                    <Route path="/agregar-actividad-complementaria" element={<AgregarActividadComplementaria/>}/>
+                    
                     <Route path="/agregar-programa" element={<AgregarPrograma />} />
+
                     <Route path="/gestion-fichas" element={<GestionFichas/>}/>
                     <Route path="/agregar-ficha" element={<AgregarFicha />} />
+
                     <Route path="/gestion-instructores" element={<GestionInstructores/>}/>
                     <Route path="/agregar-instructor" element={<AgregarInstructor />} />
+                    
                     <Route path="/gestion-aprendices" element={<GestionAprendices/>}/>
-                    <Route path="/aprendices/:id" element={<Aprendiz />} />
+                    <Route path="/agregar-actividad/:idAprendiz" element={<AgregarActividadComplementaria/>}/>
+                    <Route path="/agregar-plan/:idAprendiz" element={<AgregarPlanMejoramiento/>}/>
+                    <Route path="/agregar-comentario/:idAprendiz" element={<AgregarComentario/>}/>
+                    <Route path="/aprendices/:idAprendiz/comentarios/:idComentario/editar" element={<EditarComentario />} />
+                    <Route path="/aprendices/:idAprendiz" element={<Aprendiz />} />
 
                     <Route path="/AboutUs" element={<AboutUs/>}/>
                 </Routes>

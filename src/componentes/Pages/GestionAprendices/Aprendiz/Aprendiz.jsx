@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import ActividadesComplementarias from '../Actividades/ActividadesComplementarias';
-import PlanesMejoramiento from '../Planes/PlanesMejoramiento';
+import PlanesMejoramiento from '../PlanesMejoramiento/PlanesMejoramiento';
 import Comentarios from '../Comentarios/Comentarios';
 
 
 
 const DetalleAprendiz = () => {
-    const { id } = useParams();
+    const { idAprendiz } = useParams();
     const [aprendiz, setAprendiz] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -18,6 +18,7 @@ const DetalleAprendiz = () => {
     useEffect(() => {
         const fetchAprendiz = async () => {
             const token = sessionStorage.getItem('token');
+
 
             if (!token) {
                 navigate('/login');
@@ -32,12 +33,12 @@ const DetalleAprendiz = () => {
                     }
                 };
 
-                const response = await axios.get(`http://localhost:8080/api/aprendices/${id}`, config);
+                const response = await axios.get(`http://localhost:8080/api/aprendices/${idAprendiz}`, config);
                 setAprendiz(response.data);
                 setLoading(false);
             } catch (error) {
                 if (error.response?.status === 403 || error.response?.status === 401) {
-                    localStorage.removeItem('token');
+                    sessionStorage.removeItem('token');
                     navigate('/login');
                 } else {
                     setError('Error al cargar el aprendiz.');
@@ -47,7 +48,7 @@ const DetalleAprendiz = () => {
         };
 
         fetchAprendiz();
-    }, [id, navigate]);
+    }, [idAprendiz, navigate]);
 
     if (loading) return <div>Cargando...</div>;
     if (error) return <div>{error}</div>;
@@ -79,9 +80,9 @@ const DetalleAprendiz = () => {
             </div>
         )}
 
-{seccion === 'actividades' && <ActividadesComplementarias idAprendiz={id} />}
-            {seccion === 'planes' && <PlanesMejoramiento idAprendiz={id} />}
-            {seccion === 'comentarios' && <Comentarios idAprendiz={id} />}
+{seccion === 'actividades' && <ActividadesComplementarias idAprendiz={idAprendiz} />}
+            {seccion === 'planes' && <PlanesMejoramiento idAprendiz={idAprendiz} />}
+            {seccion === 'comentarios' && <Comentarios idAprendiz={idAprendiz} />}
     </div>
 </>
 

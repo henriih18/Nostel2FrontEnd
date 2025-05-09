@@ -25,13 +25,13 @@ export const GestionFichas = () => {
     const fetchFichas = async () => {
         try {
             // Obtener el token del localStorage
-            const token = localStorage.getItem('token');
+            const token = sessionStorage.getItem('token');
 
             if (!token) {
                 console.error('No hay token de autenticación');
                 setError('Sesión no válida. Por favor inicie sesión nuevamente.');
                 setTimeout(() => {
-                    navigate('/login');
+                    navigate('/');
                 }, 3000);
                 return;
             }
@@ -61,7 +61,7 @@ export const GestionFichas = () => {
                 setError('No tiene permisos para acceder a esta información.');
                 localStorage.removeItem('token');
                 setTimeout(() => {
-                    navigate('/login');
+                    navigate('/');
                 }, 3000);
             } else {
                 setError(`Error del servidor: ${error.response.status}`);
@@ -80,7 +80,7 @@ export const GestionFichas = () => {
         
         if (confirmar) {
             try {
-                const token = localStorage.getItem('token');
+                const token = sessionStorage.getItem('token');
                 
                 if (!token) {
                     setError('Sesión no válida. Por favor inicie sesión nuevamente.');

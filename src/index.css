@@ -32,3 +32,253 @@ body {
 
 
 
+
+
+/* Estilos para el modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-container {
+  background: white;
+  border-radius: 8px;
+  width: 50%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  animation: fadeIn 0.3s ease;
+}
+
+.modal-header,
+.modal-footer {
+  padding: 16px;
+  background-color: #f5f5f5;
+}
+
+.modal-body {
+  padding: 20px;
+}
+
+.close-button {
+  float: right;
+  font-size: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.cancel-button,
+.submit-button {
+  margin: 0 8px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.cancel-button {
+  background-color: #ccc;
+}
+
+.submit-button {
+  background-color: #4CAF50;
+  color: white;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+
+/* 
+.acta-container {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  font-family: "Times New Roman", serif;
+  font-size: 12pt;
+  color: #000;
+  background: white;
+  padding: 40px;
+  line-height: 1.6;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.acta-container h2 {
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 16pt;
+  margin-bottom: 20px;
+}
+
+.acta-container h3 {
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 13pt;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.acta-container p {
+  margin: 5px 0;
+}
+
+.acta-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.acta-table th,
+.acta-table td {
+  border: 1px solid #000;
+  padding: 6px;
+  text-align: left;
+  vertical-align: top;
+  font-size: 11pt;
+}
+
+.legal-note {
+  font-size: 10pt;
+  margin-top: 30px;
+  text-align: justify;
+}
+
+.version-codes {
+  font-size: 10pt;
+  text-align: right;
+  margin-top: 10px;
+}
+
+@media print {
+  @page {
+    size: A4;
+    margin: 25mm;
+  }
+}
+
+.acta-cell-label {
+  font-weight: bold;
+  padding: 6px;
+}
+
+.acta-section-title {
+  text-align: center;
+  font-weight: bold;
+  padding: 8px 0;
+  background-color: #f5f5f5;
+}
+
+.acta-spaced {
+  height: 100px;
+  vertical-align: top;
+  padding: 6px;
+}
+ */
+.acta-imprimible {
+  font-family: "Times New Roman", serif;
+  font-size: 12pt;
+  color: #000;
+  background: white;
+  padding: 40px;
+  width: 100%;
+  max-width: 100%; /* Fuerza a usar todo el ancho disponible */
+  box-sizing: border-box;
+}
+
+.acta-tabla {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: auto;
+}
+
+.acta-tabla td,
+.acta-tabla th {
+  border: 1px solid #000;
+  padding: 6px;
+  vertical-align: top;
+  word-wrap: break-word;
+}
+
+.titulo-principal {
+  text-align: center;
+  font-weight: bold;
+}
+
+.fila-celda {
+  min-height: 60px;
+}
+
+.seccion-central {
+  text-align: center;
+  font-weight: bold;
+  background-color: #f3f3f3;
+}
+
+.nota-legal {
+  font-size: 10pt;
+  text-align: justify;
+  padding: 10px;
+}
+
+.pie-codigo {
+  font-size: 10pt;
+  text-align: center;
+  padding-top: 5px;
+}
+
+/* Columnas proporcionadas para tablas de compromisos y asistentes */
+.acta-tabla th:nth-child(1),
+.acta-tabla td:nth-child(1) {
+  width: 25%;
+}
+
+.acta-tabla th:nth-child(2),
+.acta-tabla td:nth-child(2) {
+  width: 15%;
+}
+
+.acta-tabla th:nth-child(3),
+.acta-tabla td:nth-child(3) {
+  width: 25%;
+}
+
+.acta-tabla th:nth-child(4),
+.acta-tabla td:nth-child(4) {
+  width: 35%;
+}
+
+/* Para la tabla de asistentes (5 columnas) */
+.acta-tabla th:nth-child(5),
+.acta-tabla td:nth-child(5) {
+  width: 30%;
+}
+
+@media print {
+  @page {
+    size: letter portrait;
+    margin: 20mm;
+  }
+
+  .acta-imprimible {
+    padding: 0;
+  }
+}

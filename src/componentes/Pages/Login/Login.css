@@ -1,94 +1,242 @@
-/* Estilos generales */
+/* Login.css - Versión Mejorada */
+:root {
+  --primary: #4CAF50;
+  --primary-hover: #388E3C;
+  --background: rgb(193, 196, 195);
+  --background-container: rgba(236, 236, 236, 0.9);
+  --error: #ff4444;
+  --text-dark: #2d3748;
+  --text-medium: #4a5568;
+  --text-light: #f8fafc;
+  --border: rgba(0, 0, 0, 0.1);
+}
 
+/* Estilos base */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
 
-/* Contenedor principal */
+/* Contenedor principal - Mismo estilo que Registro */
 .PrincipalContainer {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: var(--background);
+  padding: 1rem;
+  width: 100vw;
 }
 
-/* Contenedor del formulario */
+/* Contenedor del login - Estilo consistente */
 .loginContainer {
-    background: var(--backgroundContainer);
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-    width: 350px;
-    text-align: center;
+  width: 100vw;
+  max-width: 650px;
+  padding: 2rem;
+  background: var(--background-container);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 15px 60px rgba(0, 0, 0, 0.15),
+              0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+  position: relative;
+  overflow: hidden;
 }
 
-/* Título */
-h1 {
+/* Efectos de fondo animados - Igual que Registro */
+.loginContainer::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: 
+    radial-gradient(circle at 30% 30%, rgba(76, 175, 80, 0.08) 0%, transparent 40%),
+    radial-gradient(circle at 70% 70%, rgba(56, 142, 60, 0.08) 0%, transparent 40%);
+  animation: float 20s linear infinite;
+  z-index: -1;
+}
 
-    margin-bottom: 20px;
-    font-size: 24px;
-    color: #333;
+.loginContainer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 6px;
+  background: linear-gradient(90deg, var(--primary), var(--primary-hover), var(--primary));
+  background-size: 200% 100%;
+  animation: gradientShift 6s ease infinite;
+  z-index: 1;
+}
 
+/* Título - Mismo estilo */
+.loginContainer h1 {
+  text-align: center;
+  margin-bottom: 2.5rem;
+  color: var(--text-dark);
+  font-size: 2.2rem;
+  position: relative;
+  padding-bottom: 1.5rem;
+  font-weight: 700;
+}
+
+.loginContainer h1::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary), var(--primary-hover));
+  border-radius: 5px;
 }
 
 /* Formulario */
 .loginForm {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  
 }
 
-/* Inputs */
+.loginForm div {
+  position: relative;
+  
+}
+
 .loginForm label {
-    font-weight: bold;
-    text-align: left;
-    display: block;
-    margin-bottom: 5px;
+  display: block;
+  margin-bottom: 0.8rem;
+  font-weight: 600;
+  color: var(--text-medium);
+  font-size: 1rem;
 }
 
-.loginForm input,
-.loginForm select {
-    width: 100%;
-    padding: 10px;
-    border-radius: 5px;
-    font-size: 14px;
-    border: 1px solid #ccc;
-    transition: border 0.3s ease-in-out;
+.loginForm input {
+  width: 100%;
+  padding: 1rem;
+  border: 2px solid rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.7);
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
 }
 
-.loginForm input:focus,
-.loginForm select:focus {
-    border-color: var(--boton);
-    outline: none;
+
+.loginForm input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(76, 175, 80, 0.15),
+              0 4px 20px rgba(76, 175, 80, 0.1);
+  outline: none;
+  background: white;
 }
 
-/* Botón */
-button {
-    background-color: var(--boton);
-    color: white;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background 0.3s ease;
+/* Botón - Mismo estilo que Registro */
+.loginForm button {
+  background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+  color: white;
+  border: none;
+  padding: 1.2rem;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1.1rem;
+  transition: all 0.4s ease;
+  margin-top: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 10px 25px rgba(76, 175, 80, 0.3);
+  position: relative;
+  overflow: hidden;
+  width: 100%;
 }
 
-button:hover {
-    background-color: var(--botonesHover);
+.loginForm button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 35px rgba(76, 175, 80, 0.4);
+}
+
+.loginForm button:active {
+  transform: translateY(-1px);
+}
+
+.loginForm button:disabled {
+  background: linear-gradient(135deg, #a5d6a7, #c8e6c9);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 /* Enlace de registro */
 .registro {
-    list-style: none;
-    padding: 0;
-    margin-top: 15px;
-
+  list-style: none;
+  padding: 0;
+  margin-top: 2rem;
+  text-align: center;
 }
 
 .registro li a {
-    text-decoration: none;
-    color: var(--boton);
-    font-weight: bold;
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
 }
 
 .registro li a:hover {
-    text-decoration: underline;
+  text-decoration: underline;
+  color: var(--primary-hover);
+}
+
+/* Animaciones (igual que Registro) */
+@keyframes float {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(-5%, -5%); }
+  50% { transform: translate(-10%, 0); }
+  75% { transform: translate(-5%, 5%); }
+  100% { transform: translate(0, 0); }
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .PrincipalContainer {
+    padding: 1rem;
+  }
+  
+  .loginContainer {
+    padding: 2rem 1.5rem;
+    max-width: 100%;
+  }
+  
+  .loginContainer h1 {
+    font-size: 1.8rem;
+    margin-bottom: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .loginContainer {
+    padding: 1.5rem 1rem;
+    border-radius: 16px;
+  }
+  
+  .loginForm {
+    gap: 1.5rem;
+  }
+  
+  .loginForm input {
+    padding: 0.9rem;
+  }
 }

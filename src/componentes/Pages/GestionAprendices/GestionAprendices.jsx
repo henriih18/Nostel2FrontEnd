@@ -42,7 +42,7 @@ export const GestionAprendices = () => {
            
             const response = await axios.get('http://localhost:8080/api/aprendices', config);
 
-            console.log('Respuesta del servidor:', response.data);
+            //console.log('Respuesta del servidor:', response.data);
 
             setAprendices(response.data);
             setLoading(false);

@@ -1,11 +1,12 @@
-// Comentarios.jsx
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-
+import { useNavigate } from 'react-router-dom';
+//import './Comentarios.css';
 import AgregarComentario from './AgregarComentario';
 import EditarComentario from './EditarComentario';
 
-const Comentarios = ({ idAprendiz }) => {
+export const Comentarios = ({ idAprendiz }) => {
+    const navigate = useNavigate();
     const [comentarios, setComentarios] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -13,12 +14,22 @@ const Comentarios = ({ idAprendiz }) => {
     const [showEditModal, setShowEditModal] = useState(false);
     const [confirmDelete, setConfirmDelete] = useState(null);
     const [instructor, setInstructor] = useState(null);
-    
+
     const fetchComentarios = async () => {
+        if (!idAprendiz || isNaN(idAprendiz)) {
+            setError('ID de aprendiz inválido.');
+            setLoading(false);
+            return;
+        }
+
         try {
             const token = sessionStorage.getItem('token');
-            if (!token) return;
-            
+            if (!token) {
+                setError('No hay token de autenticación.');
+                navigate('/login');
+                return;
+            }
+
             const response = await axios.get(`http://localhost:8080/api/comentarios/${idAprendiz}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -26,110 +37,115 @@ const Comentarios = ({ idAprendiz }) => {
                 },
             });
             setComentarios(response.data);
-            setLoading(false);
+            setError(null);
         } catch (err) {
             console.error('Error al cargar comentarios:', err);
-            setError('Error al cargar los comentarios.');
+            if (err.response?.status === 401 || err.response?.status === 403) {
+                sessionStorage.removeItem('token');
+                setError('Sesión expirada. Por favor, inicia sesión nuevamente.');
+                navigate('/login');
+            } else {
+                setError('Error al cargar los comentarios.');
+            }
+        } finally {
             setLoading(false);
         }
     };
 
     useEffect(() => {
         fetchComentarios();
-    }, [idAprendiz]);
+    }, [idAprendiz, navigate]);
 
-    // Función para manejar cuando se agrega un nuevo comentario
     const handleComentarioAgregado = (nuevoComentario) => {
-        // Actualizar la lista de comentarios
         setComentarios([...comentarios, nuevoComentario]);
     };
 
-    // Función para manejar cuando se actualiza un comentario
     const handleComentarioActualizado = (comentarioActualizado) => {
-        // Actualizar la lista de comentarios
-        setComentarios(comentarios.map(c => 
+        setComentarios(comentarios.map(c =>
             c.idComentario === comentarioActualizado.idComentario ? comentarioActualizado : c
         ));
         setShowEditModal(false);
         setComentarioEditar(null);
     };
 
-    // Función para abrir el modal de edición
     const handleEditarComentario = (comentario) => {
-        setComentarioEditar(comentario);
-        setShowEditModal(true);
+        /* setComentarioEditar(comentario);
+        setShowEditModal(true); */
+        navigate(`/aprendices/${idAprendiz}/comentarios/${comentario.idComentario}/editar`);
     };
 
-    // Función para confirmar eliminación
     const handleConfirmDelete = (idComentario) => {
         setConfirmDelete(idComentario);
     };
 
-    // Función para cancelar eliminación
     const handleCancelDelete = () => {
         setConfirmDelete(null);
     };
 
-    // Función para eliminar un comentario
     const handleEliminarComentario = async (idComentario) => {
         try {
             const token = sessionStorage.getItem('token');
-            if (!token) return;
-            
-            await axios.delete(`http://localhost:8080/api/comentarios/${idComentario}`, {
+            if (!token) {
+                setError('No hay token de autenticación.');
+                navigate('/login');
+                return;
+            }
+
+            await axios.delete(`http://localhost:8080/api/comentarios/${idAprendiz}/${idComentario}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json',
                 },
             });
-            
-            // Actualizar la lista de comentarios
+
             setComentarios(comentarios.filter(c => c.idComentario !== idComentario));
             setConfirmDelete(null);
         } catch (err) {
             console.error('Error al eliminar comentario:', err);
-            alert('Error al eliminar el comentario.');
+            setError('Error al eliminar el comentario.');
         }
     };
 
-    // Verificar si el usuario actual es el autor del comentario
     const esAutor = (nombreInstructor) => {
         if (!instructor) return false;
-        const nombreCompleto = instructor.nombre && instructor.apellido 
-            ? `${instructor.nombre} ${instructor.apellido}` 
+        const nombreCompleto = instructor.nombres && instructor.apellidos
+            ? `${instructor.nombres} ${instructor.apellidos}`
             : instructor.nombreCompleto || instructor.nombre || '';
         return nombreInstructor === nombreCompleto;
     };
 
-    // Obtener información del instructor al cargar el componente
     useEffect(() => {
         const obtenerDatosInstructor = async () => {
             try {
                 const token = sessionStorage.getItem('token');
-                const idInstructor = sessionStorage.getItem('idUsuario');
-                
-                if (!token || !idInstructor) return;
-                
-                const response = await axios.get(`http://localhost:8080/api/instructores/${idInstructor}`, {
+                const idUsuario = sessionStorage.getItem('idUsuario');
+
+                if (!token || !idUsuario) {
+                    setError('No hay token de autenticación o ID de usuario.');
+                    navigate('/login');
+                    return;
+                }
+
+                const response = await axios.get(`http://localhost:8080/api/instructores/usuario/${idUsuario}`, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json',
                     },
                 });
-                
+
                 setInstructor(response.data);
             } catch (err) {
                 console.error('Error al obtener datos del instructor:', err);
+                if (err.response?.status === 401 || err.response?.status === 403) {
+                    setError('Sesión expirada. Por favor, inicia sesión nuevamente.');
+                    navigate('/login');
+                }
             }
         };
-        
+
         obtenerDatosInstructor();
-    }, []);
+    }, [navigate]);
 
-    if (loading) return <div>Cargando comentarios...</div>;
-    if (error) return <div>{error}</div>;
-
-    // Función para formatear fechas
     const formatDate = (dateString) => {
         if (!dateString) return 'No definida';
         const date = new Date(dateString);
@@ -143,13 +159,20 @@ const Comentarios = ({ idAprendiz }) => {
         <div className="card">
             <div className="card-header">
                 <h3>Comentarios</h3>
-                <AgregarComentario 
-                    idAprendiz={idAprendiz} 
-                    onComentarioAgregado={handleComentarioAgregado} 
-                />
+                <button className="add-button" onClick={() => navigate(`/agregar-comentario/${idAprendiz}`)}>
+                    <span className="icon-plus">+</span> Agregar Comentario
+                </button>
             </div>
             <div className="card-body">
-                {comentarios.length === 0 ? (
+                {loading ? (
+                    <div className="loading-state">
+                        <p>Cargando comentarios...</p>
+                    </div>
+                ) : error ? (
+                    <div className="error-state">
+                        <p>{error}</p>
+                    </div>
+                ) : comentarios.length === 0 ? (
                     <div className="empty-state">
                         <p>No hay comentarios registrados.</p>
                     </div>
@@ -159,37 +182,29 @@ const Comentarios = ({ idAprendiz }) => {
                             <div key={comentario.idComentario} className="comentario-card">
                                 <div className="comentario-header">
                                     <span className="comentario-autor">{comentario.nombreInstructor}</span>
-                                    <span className="comentario-fecha">{formatDate(comentario.fecha)}</span>
+                                    <span className="comentario-fecha">{formatDate(comentario.fechaComentario)}</span>
                                 </div>
-                                <div className="comentario-contenido">
-                                    {comentario.contenido}
-                                </div>
+                                <div className="comentario-contenido" dangerouslySetInnerHTML={{ __html: comentario.comentario }} />
                                 <div className="comentario-footer">
-                                    <span className={`tipo-badge ${comentario.tipo.toLowerCase()}`}>
-                                        {comentario.tipo}
-                                    </span>
-                                    
-                                    {/* Mostrar botones solo si el usuario actual es el autor */}
                                     {esAutor(comentario.nombreInstructor) && (
                                         <div className="comentario-acciones">
-                                            <button 
+                                            <button
                                                 className="btn-editar"
                                                 onClick={() => handleEditarComentario(comentario)}
                                             >
                                                 <span className="icon-edit">✎</span>
                                                 Editar
                                             </button>
-                                            
                                             {confirmDelete === comentario.idComentario ? (
                                                 <div className="confirm-delete">
                                                     <span>¿Confirmar eliminación?</span>
-                                                    <button 
+                                                    <button
                                                         className="btn-confirm"
                                                         onClick={() => handleEliminarComentario(comentario.idComentario)}
                                                     >
                                                         Sí
                                                     </button>
-                                                    <button 
+                                                    <button
                                                         className="btn-cancel"
                                                         onClick={handleCancelDelete}
                                                     >
@@ -197,7 +212,7 @@ const Comentarios = ({ idAprendiz }) => {
                                                     </button>
                                                 </div>
                                             ) : (
-                                                <button 
+                                                <button
                                                     className="btn-eliminar"
                                                     onClick={() => handleConfirmDelete(comentario.idComentario)}
                                                 >
@@ -213,10 +228,9 @@ const Comentarios = ({ idAprendiz }) => {
                     </div>
                 )}
             </div>
-            
-            {/* Modal para editar comentario */}
+
             {showEditModal && comentarioEditar && (
-                <EditarComentario 
+                <EditarComentario
                     comentario={comentarioEditar}
                     onComentarioActualizado={handleComentarioActualizado}
                     onClose={() => {
