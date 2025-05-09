@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useReactToPrint } from "react-to-print";
 import AgregarActividadComplementaria from "./AgregarActividadComplementaria";
 import EditarActividadComplementaria from "./EditarActividadComplementaria";
+/* import { input } from "@azure/functions"; */
 
 const ActividadesComplementarias = ({ idAprendiz }) => {
   const navigate = useNavigate();
