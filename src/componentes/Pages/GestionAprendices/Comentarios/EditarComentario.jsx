@@ -1,188 +1,118 @@
-import React, { useState, useEffect } from 'react';
+// EditarComentario.jsx
+import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate, useParams } from 'react-router-dom';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
 
-const EditarComentario = () => {
-    const navigate = useNavigate();
-    const { idAprendiz, idComentario } = useParams();
+const EditarComentario = ({ comentario, onComentarioActualizado, onClose }) => {
+  const [formData, setFormData] = useState({
+    fechaComentario: comentario.fechaComentario.split('T')[0],
+    comentario: comentario.comentario,
+  });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(false);
 
-    const [formData, setFormData] = useState({
-        fechaComentario: '',
-        comentario: '',
-    });
+  const handleChange = e => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
 
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
-    const [success, setSuccess] = useState(false);
+  const handleSubmit = async e => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+    setSuccess(false);
 
-    const quillModules = {
-        toolbar: [
-            ['bold', 'italic', 'underline'],
-            [{ list: 'ordered' }, { list: 'bullet' }],
-            ['link'],
-            ['clean']
-        ],
-    };
+    try {
+      const token = sessionStorage.getItem('token');
+      if (!token) throw new Error('Sin token de autenticación');
 
-    useEffect(() => {
-        const fetchComentario = async () => {
-            setLoading(true);
-            try {
-                const token = sessionStorage.getItem('token');
-                if (!token) {
-                    setError('No hay token de autenticación.');
-                    navigate('/login');
-                    return;
-                }
-
-                const response = await axios.get(
-                    `http://localhost:8080/api/comentarios/${idAprendiz}`,
-                    {
-                        headers: {
-                            'Authorization': `Bearer ${token}`,
-                        },
-                    }
-                );
-                const comentario = response.data.find(c => c.idComentario === parseInt(idComentario));
-                if (!comentario) {
-                    throw new Error('Comentario no encontrado');
-                }
-                setFormData({
-                    fechaComentario: comentario.fechaComentario,
-                    comentario: comentario.comentario,
-                });
-            } catch (err) {
-                console.error('Error al cargar comentario:', err);
-                setError('Error al cargar el comentario.');
-                navigate(`/aprendices/${idAprendiz}`);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchComentario();
-    }, [idAprendiz, idComentario, navigate]);
-
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData(prev => ({
-            ...prev,
-            [name]: value
-        }));
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setLoading(true);
-        setError(null);
-        setSuccess(false);
-
-        try {
-            const token = sessionStorage.getItem('token');
-            if (!token) {
-                setError('No hay token de autenticación.');
-                navigate('/login');
-                return;
-            }
-
-             axios.put(
-                `http://localhost:8080/api/comentarios/${idAprendiz}/${idComentario}`,
-                {
-                    fechaComentario: formData.fechaComentario,
-                    comentario: formData.comentario
-                },
-                {
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json',
-                    },
-                }
-            );
-
-            setSuccess(true);
-
-            setTimeout(() => {
-                setSuccess(false);
-                navigate(`/aprendices/${idAprendiz}`);
-            }, 2000);
-        } catch (err) {
-            console.error('Error al actualizar comentario:', err);
-            if (err.response && err.response.status === 401) {
-                setError('Sesión expirada. Por favor, inicie sesión nuevamente.');
-                sessionStorage.clear();
-                navigate('/login');
-            } else if (err.response && err.response.data.message) {
-                setError(`Error: ${err.response.data.message}`);
-            } else {
-                setError('Error al actualizar el comentario.');
-            }
-        } finally {
-            setLoading(false);
+      const url = `http://localhost:8080/api/comentarios/${comentario.idAprendiz}/${comentario.idComentario}`;
+      const res = await axios.put(
+        url,
+        {
+          fechaComentario: formData.fechaComentario,
+          comentario: formData.comentario,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
         }
-    };
+      );
 
-    return (
-        <div className="formato-sena-container">
-            <h1 className="document-title">
-                SERVICIO NACIONAL DE APRENDIZAJE SENA<br />
-                SISTEMA INTEGRADO DE GESTIÓN<br />
-                Editar Comentario
-            </h1>
+      setSuccess(true);
+      onComentarioActualizado(res.data);
+    } catch (err) {
+      console.error('Error al actualizar comentario:', err);
+      setError(err.response?.data?.message || 'Error al actualizar el comentario.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
-            <form onSubmit={handleSubmit} className="sena-form">
-                <div className="form-section">
-                    <h3>Editar Comentario</h3>
-                    <div className="form-row">
-                        <div className="form-group">
-                            <label>Fecha del Comentario</label>
-                            <input
-                                type="date"
-                                name="fechaComentario"
-                                value={formData.fechaComentario}
-                                onChange={handleChange}
-                                required
-                            />
-                        </div>
-                    </div>
-                    <div className="form-row">
-                        <div className="form-group wide">
-                            <label>Comentario</label>
-                            <input
-                                type='textarea'
-                                name="comentario"
-                                value={formData.comentario}
-                                onChange={handleChange}
-                                placeholder="Escribe el comentario detalladamente..."
-                            />
-                        </div>
-                    </div>
-                </div>
+  return (
+    <div className="formato-sena-container">
+      <h1 className="document-title">
+        SERVICIO NACIONAL DE APRENDIZAJE SENA<br />
+        SISTEMA INTEGRADO DE GESTIÓN<br />
+        Editar Comentario
+      </h1>
 
-                <div className="form-actions">
-                    <button
-                        type="button"
-                        className="cancel-button"
-                        onClick={() => navigate(`/aprendices/${idAprendiz}`)}
-                        disabled={loading}
-                    >
-                        Cancelar
-                    </button>
-                    <button
-                        type="submit"
-                        className="submit-button"
-                        disabled={loading}
-                    >
-                        {loading ? 'Guardando...' : 'Actualizar Comentario'}
-                    </button>
-                </div>
-            </form>
-
-            {error && <div className="error-message">{error}</div>}
-            {success && <div className="success-message">Comentario actualizado exitosamente!</div>}
+      <form onSubmit={handleSubmit} className="sena-form">
+        <div className="form-section">
+          <h3>Editar Comentario</h3>
+          <div className="form-row">
+            <div className="form-group">
+              <label>Fecha del Comentario</label>
+              <input
+                type="date"
+                name="fechaComentario"
+                value={formData.fechaComentario}
+                onChange={handleChange}
+                required
+                
+              />
+            </div>
+          </div>
+          <div className="form-row">
+            <div className="form-group wide">
+              <label>Comentario</label>
+              <textarea
+                name="comentario"
+                value={formData.comentario}
+                onChange={handleChange}
+                rows={5}
+                placeholder="Escribe el comentario detalladamente..."
+                required
+              />
+            </div>
+          </div>
         </div>
-    );
+
+        <div className="form-actions">
+          <button
+            type="button"
+            className="cancel-button"
+            onClick={onClose}
+            disabled={loading}
+          >
+            Cancelar
+          </button>
+          <button
+            type="submit"
+            className="submit-button"
+            disabled={loading}
+          >
+            {loading ? 'Guardando...' : 'Actualizar Comentario'}
+          </button>
+        </div>
+      </form>
+
+      {error && <div className="error-message">{error}</div>}
+      {success && <div className="success-message">Comentario actualizado exitosamente!</div>}
+    </div>
+  );
 };
 
 export default EditarComentario;

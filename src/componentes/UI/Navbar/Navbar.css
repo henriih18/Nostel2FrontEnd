@@ -6,56 +6,43 @@
   --text-dark: #2d3748;
   --text-light: #f8fafc;
   --border: rgba(0, 0, 0, 0.1);
+  --war: #ff4444;
+    --warHover: #cc0000;
   --transition: all 0.3s ease;
   --shadow: 0 15px 60px rgba(0, 0, 0, 0.15);
+}
+
+img {
+  margin-top: 2rem;
+  width: 5rem;
 }
 
 /* Contenedor principal con efecto vidrio */
 nav {
   width: 20vw;
-  /* ACA SE AJUSTA EL PANEL DE NAVEGACION */
-  height: 100vh;
+  height: 98.9vh;
   display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-left: .3rem;
+  border-radius: 10px;
+  align-items: center;
   padding: 0;
-  background: var(--background);
+  background-color: #ececec;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   box-shadow: var(--shadow),
               0 0 0 1px rgba(255, 255, 255, 0.3) inset;
-  
-  left: 0;
-  top: 0;
   z-index: 1;
   overflow: hidden;
+  border: solid 1px;
 }
 
 /* Efecto de partículas de fondo */
-nav::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: 
-    radial-gradient(circle at 30% 30%, rgba(76, 175, 80, 0.08) 0%, transparent 40%),
-    radial-gradient(circle at 70% 70%, rgba(56, 142, 60, 0.08) 0%, transparent 40%);
-  animation: float 20s linear infinite;
-  z-index: -1;
-}
+
 
 /* Barra superior animada */
-nav::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 4px;
-  background: linear-gradient(90deg, var(--primary), var(--primary-hover), var(--primary));
-  background-size: 200% 100%;
-  animation: gradientShift 6s ease infinite;
-}
+
 
 /* Lista de navegación - Estilo premium */
 nav > ul {
@@ -119,30 +106,32 @@ nav > ul > li a.active::before {
 }
 
 /* Botón Cerrar Sesión - Estilo idéntico al login */
-nav > ul > li .botonSalir {
-  background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+.botonSalir {
+  background: var(--war);
   color: white;
-  border: none;
+  
   padding: 1rem 2rem;
   border-radius: 8px;
   cursor: pointer;
   font-weight: 600;
   font-size: 1rem;
   transition: var(--transition);
-  width: 80%;
+  width: 60%;
   margin-top: 2rem;
   box-shadow: 0 10px 25px rgba(76, 175, 80, 0.3);
   position: relative;
   overflow: hidden;
+  margin-bottom: 2rem;
 }
 
-nav > ul > li .botonSalir:hover {
-  transform: translateY(-3px);
+.botonSalir:hover {
+  transform: scale(1.03);
+  background-color: var(--warHover);
   box-shadow: 0 15px 35px rgba(76, 175, 80, 0.4);
 }
 
 /* Efecto ripple como en login */
-nav > ul > li .botonSalir::after {
+ .botonSalir::after {
   content: '';
   position: absolute;
   top: 50%;
@@ -156,7 +145,7 @@ nav > ul > li .botonSalir::after {
   transform-origin: 50% 50%;
 }
 
-nav > ul > li .botonSalir:focus:not(:active)::after {
+.botonSalir:focus:not(:active)::after {
   animation: ripple 1s ease-out;
 }
 

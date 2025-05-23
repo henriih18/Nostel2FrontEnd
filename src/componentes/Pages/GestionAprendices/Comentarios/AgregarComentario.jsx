@@ -18,6 +18,7 @@ export const AgregarComentario = ({ onComentarioAgregado }) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(false);
+    const [showModal , setShowModal] = useState(false);
 
     const quillModules = {
         toolbar: [
@@ -36,6 +37,7 @@ export const AgregarComentario = ({ onComentarioAgregado }) => {
 
                 if (!token || !idUsuario) {
                     setError('No hay token de autenticación o ID de usuario disponible');
+                    setShowModal(true);
                     navigate('/login');
                     return;
                 }
@@ -55,10 +57,12 @@ export const AgregarComentario = ({ onComentarioAgregado }) => {
                 console.error('Error al obtener datos del instructor:', err);
                 if (err.response && err.response.status === 401) {
                     setError('Sesión expirada. Por favor, inicie sesión nuevamente.');
+                    setShowModal(true);
                     sessionStorage.clear();
                     navigate('/login');
                 } else {
                     setError(`Error al cargar datos del instructor: ${err.response?.data?.message || err.message}`);
+                    setShowModal(true);
                 }
             }
         };
@@ -85,6 +89,7 @@ export const AgregarComentario = ({ onComentarioAgregado }) => {
 
             if (!token || !idAprendiz) {
                 setError('Faltan datos de autenticación o ID de aprendiz.');
+                setShowModal(true);
                 setLoading(false);
                 return;
             }
@@ -105,8 +110,10 @@ export const AgregarComentario = ({ onComentarioAgregado }) => {
             );
 
             setSuccess(true);
+            setShowModal(true);
 
             setTimeout(() => {
+                setShowModal(false);
                 if (onComentarioAgregado) {
                     onComentarioAgregado(response.data);
                 } else {
@@ -117,14 +124,22 @@ export const AgregarComentario = ({ onComentarioAgregado }) => {
             console.error('Error al guardar comentario:', err);
             if (err.response && err.response.status === 401) {
                 setError('Sesión expirada. Por favor, inicie sesión nuevamente.');
+                setShowModal(true);
                 sessionStorage.clear();
                 navigate('/login');
             } else {
                 setError(`Error: ${err.response?.data?.message || err.message}`);
+                setShowModal(true);
             }
         } finally {
             setLoading(false);
         }
+    };
+
+    const closeModal = () => {
+        setShowModal(false);
+        setError(null);
+        setSuccess(false);
     };
 
     return (
@@ -162,8 +177,8 @@ export const AgregarComentario = ({ onComentarioAgregado }) => {
                     <div className="form-row">
                         <div className="form-group wide">
                             <label>Comentario</label>
-                            <input
-                                type='textarea'
+                            <textarea
+                                
                                 name="comentario"
                                 
                                 value={formData.comentario}
@@ -178,23 +193,31 @@ export const AgregarComentario = ({ onComentarioAgregado }) => {
                     <button
                         type="button"
                         className="cancel-button"
-                        onClick={() => navigate(`/aprendices/${idAprendiz}`)}
-                        disabled={loading}
+                        onClick={() => navigate(`/aprendices/${idAprendiz}/comentarios`)}
+                        disabled={loading || showModal}
                     >
                         Cancelar
                     </button>
                     <button
                         type="submit"
                         className="submit-button"
-                        disabled={loading}
+                        disabled={loading || showModal}
                     >
                         {loading ? 'Guardando...' : 'Guardar Comentario'}
                     </button>
                 </div>
             </form>
 
-            {error && <div className="error-message">{error}</div>}
-            {success && <div className="success-message">Comentario guardado exitosamente!</div>}
+            {/* Modal para mensajes de error o éxito */}
+            {showModal && (
+                <div className="modal-overlay" onClick={closeModal}>
+                    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                        {error && <p className="modal-error">{error}</p>}
+                        {success && <p className="modal-success">Comentario guardado exitosamente!</p>}
+                        
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

@@ -1,0 +1,8 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Fondo negro dominante -->
+  <rect width="200" height="200" fill="#000000" rx="20"/>
+  <!-- Línea diagonal verde SENA como acento -->
+  <line x1="40" y1="160" x2="160" y2="40" stroke="#4CAF50" stroke-width="8" stroke-linecap="round" />
+  <!-- Letra N minimalista en blanco -->
+  <text x="100" y="140" text-anchor="middle" fill="#FFFFFF" font-family="Helvetica, sans-serif" font-size="96" font-weight="bold">N</text>
+</svg>

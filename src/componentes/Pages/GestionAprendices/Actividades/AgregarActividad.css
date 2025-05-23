@@ -23,7 +23,8 @@
 
 .document-header {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 1rem;
   font-size: 0.875rem;
   margin-bottom: 20px;
 }
@@ -32,7 +33,9 @@
 .sena-form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
 }
 
 .form-section {
@@ -168,7 +171,9 @@ input[readonly] {
   display: flex;
   justify-content: flex-end;
   gap: 12px;
-  margin-top: 15px;
+  margin-top: 20px;
+  
+  margin-left: 45.5rem;
 }
 
 .submit-button,
@@ -184,10 +189,12 @@ input[readonly] {
 .submit-button {
   background-color: #27ae60;
   color: white;
+  transition: all 0.3s ease;
 }
 
 .submit-button:hover {
   background-color: #219955;
+  transform: scale(1.03);
 }
 
 .submit-button:disabled {
@@ -198,10 +205,12 @@ input[readonly] {
 .cancel-button {
   background-color: #e74c3c;
   color: white;
+  transition: all 0.3s ease;
 }
 
 .cancel-button:hover {
   background-color: #c0392b;
+  transform: scale(1.03);
 }
 
 /* ===== Mensajes ===== */
@@ -267,3 +276,198 @@ input[readonly] {
     max-height: 250px;
   }
 }
+
+.header-with-logo{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+}
+
+.sena-logo{
+  width: 5rem;
+  opacity: 60%;
+}
+
+.codigo{
+  opacity: 60%;
+}
+
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  overflow-y: auto;
+}
+
+/* Contenedor del modal */
+.modal-content {
+  font-family: 'Arial', sans-serif;
+  max-width: 95%;
+  max-height: 90vh;
+  margin: 20px auto;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: #fff;
+  animation: fadeIn 0.3s ease;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+}
+
+/* Estilos para la sección de asistentes */
+.form-section1 {
+  border: 1px solid #ddd;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+  padding: 12px;
+  margin-bottom: 20px;
+}
+
+/* Asegurar que el contenedor no se desborde */
+.form-section1 > * {
+  max-width: 100%;
+}
+
+.form-section1 h3 {
+  margin: 0 0 12px;
+  font-size: 1rem;
+  color: #2c3e50;
+  border-bottom: 2px solid #3498db;
+  padding-bottom: 5px;
+}
+
+/* Tabla de asistentes */
+.sena-table{
+  
+  margin-left: 3rem;
+}
+
+.sena-table1 {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+  table-layout: fixed; /* Forzar que las columnas se ajusten al ancho disponible */
+}
+
+.sena-table1 th,
+.sena-table1 td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+  font-size: 0.875rem;
+  vertical-align: middle;
+  white-space: normal; /* Permitir que el texto se envuelva */
+  word-wrap: break-word; /* Asegurar que las palabras largas se rompan */
+  text-align: center;
+  
+}
+
+.sena-table th,
+.sena-table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+  font-size: 0.875rem;
+  vertical-align: middle;
+  white-space: normal; /* Permitir que el texto se envuelva */
+  word-wrap: break-word; /* Asegurar que las palabras largas se rompan */
+  text-align: center;
+}
+
+.sena-table1 th {
+  background-color: #f5f5f5;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.sena-table1 td {
+  background-color: #fff;
+}
+
+.sena-table1 td input,
+.sena-table1 td select {
+  width: 100%;
+  padding: 6px;
+  font-size: 0.875rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-sizing: border-box;
+  min-width: 0; /* Permitir que el input se ajuste al ancho de la celda */
+}
+
+.sena-table1 td input[type="checkbox"] {
+  width: auto;
+  margin: 0;
+}
+
+/* Ajuste de columnas para mejor distribución */
+.sena-table1 th:nth-child(1),
+.sena-table1 td:nth-child(1) { width: 4%; } /* N° */
+.sena-table1 th:nth-child(2),
+.sena-table1 td:nth-child(2) { width: 15%; } /* NOMBRES Y APELLIDOS */
+.sena-table1 th:nth-child(3),
+.sena-table1 td:nth-child(3) { width: 10%; } /* N°. DOCUMENTO */
+.sena-table1 th:nth-child(4),
+.sena-table1 td:nth-child(4) { width: 7%; } /* PLANTA */
+.sena-table1 th:nth-child(5),
+.sena-table1 td:nth-child(5) { width: 7%; } /* CONTRATISTA */
+.sena-table1 th:nth-child(6),
+.sena-table1 td:nth-child(6) { width: 7%; } /* OTRO */
+.sena-table1 th:nth-child(7),
+.sena-table1 td:nth-child(7) { width: 10%; } /* DEPENDENCIA / EMPRESA */
+.sena-table1 th:nth-child(8),
+.sena-table1 td:nth-child(8) { width: 12%; } /* CORREO ELECTRÓNICO */
+.sena-table1 th:nth-child(9),
+.sena-table1 td:nth-child(9) { width: 8%; } /* TELÉFONO / EXT. */
+.sena-table1 th:nth-child(10),
+.sena-table1 td:nth-child(10) { width: 7%; } /* AUTORIZA GRABACIÓN */
+.sena-table1 th:nth-child(11),
+.sena-table1 td:nth-child(11) { width: 12%; } /* FIRMA O PARTICIPACIÓN VIRTUAL */
+.sena-table1 th:nth-child(12),
+.sena-table1 td:nth-child(12) { width: 5%; } /* FIRMA O PARTICIPACIÓN VIRTUAL */
+
+/* Botón para agregar filas */
+.add-row-button {
+  padding: 8px 16px;
+  border: none;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  background-color: #27ae60;
+  color: white;
+  margin-top: 12px;
+  transition: all 0.3s ease;
+}
+
+.add-row-button:hover {
+  background-color: #219955;
+  transform: scale(1.03);
+}
+
+
+
+.delete-row-button {
+  background: transparent;
+  border: none;
+  font-size: 1.2em;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  border: none;
+  
+}
+
+.delete-row-button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+

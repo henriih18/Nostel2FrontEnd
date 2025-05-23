@@ -43,10 +43,11 @@ width: 100%;
     transition: transform 0.2s;
     width: 12rem;
     gap: .5rem;
+    transition: all 0.3s ease;
 }
 
 .aprendiz-item:hover {
-    transform: translateY(-2px);
+    transform: scale(1.03);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 

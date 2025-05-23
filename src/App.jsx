@@ -17,6 +17,7 @@ import Aprendiz from "./componentes/Pages/GestionAprendices/Aprendiz/Aprendiz";
 import AgregarPlanMejoramiento from "./componentes/Pages/GestionAprendices/PlanesMejoramiento/AgregarPlanMejoramiento.jsx";
 import AgregarComentario from "./componentes/Pages/GestionAprendices/Comentarios/AgregarComentario.jsx";
 import EditarComentario from "./componentes/Pages/GestionAprendices/Comentarios/EditarComentario.jsx";
+import Comentarios from "./componentes/Pages/GestionAprendices/Comentarios/Comentarios.jsx";
 
 function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(() => {
@@ -63,6 +64,7 @@ function App() {
                     <Route path="/gestion-aprendices" element={<GestionAprendices/>}/>
                     <Route path="/agregar-actividad/:idAprendiz" element={<AgregarActividadComplementaria/>}/>
                     <Route path="/agregar-plan/:idAprendiz" element={<AgregarPlanMejoramiento/>}/>
+                    <Route path ="/aprendices/:idAprendiz/comentarios" element={<Comentarios/>}/>
                     <Route path="/agregar-comentario/:idAprendiz" element={<AgregarComentario/>}/>
                     <Route path="/aprendices/:idAprendiz/comentarios/:idComentario/editar" element={<EditarComentario />} />
                     <Route path="/aprendices/:idAprendiz" element={<Aprendiz />} />

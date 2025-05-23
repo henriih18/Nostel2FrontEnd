@@ -147,7 +147,7 @@
   border-radius: 12px;
   cursor: pointer;
   font-weight: 600;
-  font-size: 1.1rem;
+  font-size: 1rem;
   transition: all 0.4s ease;
   margin-top: 1rem;
   text-transform: uppercase;
@@ -156,10 +156,11 @@
   position: relative;
   overflow: hidden;
   width: 100%;
+  transition: all 0.3s ease;
 }
 
 .loginForm button:hover {
-  transform: translateY(-3px);
+  transform: scale(1.03);
   box-shadow: 0 15px 35px rgba(76, 175, 80, 0.4);
 }
 

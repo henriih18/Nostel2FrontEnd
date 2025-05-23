@@ -379,7 +379,8 @@ export const RegistroAprendiz = () => {
   useEffect(() => {
     const cargarFichas = async () => {
       try {
-        const response = await axios.get("http://localhost:8080/api/fichas");
+        const response = await axios.get("http://localhost:8080/api/fichas/disponibles");
+        
         console.log("Respuesta de fichas:", response.data);
         setFichas(response.data);
       } catch (error) {

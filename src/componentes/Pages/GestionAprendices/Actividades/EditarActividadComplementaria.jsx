@@ -84,7 +84,7 @@ export const EditarActividadComplementaria = ({
     }));
   };
 
-  const addCompromiso = () => {
+  /* const addCompromiso = () => {
     setFormData((prev) => ({
       ...prev,
       compromisos: [
@@ -92,7 +92,7 @@ export const EditarActividadComplementaria = ({
         { actividadDecision: "", fecha: "", responsable: "", firmaParticipacion: "" },
       ],
     }));
-  };
+  }; */
 
   const addAsistente = () => {
     setFormData((prev) => ({
@@ -177,6 +177,7 @@ export const EditarActividadComplementaria = ({
       }
 
       setTimeout(() => {
+        
         onClose();
       }, 2000);
     } catch (err) {
@@ -192,11 +193,9 @@ export const EditarActividadComplementaria = ({
       <div className="modal-container">
         <div className="modal-header">
           <h2>Editar Actividad Complementaria</h2>
-          <button className="close-button" onClick={onClose}>×</button>
+          {/* <button className="close-button" onClick={onClose}>×</button> */}
         </div>
         <div className="modal-body">
-          {error && <div className="alert error">{error}</div>}
-          {success && <div className="alert success">Actividad actualizada con éxito</div>}
 
           <form onSubmit={handleSubmit}>
             {/* Sección 1: Encabezado del Acta */}
@@ -431,9 +430,9 @@ export const EditarActividadComplementaria = ({
                   ))}
                 </tbody>
               </table>
-              <button type="button" className="add-row-button" onClick={addCompromiso}>
+              {/* <button type="button" className="add-row-button" onClick={addCompromiso}>
                 Agregar Compromiso
-              </button>
+              </button> */}
             </div>
 
             {/* Sección 5: Asistentes */}
