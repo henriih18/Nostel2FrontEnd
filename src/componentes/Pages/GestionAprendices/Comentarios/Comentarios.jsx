@@ -31,7 +31,7 @@ export const Comentarios = ({ idAprendiz }) => {
       }
 
       const response = await axios.get(
-        `http://localhost:8080/api/comentarios/${idAprendiz}`,
+        `http://localhost:8080/comentarios/${idAprendiz}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -99,7 +99,7 @@ export const Comentarios = ({ idAprendiz }) => {
       }
 
       await axios.delete(
-        `http://localhost:8080/api/comentarios/${idAprendiz}/${idComentario}`,
+        `http://localhost:8080/comentarios/${idAprendiz}/${idComentario}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -140,7 +140,7 @@ export const Comentarios = ({ idAprendiz }) => {
         }
 
         const response = await axios.get(
-          `http://localhost:8080/api/instructores/usuario/${idUsuario}`,
+          `http://localhost:8080/instructores/usuario/${idUsuario}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

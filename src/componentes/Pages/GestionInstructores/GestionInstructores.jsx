@@ -39,10 +39,10 @@ export const GestionInstructores = () => {
         timeout: 5000 // 5 segundos
       };
 
-      console.log("Realizando petición a http://localhost:8080/api/instructores");
+      console.log("Realizando petición a http://localhost:8080/instructores");
 
       // Realizar la petición para obtener los instructores
-      const response = await axios.get('http://localhost:8080/api/instructores', config);
+      const response = await axios.get('http://localhost:8080/instructores', config);
 
       console.log("Datos recibidos:", response.data);
 

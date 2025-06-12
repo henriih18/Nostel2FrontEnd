@@ -31,7 +31,7 @@ export const AgregarPrograma = () => {
 
             const nuevoPrograma = { nombrePrograma };
 
-            await axios.post('http://localhost:8080/api/programas', nuevoPrograma, config);
+            await axios.post('http://localhost:8080/programas', nuevoPrograma, config);
 
             // Redirigir a la lista de programas después de agregar
             navigate('/gestion-programas');

@@ -31,7 +31,7 @@ const ResetPassword = () => {
 
     try {
       const token = searchParams.get("token");
-      await axios.post("http://localhost:8080/api/password-reset/reset", {
+      await axios.post("http://localhost:8080/password-reset/reset", {
         token,
         newPassword,
       });

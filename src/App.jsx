@@ -30,7 +30,7 @@ function App() {
 
   useEffect(() => {
     if (isAuthenticated) {
-      fetch("http://localhost:3001/api/data")
+      fetch("http://localhost:3001/data")
         .then((response) => response.json())
         .then((data) => setData(data))
         .catch((error) => console.error("Error:", error));

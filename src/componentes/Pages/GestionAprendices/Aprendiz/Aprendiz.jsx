@@ -32,7 +32,7 @@ const Aprendiz = () => {
         };
 
         const response = await axios.get(
-          `http://localhost:8080/api/aprendices/${idAprendiz}`,
+          `http://localhost:8080/aprendices/${idAprendiz}`,
           config
         );
         setAprendiz(response.data);

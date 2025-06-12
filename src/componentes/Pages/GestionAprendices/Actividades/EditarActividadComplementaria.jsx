@@ -159,7 +159,7 @@ export const EditarActividadComplementaria = ({
       console.log("Enviando datos actualizados de la actividad:", actividadActualizada);
 
       const response = await axios.put(
-        `http://localhost:8080/api/actividadComplementarias/${formData.idAprendiz}/${formData.idActividad}`,
+        `http://localhost:8080/actividadComplementarias/${formData.idAprendiz}/${formData.idActividad}`,
         actividadActualizada,
         {
           headers: {

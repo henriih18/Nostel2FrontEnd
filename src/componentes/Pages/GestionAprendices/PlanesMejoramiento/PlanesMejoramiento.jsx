@@ -66,7 +66,7 @@ const PlanesMejoramiento = ({ idAprendiz }) => {
           return;
         }
         const resp = await axios.get(
-          `http://localhost:8080/api/planMejoramientos/${idAprendiz}`,
+          `http://localhost:8080/planMejoramientos/${idAprendiz}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -95,7 +95,7 @@ const PlanesMejoramiento = ({ idAprendiz }) => {
         const idUsuario = sessionStorage.getItem("idUsuario");
         if (!token || !idUsuario) return;
         const response = await axios.get(
-          `http://localhost:8080/api/instructores/usuario/${idUsuario}`,
+          `http://localhost:8080/instructores/usuario/${idUsuario}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -152,7 +152,7 @@ const PlanesMejoramiento = ({ idAprendiz }) => {
       const token = sessionStorage.getItem("token");
       if (!token) throw new Error("Sin token de autenticación");
       const res = await axios.delete(
-        `http://localhost:8080/api/planMejoramiento/${idAprendiz}/${idPlan}`,
+        `http://localhost:8080/planMejoramiento/${idAprendiz}/${idPlan}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }

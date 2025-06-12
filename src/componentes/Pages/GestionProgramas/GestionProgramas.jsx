@@ -42,7 +42,7 @@ export const GestionProgramas = () => {
       };
 
       // Realizar la petición para obtener los programas
-      const respuesta = await axios.get('http://localhost:8080/api/programas', config);
+      const respuesta = await axios.get('http://localhost:8080/programas', config);
 
       // Actualizar el estado con los programas obtenidos
       setProgramas(respuesta.data);

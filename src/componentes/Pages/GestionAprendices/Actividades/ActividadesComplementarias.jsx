@@ -64,7 +64,7 @@ const ActividadesComplementarias = ({ idAprendiz }) => {
         }
 
         const response = await axios.get(
-          `http://localhost:8080/api/actividadComplementarias/${idAprendiz}`,
+          `http://localhost:8080/actividadComplementarias/${idAprendiz}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -98,7 +98,7 @@ const ActividadesComplementarias = ({ idAprendiz }) => {
         }
 
         const response = await axios.get(
-          `http://localhost:8080/api/instructores/usuario/${idUsuario}`,
+          `http://localhost:8080/instructores/usuario/${idUsuario}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -146,7 +146,7 @@ const ActividadesComplementarias = ({ idAprendiz }) => {
       const token = sessionStorage.getItem("token");
       if (!token) throw new Error("Sin token de autenticación");
       const res = await axios.delete(
-        `http://localhost:8080/api/actividadComplementarias/${idAprendiz}/${idActividad}`,
+        `http://localhost:8080/actividadComplementarias/${idAprendiz}/${idActividad}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       if (res.status >= 200 && res.status < 300) {

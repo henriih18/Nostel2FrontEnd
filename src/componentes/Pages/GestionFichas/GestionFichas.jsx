@@ -45,7 +45,7 @@ export const GestionFichas = () => {
             };
 
             // URL correcta con el context-path configurado
-            const response = await axios.get('http://localhost:8080/api/fichas', config);
+            const response = await axios.get('http://localhost:8080/fichas', config);
             
             setFichas(response.data);
             setLoading(false);
@@ -98,7 +98,7 @@ export const GestionFichas = () => {
                 };
 
                 // Realizar la petición DELETE
-                await axios.delete(`http://localhost:8080/api/fichas/${idFicha}`, config);
+                await axios.delete(`http://localhost:8080/fichas/${idFicha}`, config);
                 
                 // Actualizar la lista de fichas después de eliminar
                 fetchFichas();

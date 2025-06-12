@@ -22,7 +22,7 @@ export const Login = ({ onLogin }) => {
     try {
       setLoading(true);
 
-      const response = await axios.post('http://localhost:8080/api/auth/login', {
+      const response = await axios.post('http://localhost:8080/auth/login', {
         correo,
         contrasena,
       }, {

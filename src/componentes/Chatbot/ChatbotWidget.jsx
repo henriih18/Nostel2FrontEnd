@@ -79,7 +79,7 @@ const ChatbotWidget = () => {
       };
 
       const { data: actividadGenerada } = await axios.post(
-        "http://localhost:8080/api/gemini/generate",
+        "http://localhost:8080/gemini/generate",
         requestBody,
         {
           headers: {

@@ -84,7 +84,7 @@ const AgregarPlanMejoramiento = () => {
         }
 
         const response = await axios.get(
-          `http://localhost:8080/api/instructores/usuario/${idUsuario}`,
+          `http://localhost:8080/instructores/usuario/${idUsuario}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -145,7 +145,7 @@ const AgregarPlanMejoramiento = () => {
         }
 
         const response = await axios.get(
-          `http://localhost:8080/api/aprendices/${idAprendiz}`,
+          `http://localhost:8080/aprendices/${idAprendiz}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -418,7 +418,7 @@ const AgregarPlanMejoramiento = () => {
       }
 
       const response = await axios.post(
-        `http://localhost:8080/api/planMejoramientos/${idAprendiz}`,
+        `http://localhost:8080/planMejoramientos/${idAprendiz}`,
         formData,
         {
           headers: {

@@ -19,7 +19,7 @@ const ForgotPassword = () => {
     try {
       console.log("Enviando email:", email); // Depuración
       const response = await axios.post(
-        "http://localhost:8080/api/password-reset/request",
+        "http://localhost:8080/password-reset/request",
         { email }
       );
       setSuccess(true);

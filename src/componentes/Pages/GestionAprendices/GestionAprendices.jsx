@@ -37,7 +37,7 @@ export const GestionAprendices = () => {
       };
 
       const response = await axios.get(
-        "http://localhost:8080/api/aprendices",
+        "http://localhost:8080/aprendices",
         config
       );
 

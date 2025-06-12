@@ -42,7 +42,7 @@ export const AgregarComentario = ({ onComentarioAgregado }) => {
                     return;
                 }
 
-                const response = await axios.get(`http://localhost:8080/api/instructores/usuario/${idUsuario}`, {
+                const response = await axios.get(`http://localhost:8080/instructores/usuario/${idUsuario}`, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json',
@@ -95,7 +95,7 @@ export const AgregarComentario = ({ onComentarioAgregado }) => {
             }
 
             const response = await axios.post(
-                `http://localhost:8080/api/comentarios/${idAprendiz}`,
+                `http://localhost:8080/comentarios/${idAprendiz}`,
                 {
                     idAprendiz: idAprendiz,
                     fechaComentario: formData.fechaComentario,

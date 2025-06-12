@@ -26,7 +26,7 @@ const EditarComentario = ({ comentario, onComentarioActualizado, onClose }) => {
       const token = sessionStorage.getItem('token');
       if (!token) throw new Error('Sin token de autenticación');
 
-      const url = `http://localhost:8080/api/comentarios/${comentario.idAprendiz}/${comentario.idComentario}`;
+      const url = `http://localhost:8080/comentarios/${comentario.idAprendiz}/${comentario.idComentario}`;
       const res = await axios.put(
         url,
         {

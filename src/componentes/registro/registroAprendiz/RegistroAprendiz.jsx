@@ -12,7 +12,7 @@ export const RegistroAprendiz = () => {
   useEffect(() => {
     const cargarFichas = async () => {
       try {
-        const response = await axios.get("http://localhost:8080/api/fichas/disponibles");
+        const response = await axios.get("http://localhost:8080/fichas/disponibles");
         
         console.log("Respuesta de fichas:", response.data);
         setFichas(response.data);
@@ -124,7 +124,7 @@ export const RegistroAprendiz = () => {
 
     try {
       console.log("Datos enviados:", formData);
-      await axios.post("http://localhost:8080/api/aprendices/RegistroAprendiz", formData);
+      await axios.post("http://localhost:8080/aprendices/RegistroAprendiz", formData);
       alert("Registro exitoso.");
       // Enviar correo utilizando la función de Azure
       await enviarCorreo(formData.correo);
