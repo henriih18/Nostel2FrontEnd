@@ -9,6 +9,8 @@
   --text-medium: #4a5568;
   --text-light: #f8fafc;
   --border: rgba(0, 0, 0, 0.1);
+  --war: #ff4444;
+    --warHover: #cc0000;
 }
 
 /* Estilos base */
@@ -140,7 +142,7 @@
 
 /* Botón - Mismo estilo que Registro */
 .loginForm button {
-  background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+  background: var(--primary);
   color: white;
   border: none;
   padding: 1.2rem;
@@ -152,7 +154,6 @@
   margin-top: 1rem;
   text-transform: uppercase;
   letter-spacing: 1px;
-  box-shadow: 0 10px 25px rgba(76, 175, 80, 0.3);
   position: relative;
   overflow: hidden;
   width: 100%;
@@ -161,7 +162,8 @@
 
 .loginForm button:hover {
   transform: scale(1.03);
-  box-shadow: 0 15px 35px rgba(76, 175, 80, 0.4);
+  background-color: var(--primary-hover);
+  box-shadow: 0 5px 25px var(--primary);
 }
 
 .loginForm button:active {
@@ -181,6 +183,13 @@
   padding: 0;
   margin-top: 2rem;
   text-align: center;
+}
+
+.registro li {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 .registro li a {

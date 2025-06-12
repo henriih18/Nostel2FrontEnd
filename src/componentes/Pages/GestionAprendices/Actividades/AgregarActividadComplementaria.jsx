@@ -1,7 +1,9 @@
+
+
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import "./AgregarActividad.css"; // Reusamos el CSS existente, ajusta según necesidades
-import { useNavigate, useParams } from "react-router-dom";
+import "./AgregarActividad.css";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import logoSena from "../../../../assets/images/logoSena.png";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
@@ -9,6 +11,7 @@ import "react-quill/dist/quill.snow.css";
 export const AgregarActividadComplementaria = () => {
   const navigate = useNavigate();
   const { idAprendiz } = useParams();
+  const location = useLocation();
 
   const [formData, setFormData] = useState({
     idInstructor: null,
@@ -56,20 +59,11 @@ export const AgregarActividadComplementaria = () => {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+
   const [showModal, setShowModal] = useState(false);
-  const [asistenciaData, setAsistenciaData] = useState([
-    /* {nombre: '', 
-            numeroDocumento: '', 
-            planta: '', 
-            contratista: '', 
-            otro: '', 
-            dependenciaEmpresa: '', 
-            correoElectronico: '', 
-            telefonoExt: '', 
-            autorizaGrabacion: false, 
-            firmaParticipacion: ''} */
-  ]);
+  const [asistenciaData, setAsistenciaData] = useState([]);
+  const [aprendizData, setAprendizData] = useState(null);
 
   const quillModules = {
     toolbar: [
@@ -80,6 +74,7 @@ export const AgregarActividadComplementaria = () => {
     ],
   };
 
+  // Fetch del Instructor
   useEffect(() => {
     const fetchInstructor = async () => {
       try {
@@ -119,11 +114,6 @@ export const AgregarActividadComplementaria = () => {
               observacion: "",
               autorizaGrabacion: false,
               firmaParticipacion: "",
-              /* nombre: `${response.data.nombres} ${response.data.apellidos}`,
-                            dependenciaEmpresa: 'SENA',
-                            aprueba: 'SÍ',
-                            observacion: '',
-                            firmaParticipacion: `${response.data.nombres} ${response.data.apellidos}` */
             },
           ],
         }));
@@ -146,6 +136,7 @@ export const AgregarActividadComplementaria = () => {
     fetchInstructor();
   }, [navigate]);
 
+  // Fetch del Aprendiz
   useEffect(() => {
     const fetchAprendiz = async () => {
       try {
@@ -168,21 +159,14 @@ export const AgregarActividadComplementaria = () => {
         );
 
         const aprendizData = response.data;
+        setAprendizData(aprendizData);
 
         setFormData((prev) => ({
           ...prev,
-          compromisos: [
-            {
-              actividadDecision: "",
-              fecha: "",
-              responsable: `${aprendizData.nombres} ${aprendizData.apellidos}`,
-              firmaParticipacion: "",
-            },
-          ],
           asistentes: [
             ...prev.asistentes,
             {
-              nombre: `${response.data.nombres} ${response.data.apellidos}`,
+              nombre: `${aprendizData.nombres} ${aprendizData.apellidos}`,
               numeroDocumento: aprendizData.documento || "",
               correoElectronico: aprendizData.correo || "",
               telefonoExt: aprendizData.telefono || "",
@@ -194,11 +178,6 @@ export const AgregarActividadComplementaria = () => {
               observacion: "",
               autorizaGrabacion: false,
               firmaParticipacion: "",
-              /* nombre: `${aprendizData.nombres} ${aprendizData.apellidos}`,
-                            dependenciaEmpresa: 'Aprendiz SENA',
-                            aprueba: 'SÍ',
-                            observacion: '',
-                            firmaParticipacion: `${aprendizData.nombres} ${aprendizData.apellidos}` */
             },
           ],
         }));
@@ -226,32 +205,39 @@ export const AgregarActividadComplementaria = () => {
     }
   }, [idAprendiz, navigate]);
 
-  /* const handleChange = (e, index, section) => {
-        const { name, value, type, checked } = e.target;
-        
+  // Pllenado con datos generados por la IA
+  useEffect(() => {
+    if (location.state && location.state.actividadGenerada && aprendizData) {
+      const { actividadGenerada } = location.state;
+      console.log("Datos recibidos de location.state:", actividadGenerada); // Depuración
 
-        if (section) {
-            setFormData(prev => {
-                const updatedSection = [...prev[section]];
-                updatedSection[index] = { ...updatedSection[index], [name]: value };
-                return { ...prev, [section]: updatedSection };
-            });
-        } else if (name.includes('.')) {
-            const [parent, child] = name.split('.');
-            setFormData(prev => ({
-                ...prev,
-                [parent]: {
-                    ...prev[parent],
-                    [child]: value
-                }
-            }));
-        } else {
-            setFormData(prev => ({
-                ...prev,
-                [name]: value
-            }));
-        }
-    }; */
+      // Función para formatear texto para ReactQuill, preservando saltos de línea
+      const formatForQuill = (text) => {
+        if (!text) return "";
+        return text
+          .split("\n")
+          .map((line) => `<p>${line.trim()}</p>`)
+          .join("");
+      };
+
+      setFormData((prev) => ({
+        ...prev,
+        nombreComite: actividadGenerada.nombreComite || prev.nombreComite,
+        agenda: formatForQuill(actividadGenerada.agenda) || prev.agenda,
+        objetivos: formatForQuill(actividadGenerada.objetivos) || prev.objetivos,
+        desarrollo: formatForQuill(actividadGenerada.desarrollo) || prev.desarrollo,
+        conclusiones: formatForQuill(actividadGenerada.conclusiones) || prev.conclusiones,
+        compromisos: [
+          {
+            actividadDecision: "",
+            fecha: prev.fecha,
+            responsable: `${aprendizData.nombres} ${aprendizData.apellidos}`,
+            firmaParticipacion: "",
+          },
+        ],
+      }));
+    }
+  }, [location.state, aprendizData]);
 
   const handleChange = (e, index, section) => {
     const { name, value, type, checked } = e.target;
@@ -271,6 +257,7 @@ export const AgregarActividadComplementaria = () => {
     }
   };
 
+  const hoy = new Date().toISOString().split("T")[0]; 
   const formatFechaModal = (fecha) => {
     const date = new Date(fecha);
     return {
@@ -294,26 +281,6 @@ export const AgregarActividadComplementaria = () => {
       return updatedAsistencia;
     });
   };
-
-  /* const addCompromiso = () => {
-  const aprendiz = formData.asistentes.find(
-    (a) => a.dependenciaEmpresa === "Aprendiz"
-  );
-  const nombreAprendiz = aprendiz?.nombre || "";
-
-  setFormData((prev) => ({
-    ...prev,
-    compromisos: [
-      ...prev.compromisos,
-      {
-        actividadDecision: "",
-        fecha: "",
-        responsable: nombreAprendiz,
-        firmaParticipacion: "",
-      },
-    ],
-  }));
-}; */
 
   const addAsistente = () => {
     setFormData((prev) => ({
@@ -340,9 +307,7 @@ export const AgregarActividadComplementaria = () => {
 
   const removeAsistente = (index) => {
     setFormData((prev) => {
-      // clonamos el arreglo de asistentes
       const nuevos = [...prev.asistentes];
-      // solo eliminamos si es un índice >= 2
       if (index >= 2) {
         nuevos.splice(index, 1);
       }
@@ -370,7 +335,6 @@ export const AgregarActividadComplementaria = () => {
 
   const handleOpenModal = () => {
     try {
-      // Validar que los datos mínimos estén completos antes de abrir el modal
       const hasMissingFields = formData.asistentes.some(
         (asistente) => !asistente.nombre || !asistente.dependenciaEmpresa
       );
@@ -381,7 +345,6 @@ export const AgregarActividadComplementaria = () => {
         return;
       }
 
-      // Inicializar asistenciaData con los datos actuales de formData.asistentes
       setAsistenciaData(
         formData.asistentes.map((asistente) => ({
           nombre: asistente.nombre,
@@ -397,7 +360,6 @@ export const AgregarActividadComplementaria = () => {
         }))
       );
       setShowModal(true);
-      console.log("Modal abierto con éxito");
     } catch (err) {
       console.error("Error al abrir el modal:", err);
       setError(
@@ -407,7 +369,6 @@ export const AgregarActividadComplementaria = () => {
   };
 
   const handleModalConfirm = () => {
-    // Validar campos obligatorios antes de confirmar
     const hasEmptyRequiredFields = asistenciaData.some(
       (asistente) =>
         !asistente.nombre ||
@@ -421,13 +382,10 @@ export const AgregarActividadComplementaria = () => {
       return;
     }
 
-    // Actualizar formData.asistentes con los datos del modal
     setFormData((prev) => ({
       ...prev,
       asistentes: asistenciaData.map((asistente) => ({
         ...asistente,
-        /* aprueba: 'SÍ',
-                observacion: '' */
         aprueba: asistente.aprueba || "SÍ",
         observacion: asistente.observacion || "",
       })),
@@ -439,11 +397,10 @@ export const AgregarActividadComplementaria = () => {
   const handleSubmit = async () => {
     setLoading(true);
     setError(null);
-    setSuccess(false);
+    
 
     try {
       const token = sessionStorage.getItem("token");
-      const idUsuario = sessionStorage.getItem("idUsuario");
 
       if (!token) {
         setError("No se ha identificado al instructor");
@@ -451,14 +408,6 @@ export const AgregarActividadComplementaria = () => {
         return;
       }
 
-      // 1. Log de datos antes de enviar
-      console.log("Datos a enviar (frontend):", {
-        ...formData,
-        idUsuario: idUsuario, // Para verificar coincidencia con backend
-        timestamp: new Date().toISOString(),
-      });
-
-      // Enviar todo el objeto formData directamente
       const response = await axios.post(
         `http://localhost:8080/api/actividadComplementarias/${idAprendiz}`,
         formData,
@@ -469,26 +418,14 @@ export const AgregarActividadComplementaria = () => {
           },
         }
       );
+      setShowSuccessModal(true);
 
-      // 2. Log de respuesta
-      console.log("Respuesta del backend:", {
-        data: response.data,
-        status: response.status,
-        headers: response.headers,
-      });
-
-      setSuccess(true);
+      
       setTimeout(() => {
+        setShowSuccessModal(false);
         navigate(`/aprendices/${idAprendiz}`);
       }, 2000);
     } catch (err) {
-      // 3. Log de errores
-      console.error("Error completo:", {
-        message: err.message,
-        response: err.response?.data,
-        stack: err.stack,
-      });
-
       console.error("Error al guardar el acta:", err);
       if (err.response && err.response.status === 401) {
         setError("Sesión expirada. Por favor, inicie sesión nuevamente.");
@@ -502,6 +439,13 @@ export const AgregarActividadComplementaria = () => {
     }
   };
 
+  const handleQuillChange = (field, value) => {
+    setFormData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
   return (
     <div className="formato-sena-container">
       <div className="header-with-logo">
@@ -509,14 +453,10 @@ export const AgregarActividadComplementaria = () => {
         <h1 className="document-title">
           SERVICIO NACIONAL DE APRENDIZAJE SENA
           <br />
-          FORMATO DE ACTA
+          ACTIVIDAD COMPLEMENTARIA
         </h1>
       </div>
 
-      <div className="document-header">
-        {/* <span className="version">Versión: {formData.version}</span> 
-                <span className="codigo">Código: {formData.codigo}</span>*/}
-      </div>
 
       <form
         onSubmit={(e) => {
@@ -573,6 +513,7 @@ export const AgregarActividadComplementaria = () => {
                   value={formData.fecha}
                   onChange={handleChange}
                   required
+                  min={hoy}
                 />
               </div>
             </div>
@@ -635,9 +576,7 @@ export const AgregarActividadComplementaria = () => {
                 theme="snow"
                 modules={quillModules}
                 value={formData.agenda}
-                onChange={(value) =>
-                  setFormData({ ...formData, agenda: value })
-                }
+                onChange={(value) => handleQuillChange("agenda", value)}
                 placeholder="Describa la agenda o puntos a desarrollar..."
               />
             </div>
@@ -650,9 +589,7 @@ export const AgregarActividadComplementaria = () => {
                 theme="snow"
                 modules={quillModules}
                 value={formData.objetivos}
-                onChange={(value) =>
-                  setFormData({ ...formData, objetivos: value })
-                }
+                onChange={(value) => handleQuillChange("objetivos", value)}
                 placeholder="Describa los objetivos de la reunión..."
               />
             </div>
@@ -668,9 +605,7 @@ export const AgregarActividadComplementaria = () => {
                 theme="snow"
                 modules={quillModules}
                 value={formData.desarrollo}
-                onChange={(value) =>
-                  setFormData({ ...formData, desarrollo: value })
-                }
+                onChange={(value) => handleQuillChange("desarrollo", value)}
                 placeholder="Describa el desarrollo de la reunión..."
               />
             </div>
@@ -683,9 +618,7 @@ export const AgregarActividadComplementaria = () => {
                 theme="snow"
                 modules={quillModules}
                 value={formData.conclusiones}
-                onChange={(value) =>
-                  setFormData({ ...formData, conclusiones: value })
-                }
+                onChange={(value) => handleQuillChange("conclusiones", value)}
                 placeholder="Describa las conclusiones de la reunión..."
               />
             </div>
@@ -722,6 +655,7 @@ export const AgregarActividadComplementaria = () => {
                       name="fecha"
                       value={compromiso.fecha}
                       onChange={(e) => handleChange(e, index, "compromisos")}
+                      min={hoy}
                     />
                   </td>
                   <td>
@@ -747,13 +681,6 @@ export const AgregarActividadComplementaria = () => {
               ))}
             </tbody>
           </table>
-          {/* <button
-            type="button"
-            className="add-row-button"
-            onClick={addCompromiso}
-          >
-            Agregar Compromiso
-          </button> */}
         </div>
 
         {/* Sección 5: Asistentes */}
@@ -825,12 +752,12 @@ export const AgregarActividadComplementaria = () => {
                     <button
                       type="button"
                       className="delete-row-button"
-                      disabled={index < 2} // siempre renderiza, pero bloquea los dos primeros
+                      disabled={index < 2}
                       onClick={() => {
                         if (index < 2) {
                           alert(
                             "No se puede eliminar al instructor ni al aprendiz"
-                          ); // o usa tu propio toast
+                          );
                         } else {
                           removeAsistente(index);
                         }
@@ -839,7 +766,7 @@ export const AgregarActividadComplementaria = () => {
                         index < 2
                           ? "No se puede eliminar"
                           : "Eliminar asistente"
-                      } // tooltip nativo
+                      }
                     >
                       ❌
                     </button>
@@ -868,7 +795,6 @@ export const AgregarActividadComplementaria = () => {
           </p>
         </div>
         <div className="document-footer">
-          {/* <span className="version">Versión: {formData.version}</span> */}
           <span className="codigo">Código: {formData.codigo}</span>
         </div>
 
@@ -883,15 +809,13 @@ export const AgregarActividadComplementaria = () => {
             Cancelar
           </button>
           <button type="submit" className="submit-button" disabled={loading}>
-            {loading ? "Guardando..." : "Guardar Acta"}
+            {loading ? "Avanzando" : "Siguiente"}
           </button>
         </div>
       </form>
 
       {error && <div className="error-message">{error}</div>}
-      {success && (
-        <div className="success-message">Acta guardada exitosamente!</div>
-      )}
+      
 
       {/* Modal para Registro de Asistencia */}
       {showModal && (
@@ -918,9 +842,7 @@ export const AgregarActividadComplementaria = () => {
                     theme="snow"
                     modules={quillModules}
                     value={formData.objetivos}
-                    onChange={(value) =>
-                      setFormData({ ...formData, objetivos: value })
-                    }
+                    onChange={(value) => handleQuillChange("objetivos", value)}
                     placeholder="Describa los objetivos de la reunión..."
                     readOnly
                   />
@@ -979,7 +901,9 @@ export const AgregarActividadComplementaria = () => {
                           onChange={(e) => handleAsistenciaChange(e, index)}
                           required
                         >
-                          <option disabled value="">Seleccione</option>
+                          <option disabled value="">
+                            Seleccione
+                          </option>
                           <option value="SÍ">SÍ</option>
                           <option value="NO">NO</option>
                         </select>
@@ -991,7 +915,9 @@ export const AgregarActividadComplementaria = () => {
                           onChange={(e) => handleAsistenciaChange(e, index)}
                           required
                         >
-                          <option disabled value="">Seleccione</option>
+                          <option disabled value="">
+                            Seleccione
+                          </option>
                           <option value="SÍ">SÍ</option>
                           <option value="NO">NO</option>
                         </select>
@@ -1107,6 +1033,14 @@ export const AgregarActividadComplementaria = () => {
                 {loading ? "Guardando..." : "Confirmar y Guardar"}
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {showSuccessModal && (
+        <div className="success-modal-overlay">
+          <div className="success-modal-content">
+            <h2>¡Actividad complementaria guardada exitosamente!</h2>
           </div>
         </div>
       )}

@@ -117,7 +117,7 @@
 .add-button:hover {
   transform: scale(1.03);
   background-color: var(--botonesHover);
-  box-shadow: 0 8px 20px rgba(76, 175, 80, 0.3);
+ box-shadow: 0 5px 25px var(--boton);
 }
 
 .add-button .icon-plus {

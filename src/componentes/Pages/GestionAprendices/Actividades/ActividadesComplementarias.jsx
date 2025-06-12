@@ -512,6 +512,7 @@ const ActividadesComplementarias = ({ idAprendiz }) => {
                 className="submit-button"
                 onClick={() =>
                   handleEliminarActividad(actividadAEliminar.idActividad)
+                  
                 }
               >
                 Sí, eliminar

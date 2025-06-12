@@ -71,6 +71,7 @@ const EditarComentario = ({ comentario, onComentarioActualizado, onClose }) => {
                 value={formData.fechaComentario}
                 onChange={handleChange}
                 required
+                disabled
                 
               />
             </div>

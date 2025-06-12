@@ -268,6 +268,8 @@ export const Comentarios = ({ idAprendiz }) => {
           </div>
         </div>
       )}
+
+      
     </div>
   );
 };

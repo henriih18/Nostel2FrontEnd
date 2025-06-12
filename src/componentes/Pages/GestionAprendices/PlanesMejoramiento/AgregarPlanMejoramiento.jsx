@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-//import "./AgregarActividad.css"; // Usamos el mismo CSS que AgregarActividadComplementaria
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import logoSena from "../../../../assets/images/logoSena.png";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
@@ -9,6 +8,7 @@ import "react-quill/dist/quill.snow.css";
 const AgregarPlanMejoramiento = () => {
   const navigate = useNavigate();
   const { idAprendiz } = useParams();
+  const location = useLocation();
 
   const [formData, setFormData] = useState({
     idInstructor: null,
@@ -30,7 +30,7 @@ const AgregarPlanMejoramiento = () => {
       {
         planDecision: "",
         fecha: "",
-        responsable: "", // Se llenará con el nombre del aprendiz
+        responsable: "",
         firmaParticipacion: "",
       },
     ],
@@ -56,9 +56,10 @@ const AgregarPlanMejoramiento = () => {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [asistenciaData, setAsistenciaData] = useState([]); // Inicializamos como vacío
+  const [asistenciaData, setAsistenciaData] = useState([]);
+  const [aprendizData, setAprendizData] = useState(null);
 
   const quillModules = {
     toolbar: [
@@ -69,17 +70,19 @@ const AgregarPlanMejoramiento = () => {
     ],
   };
 
-  // Cargar datos del instructor
+  // Fetch del Instructor
   useEffect(() => {
     const fetchInstructor = async () => {
       try {
         const token = sessionStorage.getItem("token");
         const idUsuario = sessionStorage.getItem("idUsuario");
+
         if (!token || !idUsuario) {
           setError("No hay token de autenticación o ID de usuario disponible");
           navigate("/login");
           return;
         }
+
         const response = await axios.get(
           `http://localhost:8080/api/instructores/usuario/${idUsuario}`,
           {
@@ -89,6 +92,7 @@ const AgregarPlanMejoramiento = () => {
             },
           }
         );
+
         setFormData((prev) => ({
           ...prev,
           idInstructor: response.data.idInstructor,
@@ -111,26 +115,35 @@ const AgregarPlanMejoramiento = () => {
         }));
       } catch (err) {
         console.error("Error al obtener datos del instructor:", err);
-        setError(
-          `Error al cargar datos del instructor: ${
-            err.response?.data?.message || err.message
-          }`
-        );
+        if (err.response && err.response.status === 401) {
+          setError("Sesión expirada. Por favor, inicie sesión nuevamente.");
+          sessionStorage.clear();
+          navigate("/login");
+        } else {
+          setError(
+            `Error al cargar datos del instructor: ${
+              err.response?.data?.message || err.message
+            }`
+          );
+        }
       }
     };
+
     fetchInstructor();
   }, [navigate]);
 
-  // Cargar datos del aprendiz y asegurarlo como primer asistente, además llenar "responsable"
+  // Fetch del Aprendiz
   useEffect(() => {
     const fetchAprendiz = async () => {
       try {
         const token = sessionStorage.getItem("token");
+
         if (!token || !idAprendiz) {
           setError("No hay token de autenticación o ID de aprendiz disponible");
           navigate("/aprendices");
           return;
         }
+
         const response = await axios.get(
           `http://localhost:8080/api/aprendices/${idAprendiz}`,
           {
@@ -140,12 +153,16 @@ const AgregarPlanMejoramiento = () => {
             },
           }
         );
+
         const aprendizData = response.data;
-        const aprendizNombre = `${aprendizData.nombres} ${aprendizData.apellidos}`;
-        setFormData((prev) => {
-          const updatedAsistentes = [
+        setAprendizData(aprendizData);
+
+        setFormData((prev) => ({
+          ...prev,
+          asistentesPlan: [
+            ...prev.asistentesPlan,
             {
-              nombre: aprendizNombre,
+              nombre: `${aprendizData.nombres} ${aprendizData.apellidos}`,
               numeroDocumento: aprendizData.documento || "",
               correoElectronico: aprendizData.correo || "",
               telefonoExt: aprendizData.telefono || "",
@@ -158,24 +175,17 @@ const AgregarPlanMejoramiento = () => {
               autorizaGrabacion: false,
               firmaParticipacion: "",
             },
-            ...prev.asistentesPlan,
-          ].filter((asistente, index, self) =>
-            index === self.findIndex((a) => a.nombre === asistente.nombre)
-          ); // Eliminar duplicados
-          return {
-            ...prev,
-            asistentesPlan: updatedAsistentes,
-            compromisosPlan: prev.compromisosPlan.map((compromiso) => ({
-              ...compromiso,
-              responsable: aprendizNombre, // Llenar el responsable con el nombre del aprendiz
-            })),
-          };
-        });
+          ],
+        }));
       } catch (err) {
         console.error("Error al obtener datos del aprendiz:", err);
         if (err.response && err.response.status === 404) {
           setError("No se encontró un aprendiz con el ID proporcionado.");
           setTimeout(() => navigate("/aprendices"), 3000);
+        } else if (err.response && err.response.status === 401) {
+          setError("Sesión expirada. Por favor, inicie sesión nuevamente.");
+          sessionStorage.clear();
+          navigate("/login");
         } else {
           setError(
             `Error al cargar datos del aprendiz: ${
@@ -185,21 +195,101 @@ const AgregarPlanMejoramiento = () => {
         }
       }
     };
-    if (idAprendiz) fetchAprendiz();
+
+    if (idAprendiz) {
+      fetchAprendiz();
+    }
   }, [idAprendiz, navigate]);
+
+  // Pllenado con datos generados por la IA
+  useEffect(() => {
+    if (location.state && location.state.actividadGenerada && aprendizData) {
+      const { actividadGenerada } = location.state;
+      console.log("Datos recibidos de location.state:", actividadGenerada); // Depuración
+
+      // Verificar que sea un plan de mejoramiento
+      if (actividadGenerada.tipoDocumento !== "plan de mejoramiento") {
+        setError(
+          "Este formulario solo acepta planes de mejoramiento generados por el chatbot."
+        );
+        return;
+      }
+
+      // Función para formatear texto para ReactQuill, preservando saltos de línea
+      const formatForQuill = (text) => {
+        if (!text) return "";
+        return text
+          .split("\n")
+          .map((line) => `<p>${line.trim()}</p>`)
+          .join("");
+      };
+
+      setFormData((prev) => ({
+        ...prev,
+        nombreComite: actividadGenerada.nombreComite || prev.nombreComite,
+        agenda: formatForQuill(actividadGenerada.agenda) || prev.agenda,
+        objetivos:
+          formatForQuill(actividadGenerada.objetivos) || prev.objetivos,
+        desarrollo:
+          formatForQuill(actividadGenerada.desarrollo) || prev.desarrollo,
+        conclusiones:
+          formatForQuill(actividadGenerada.conclusiones) || prev.conclusiones,
+        compromisosPlan: [
+          {
+            planDecision: "",
+            fecha: prev.fecha,
+            responsable: `${aprendizData.nombres} ${aprendizData.apellidos}`,
+            firmaParticipacion: "",
+          },
+        ],
+      }));
+    }
+  }, [location.state, aprendizData]);
 
   const handleChange = (e, index, section) => {
     const { name, value, type, checked } = e.target;
     const newValue = type === "checkbox" ? checked : value;
+
     if (section) {
       setFormData((prev) => {
-        const updated = [...prev[section]];
-        updated[index] = { ...updated[index], [name]: newValue };
-        return { ...prev, [section]: updated };
+        const updatedSection = [...prev[section]];
+        updatedSection[index] = { ...updatedSection[index], [name]: newValue };
+        return { ...prev, [section]: updatedSection };
       });
     } else {
-      setFormData((prev) => ({ ...prev, [name]: newValue }));
+      setFormData((prev) => ({
+        ...prev,
+        [name]: newValue,
+      }));
     }
+  };
+
+  const hoy = new Date().toISOString().split("T")[0]; 
+  const formatFechaModal = (fecha) => {
+    const date = new Date(fecha);
+    // Dentro de tu componente:
+    // e.g. "2025-06-03"
+
+    return {
+      dia: date.getDate(),
+      mes: date.toLocaleString("default", { month: "long" }),
+      anio: date.getFullYear(),
+    };
+  };
+  const fechaModal = formatFechaModal(formData.fecha);
+
+  const handleAsistenciaChange = (e, index) => {
+    const { name, value, type, checked } = e.target;
+    const newValue = type === "checkbox" ? checked : value;
+
+    setAsistenciaData((prev) => {
+      const updatedAsistencia = [...prev];
+      updatedAsistencia[index] = {
+        ...updatedAsistencia[index],
+        [name]: newValue,
+      };
+      return updatedAsistencia;
+    });
   };
 
   const addAsistente = () => {
@@ -210,15 +300,15 @@ const AgregarPlanMejoramiento = () => {
         {
           nombre: "",
           numeroDocumento: "",
-          correoElectronico: "",
-          telefonoExt: "",
           planta: "",
           contratista: "",
           otro: "",
           dependenciaEmpresa: "",
+          correoElectronico: "",
+          telefonoExt: "",
+          autorizaGrabacion: false,
           aprueba: "SÍ",
           observacion: "",
-          autorizaGrabacion: false,
           firmaParticipacion: "",
         },
       ],
@@ -232,32 +322,6 @@ const AgregarPlanMejoramiento = () => {
         nuevos.splice(index, 1);
       }
       return { ...prev, asistentesPlan: nuevos };
-    });
-  };
-
-  const handleOpenModal = () => {
-    const hasMissingFields = formData.asistentesPlan.some(
-      (asistente) => !asistente.nombre || !asistente.dependenciaEmpresa
-    );
-    if (hasMissingFields) {
-      setError(
-        "Por favor, completa los campos Nombre y Dependencia/Empresa para todos los asistentes antes de continuar."
-      );
-      return;
-    }
-    setAsistenciaData(
-      formData.asistentesPlan.map((asistente) => ({ ...asistente }))
-    );
-    setShowModal(true);
-  };
-
-  const handleAsistenciaChange = (e, index) => {
-    const { name, value, type, checked } = e.target;
-    const newValue = type === "checkbox" ? checked : value;
-    setAsistenciaData((prev) => {
-      const updated = [...prev];
-      updated[index] = { ...updated[index], [name]: newValue };
-      return updated;
     });
   };
 
@@ -279,20 +343,55 @@ const AgregarPlanMejoramiento = () => {
     ]);
   };
 
+  const handleOpenModal = () => {
+    try {
+      const hasMissingFields = formData.asistentesPlan.some(
+        (asistente) => !asistente.nombre || !asistente.dependenciaEmpresa
+      );
+      if (hasMissingFields) {
+        setError(
+          "Por favor, completa los campos Nombre y Dependencia/Empresa para todos los asistentes antes de continuar."
+        );
+        return;
+      }
+
+      setAsistenciaData(
+        formData.asistentesPlan.map((asistente) => ({
+          nombre: asistente.nombre,
+          numeroDocumento: asistente.numeroDocumento,
+          planta: asistente.planta,
+          contratista: asistente.contratista,
+          otro: asistente.otro,
+          dependenciaEmpresa: asistente.dependenciaEmpresa,
+          correoElectronico: asistente.correoElectronico,
+          telefonoExt: asistente.telefonoExt,
+          autorizaGrabacion: asistente.autorizaGrabacion,
+          firmaParticipacion: asistente.firmaParticipacion,
+        }))
+      );
+      setShowModal(true);
+    } catch (err) {
+      console.error("Error al abrir el modal:", err);
+      setError(
+        "Error al abrir el modal de registro de asistencia. Por favor, intenta nuevamente."
+      );
+    }
+  };
+
   const handleModalConfirm = () => {
     const hasEmptyRequiredFields = asistenciaData.some(
       (asistente) =>
         !asistente.nombre ||
         !asistente.numeroDocumento ||
-        !asistente.firmaParticipacion ||
-        !asistente.dependenciaEmpresa // Validación adicional
+        !asistente.firmaParticipacion
     );
     if (hasEmptyRequiredFields) {
       setError(
-        "Todos los campos obligatorios (Nombre, Número de Documento, Dependencia/Empresa y Firma) deben estar llenos."
+        "Todos los campos obligatorios (Nombre, Número de Documento y Firma) deben estar llenos."
       );
       return;
     }
+
     setFormData((prev) => ({
       ...prev,
       asistentesPlan: asistenciaData.map((asistente) => ({
@@ -308,10 +407,16 @@ const AgregarPlanMejoramiento = () => {
   const handleSubmit = async () => {
     setLoading(true);
     setError(null);
+
     try {
       const token = sessionStorage.getItem("token");
-      if (!token) throw new Error("No se ha identificado al instructor");
-      console.log("Datos a enviar (frontend):", formData);
+
+      if (!token) {
+        setError("No se ha identificado al instructor");
+        setLoading(false);
+        return;
+      }
+
       const response = await axios.post(
         `http://localhost:8080/api/planMejoramientos/${idAprendiz}`,
         formData,
@@ -322,26 +427,32 @@ const AgregarPlanMejoramiento = () => {
           },
         }
       );
-      console.log("Respuesta del backend:", response);
-      setSuccess(true);
-      setTimeout(() => navigate(`/aprendices/${idAprendiz}`), 2000);
+      setShowSuccessModal(true);
+
+      setTimeout(() => {
+        setShowSuccessModal(false);
+        navigate(`/aprendices/${idAprendiz}`);
+      }, 2000);
     } catch (err) {
-      console.error("Error completo:", err);
-      setError(err.response?.data?.message || err.message);
+      console.error("Error al guardar el plan:", err);
+      if (err.response && err.response.status === 401) {
+        setError("Sesión expirada. Por favor, inicie sesión nuevamente.");
+        sessionStorage.clear();
+        navigate("/login");
+      } else {
+        setError(`Error: ${err.response?.data?.message || err.message}`);
+      }
     } finally {
       setLoading(false);
     }
   };
 
-  const formatFechaModal = (fecha) => {
-    const date = new Date(fecha);
-    return {
-      dia: date.getDate(),
-      mes: date.toLocaleString("default", { month: "long" }),
-      anio: date.getFullYear(),
-    };
+  const handleQuillChange = (field, value) => {
+    setFormData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
   };
-  const fechaModal = formatFechaModal(formData.fecha);
 
   return (
     <div className="formato-sena-container">
@@ -350,13 +461,8 @@ const AgregarPlanMejoramiento = () => {
         <h1 className="document-title">
           SERVICIO NACIONAL DE APRENDIZAJE SENA
           <br />
-          FORMATO DE PLAN DE MEJORAMIENTO
+          PLAN DE MEJORAMIENTO
         </h1>
-      </div>
-
-      <div className="document-header">
-        {/* <span className="version">Versión: {formData.version}</span>
-        <span className="codigo">Código: {formData.codigo}</span> */}
       </div>
 
       <form
@@ -414,6 +520,7 @@ const AgregarPlanMejoramiento = () => {
                   value={formData.fecha}
                   onChange={handleChange}
                   required
+                  min={hoy}
                 />
               </div>
             </div>
@@ -476,7 +583,7 @@ const AgregarPlanMejoramiento = () => {
                 theme="snow"
                 modules={quillModules}
                 value={formData.agenda}
-                onChange={(value) => setFormData({ ...formData, agenda: value })}
+                onChange={(value) => handleQuillChange("agenda", value)}
                 placeholder="Describa la agenda o puntos a desarrollar..."
               />
             </div>
@@ -489,7 +596,7 @@ const AgregarPlanMejoramiento = () => {
                 theme="snow"
                 modules={quillModules}
                 value={formData.objetivos}
-                onChange={(value) => setFormData({ ...formData, objetivos: value })}
+                onChange={(value) => handleQuillChange("objetivos", value)}
                 placeholder="Describa los objetivos del plan..."
               />
             </div>
@@ -505,7 +612,7 @@ const AgregarPlanMejoramiento = () => {
                 theme="snow"
                 modules={quillModules}
                 value={formData.desarrollo}
-                onChange={(value) => setFormData({ ...formData, desarrollo: value })}
+                onChange={(value) => handleQuillChange("desarrollo", value)}
                 placeholder="Describa el desarrollo del plan..."
               />
             </div>
@@ -518,7 +625,7 @@ const AgregarPlanMejoramiento = () => {
                 theme="snow"
                 modules={quillModules}
                 value={formData.conclusiones}
-                onChange={(value) => setFormData({ ...formData, conclusiones: value })}
+                onChange={(value) => handleQuillChange("conclusiones", value)}
                 placeholder="Describa las conclusiones del plan..."
               />
             </div>
@@ -545,7 +652,9 @@ const AgregarPlanMejoramiento = () => {
                       type="text"
                       name="planDecision"
                       value={compromiso.planDecision}
-                      onChange={(e) => handleChange(e, index, "compromisosPlan")}
+                      onChange={(e) =>
+                        handleChange(e, index, "compromisosPlan")
+                      }
                       placeholder="Actividad o decisión"
                     />
                   </td>
@@ -554,7 +663,10 @@ const AgregarPlanMejoramiento = () => {
                       type="date"
                       name="fecha"
                       value={compromiso.fecha}
-                      onChange={(e) => handleChange(e, index, "compromisosPlan")}
+                      onChange={(e) =>
+                        handleChange(e, index, "compromisosPlan")
+                      }
+                      min={hoy}
                     />
                   </td>
                   <td>
@@ -562,9 +674,11 @@ const AgregarPlanMejoramiento = () => {
                       type="text"
                       name="responsable"
                       value={compromiso.responsable}
-                      onChange={(e) => handleChange(e, index, "compromisosPlan")}
+                      onChange={(e) =>
+                        handleChange(e, index, "compromisosPlan")
+                      }
                       placeholder="Nombre del responsable"
-                      readOnly // El responsable se llena automáticamente con el nombre del aprendiz
+                      readOnly
                     />
                   </td>
                   <td>
@@ -572,7 +686,9 @@ const AgregarPlanMejoramiento = () => {
                       type="text"
                       name="firmaParticipacion"
                       value={compromiso.firmaParticipacion}
-                      onChange={(e) => handleChange(e, index, "compromisosPlan")}
+                      onChange={(e) =>
+                        handleChange(e, index, "compromisosPlan")
+                      }
                       placeholder="Firma o participación virtual"
                     />
                   </td>
@@ -580,7 +696,6 @@ const AgregarPlanMejoramiento = () => {
               ))}
             </tbody>
           </table>
-          {/* Botón de agregar compromiso eliminado */}
         </div>
 
         {/* Sección 5: Asistentes */}
@@ -607,8 +722,7 @@ const AgregarPlanMejoramiento = () => {
                       value={asistente.nombre}
                       onChange={(e) => handleChange(e, index, "asistentesPlan")}
                       placeholder="Nombre completo"
-                      readOnly={index < 2} // Aprendiz e Instructor de solo lectura
-                      required
+                      readOnly={index < 2}
                     />
                   </td>
                   <td>
@@ -619,7 +733,6 @@ const AgregarPlanMejoramiento = () => {
                       onChange={(e) => handleChange(e, index, "asistentesPlan")}
                       placeholder="Dependencia o empresa"
                       readOnly={index < 2}
-                      required
                     />
                   </td>
                   <td>
@@ -627,11 +740,9 @@ const AgregarPlanMejoramiento = () => {
                       name="aprueba"
                       value={asistente.aprueba}
                       onChange={(e) => handleChange(e, index, "asistentesPlan")}
-                      
                     >
-                      <option disabled>Seleccione</option>
-                      <option value="">SÍ</option>
-                      <option value="">NO</option>
+                      <option value="SÍ">SÍ</option>
+                      <option value="NO">NO</option>
                     </select>
                   </td>
                   <td>
@@ -659,8 +770,10 @@ const AgregarPlanMejoramiento = () => {
                       disabled={index < 2}
                       onClick={() => {
                         if (index < 2) {
-                          alert("No se puede eliminar al aprendiz ni al instructor");
-                        } else if (window.confirm("¿Estás seguro de eliminar este asistente?")) {
+                          alert(
+                            "No se puede eliminar al instructor ni al aprendiz"
+                          );
+                        } else {
                           removeAsistente(index);
                         }
                       }}
@@ -696,7 +809,6 @@ const AgregarPlanMejoramiento = () => {
             correspondiente en cumplimiento de lo establecido legalmente.
           </p>
         </div>
-
         <div className="document-footer">
           <span className="codigo">Código: {formData.codigo}</span>
         </div>
@@ -712,13 +824,12 @@ const AgregarPlanMejoramiento = () => {
             Cancelar
           </button>
           <button type="submit" className="submit-button" disabled={loading}>
-            {loading ? "Guardando..." : "Guardar Plan"}
+            {loading ? "Avanzando" : "Siguiente"}
           </button>
         </div>
       </form>
 
       {error && <div className="error-message">{error}</div>}
-      {success && <div className="success-message">Plan guardado correctamente!</div>}
 
       {/* Modal para Registro de Asistencia */}
       {showModal && (
@@ -745,9 +856,7 @@ const AgregarPlanMejoramiento = () => {
                     theme="snow"
                     modules={quillModules}
                     value={formData.objetivos}
-                    onChange={(value) =>
-                      setFormData({ ...formData, objetivos: value })
-                    }
+                    onChange={(value) => handleQuillChange("objetivos", value)}
                     placeholder="Describa los objetivos del plan..."
                     readOnly
                   />
@@ -806,7 +915,9 @@ const AgregarPlanMejoramiento = () => {
                           onChange={(e) => handleAsistenciaChange(e, index)}
                           required
                         >
-                          <option disabled value="">Seleccione</option>
+                          <option disabled value="">
+                            Seleccione
+                          </option>
                           <option value="SÍ">SÍ</option>
                           <option value="NO">NO</option>
                         </select>
@@ -818,7 +929,9 @@ const AgregarPlanMejoramiento = () => {
                           onChange={(e) => handleAsistenciaChange(e, index)}
                           required
                         >
-                          <option disabled value="">Seleccione</option>
+                          <option disabled value="">
+                            Seleccione
+                          </option>
                           <option value="SÍ">SÍ</option>
                           <option value="NO">NO</option>
                         </select>
@@ -934,6 +1047,14 @@ const AgregarPlanMejoramiento = () => {
                 {loading ? "Guardando..." : "Confirmar y Guardar"}
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {showSuccessModal && (
+        <div className="success-modal-overlay">
+          <div className="success-modal-content">
+            <h2>¡Plan de mejoramiento guardado exitosamente!</h2>
           </div>
         </div>
       )}

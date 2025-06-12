@@ -229,7 +229,7 @@ select {
 
 /* Botón de envío */
 .registro-form button {
-  background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+  background: var(--primary);
   color: white;
   border: none;
   padding: 1.4rem 3.5rem;
@@ -252,7 +252,8 @@ select {
 
 .registro-form button:hover {
   transform: scale(1.03);
-  box-shadow: 0 15px 35px rgba(76, 175, 80, 0.4);
+  background-color: var(--primary-hover);
+  box-shadow: 0 1px 25px var(--primary);
 }
 
 .registro-form button:active {

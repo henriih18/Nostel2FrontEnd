@@ -1,0 +1,190 @@
+:root {
+  --boton: #4caf50;
+  --botones-hover: #388e3c;
+  --background: #f5f5f5;
+  --background-container: #ffffff;
+  --border-color: #ddd;
+  --text-dark: #2d3748;
+  --text-light: #f8fafc;
+  --accent: #007bff;
+  --accent-hover: #0056b3;
+  --error: #dc3545;
+}
+
+/* ---------------------- */
+/* Contenedor general */
+.chatbot-widget {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;      /* Siempre anclado a la esquina inferior derecha */
+  z-index: 10000;    /* Muy por encima para que no quede oculto */
+  width: 320px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;         /* Sin margen adicional */
+  padding: 0;
+  /* Para que el botón no se desplace si se muestra el contenido */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+/* ---------------------- */
+/* Botón circular principal */
+.chatbot-toggle-button {
+  background-color: var(--boton);
+  color: var(--text-light);
+  padding: 12px;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.4rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  z-index: 10001;     /* Aún por encima del panel de chat */
+}
+
+.chatbot-toggle-button:hover {
+  background-color: var(--botones-hover);
+  transform: scale(1.03);
+  box-shadow: 0 5px 25px var(--boton);
+  
+
+}
+
+/* ---------------------- */
+/* Ventana de chatbot */
+.chatbot-content {
+  background: var(--background-container);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+  margin-top: 10px;        /* Separación respecto al botón */
+  display: flex;
+  flex-direction: column;
+  height: 400px;           /* Altura fija para scroll */
+  overflow: hidden;
+  width: 100%;             /* Ocupa el 100% del ancho del contenedor chatbot-widget */
+}
+
+/* ---------------------- */
+/* Área de mensajes (scrollable) */
+.chatbot-messages {
+  flex: 1;
+  padding: 10px 12px;
+  background: var(--background);
+  overflow-y: auto;
+}
+
+/* Scrollbar fino */
+.chatbot-messages::-webkit-scrollbar {
+  width: 6px;
+}
+.chatbot-messages::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+}
+.chatbot-messages::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* ---------------------- */
+/* Burbuja de mensaje del usuario */
+.chatbot-message.user {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 8px;
+}
+.chatbot-message.user .message-content {
+  background-color: var(--boton);
+  color: var(--text-light);
+  border-radius: 16px 16px 0 16px;
+}
+
+/* Burbuja de mensaje del bot */
+.chatbot-message.bot {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 8px;
+}
+.chatbot-message.bot .message-content {
+  background-color: var(--background-container);
+  color: var(--text-dark);
+  border: 1px solid var(--border-color);
+  border-radius: 16px 16px 16px 0;
+}
+
+/* Estilos generales de burbuja */
+.chatbot-message .message-content {
+  max-width: 75%;
+  padding: 8px 12px;
+  font-size: 0.95rem;
+  line-height: 1.3;
+  word-wrap: break-word;
+}
+
+/* ---------------------- */
+/* Formulario inferior */
+.chatbot-form {
+  display: flex;
+  flex-direction: column;
+  padding: 10px 12px;
+  border-top: 1px solid var(--border-color);
+  background-color: var(--background-container);
+}
+
+/* Input de texto */
+.chatbot-form input {
+  padding: 8px 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-size: 0.95rem;
+  margin-bottom: 6px;
+}
+
+/* Botón de envío */
+.chatbot-form button {
+  padding: 8px;
+  background-color: var(--boton);
+  color: var(--text-light);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition:  0.2s ease;
+}
+
+/* Hover del botón */
+.chatbot-form button:hover:not(:disabled) {
+  background-color: var(--botones-hover);
+  transform: scale(1.03);
+  box-shadow: 0px 5px 25px var(--boton);
+}
+
+/* Estado deshabilitado del botón */
+.chatbot-form button:disabled {
+  background-color: var(--boton);
+  opacity: 0.6;
+  cursor: default;
+}
+
+/* ---------------------- */
+/* Animación blink */
+@keyframes blink {
+  0% { opacity: 1; }
+  50% { opacity: 0.4; }
+  100% { opacity: 1; }
+}
+
+/* Clase para parpadear */
+.blink {
+  animation: blink 1s infinite;
+}
+
+/* ---------------------- */
+/* Mensaje de error en formulario */
+.error-message {
+  color: var(--error);
+  font-size: 0.85rem;
+  margin-top: 4px;
+  text-align: center;
+}

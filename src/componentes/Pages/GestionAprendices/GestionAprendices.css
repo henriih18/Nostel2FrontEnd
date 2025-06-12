@@ -1,140 +1,266 @@
-/* Estilos para GestionAprendices basados en RegistroAprendices.css */
+/* Variables basadas en Login.css de Nostel */
+:root {
+  --primary: #4CAF50;
+  --primary-hover: #388E3C;
+  --background: rgb(193, 196, 195);
+  --background-container: rgba(236, 236, 236, 0.9);
+  --error: #ff4444;
+  --text-dark: #2d3748;
+  --text-medium: #4a5568;
+  --text-light: #f8fafc;
+  --war: #ff4444;
+  --war-hover: #cc0000;
+  --border-radius: 12px;
+  --shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+  --spacing: 1rem;
+  --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
 
+/* Reset & tipografía global */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-family);
+}
+
+/* Contenedor principal */
 .gestion-aprendices-container {
-    max-width: 100%;
-    height: 100%;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #f5f5f5;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-.gestion-aprendices-container h2 {
-    text-align: center;
-    color: #2c3e50;
-    margin-bottom: 20px;
-    font-size: 24px;
-}
-
-.aprendices-list {
-    display: flex;
-    justify-content: center;
-    flex-direction: row;
-  flex-wrap: wrap;
-width: 100%;
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-    gap: 2rem;
-}
-
-.aprendiz-item {
-    text-align: center;
-    background-color: white;
-    padding: 15px;
-    margin-bottom: 10px;
-    border-radius: 5px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    transition: transform 0.2s;
-    width: 12rem;
-    gap: .5rem;
-    transition: all 0.3s ease;
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  margin: 0 auto;
+  padding: 1rem;
+ 
+  border-radius: var(--border-radius);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 15px 60px rgba(0, 0, 0, 0.15),
+              inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+.gestion-aprendices-container::before {
+  content: '';
+  position: absolute;
+  top: -50%; left: -50%;
+  width: 200%; height: 200%;
+  
+  animation: float 20s linear infinite;
+  z-index: -1;
+}
+.gestion-aprendices-container::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 6px;
+  background: linear-gradient(90deg, var(--primary), var(--primary-hover), var(--primary));
+  background-size: 200% 100%;
+  animation: gradientShift 6s ease infinite;
+  z-index: 1;
 }
 
-.aprendiz-item:hover {
-    transform: scale(1.03);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+/* Título */
+.gestion-aprendices-container h2 {
+  text-align: center;
+  color: var(--text-dark);
+  margin-bottom: 2rem;
+  font-size: 2rem;
+  font-weight: 700;
+  position: relative;
+  padding-bottom: 1rem;
+}
+.gestion-aprendices-container h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 100px; height: 4px;
+  background: linear-gradient(90deg, var(--primary), var(--primary-hover));
+  border-radius: 5px;
 }
 
-.aprendiz-item strong {
-    color: var(--boton);
-    font-weight: 600;
-}
-
-.aprendiz-item span {
-    display: flex;
-    flex-wrap: wrap;
-    text-align: start;
-}
-
-.ficha-info {
-    background-color: #ecf0f1;
-    padding: 5px 10px;
-    border-radius: 15px;
-    font-size: 14px;
-    color: #7f8c8d;
-}
-
-.error-message {
-    background-color: #f8d7da;
-    color: #721c24;
-    padding: 10px;
-    border-radius: 5px;
-    margin-bottom: 20px;
-    text-align: center;
-}
-
-.loading-container {
-    text-align: center;
-    padding: 20px;
-    color: #7f8c8d;
-}
-
-/* Estilos para filtros o búsqueda (opcional) */
+/* Filtros */
 .filtros-container {
-    margin-bottom: 20px;
-    display: flex;
-    gap: 10px;
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  width: 100%;
 }
-
 .filtros-container input {
-    flex: 1;
-    padding: 8px 12px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 14px;
+  flex: 1;
+  padding: 0.8rem 1rem;
+  border: 2px solid rgba(0, 0, 0, 0.08);
+  border-radius: var(--border-radius);
+  background: rgba(255,255,255,0.7);
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow);
 }
-
+.filtros-container input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(76,175,80,0.15), 0 4px 20px rgba(76,175,80,0.1);
+  outline: none;
+  background: #fff;
+}
 .filtros-container button {
-    background-color: #3498db;
-    color: white;
-    border: none;
-    padding: 8px 15px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s;
+  background: var(--primary);
+  color: var(--text-light);
+  border: none;
+  padding: 1rem;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+  width: 200px;
+}
+.filtros-container button:hover {
+  transform: scale(1.03);
+  background-color: var(--primary-hover);
+  box-shadow: 0 5px 25px var(--primary);
+}
+.filtros-container button:disabled {
+  background: linear-gradient(135deg, #a5d6a7, #c8e6c9);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
-.filtros-container button:hover {
-    background-color: #2980b9;
+/* Lista de aprendices */
+.aprendices-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+  
+  gap: 2rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  overflow-y: auto;
+}
+
+/* ——— ESTILOS ORIGINALES DE .aprendiz-item, SIN MODIFICAR ——— */
+.aprendiz-item {
+  cursor: pointer;
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 14rem;
+  
+  gap: 1rem;
+  transition: all 0.3s ease;
+  overflow: hidden;
+  box-sizing: border-box;
+ 
+}
+.aprendiz-item:hover {
+  transform: scale(1.03);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.aprendiz-item strong {
+  color: var(--boton);
+  font-weight: 600;
+  font-size: 1.2rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
+  text-align: center;
+}
+.aprendiz-item span {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  text-align: start;
+  gap: 0.5rem;
+  width: 100%;
+  overflow: hidden;
+}
+.ficha-info {
+  background-color: #ecf0f1;
+  padding: 8px 12px;
+  border-radius: 15px;
+  font-size: 14px;
+  color: #7f8c8d;
+  display: flex;
+  flex-wrap: wrap;
+  overflow: hidden;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+/* ———————————————————————————————————————————————— */
+
+/* Mensaje de error */
+.error-message {
+  background-color: var(--war);
+  color: var(--text-light);
+  padding: 1rem;
+  border-radius: var(--border-radius);
+  margin-bottom: 2rem;
+  text-align: center;
+  width: 100%;
+  max-width: 600px;
+}
+
+/* Indicador de carga */
+.loading-container {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-medium);
+  width: 100%;
 }
 
 /* Mensaje cuando no hay aprendices */
 .no-aprendices {
-    text-align: center;
-    padding: 30px;
-    color: #7f8c8d;
-    font-style: italic;
+  text-align: center;
+  padding: 3rem;
+  color: var(--text-medium);
+  font-style: italic;
+  width: 100%;
+}
+
+/* Animaciones */
+@keyframes float {
+  0%   { transform: translate(0, 0); }
+  25%  { transform: translate(-5%, -5%); }
+  50%  { transform: translate(-10%, 0); }
+  75%  { transform: translate(-5%, 5%); }
+  100% { transform: translate(0, 0); }
+}
+@keyframes gradientShift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 /* Responsive */
+@media (max-width: 1024px) {
+  .gestion-aprendices-container { padding: 1.5rem; }
+  .gestion-aprendices-container h2 { font-size: 1.5rem; margin-bottom: 1.5rem; }
+  .filtros-container { flex-direction: column; gap: 1rem; }
+}
 @media (max-width: 600px) {
-    .gestion-aprendices-container {
-        padding: 15px;
-    }
-
-    .aprendiz-item {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .ficha-info {
-        margin-top: 8px;
-        align-self: flex-start;
-    }
+  .gestion-aprendices-container { padding: 1rem; }
+  .gestion-aprendices-container h2 { font-size: 1.3rem; }
+  .filtros-container input { font-size: 0.9rem; padding: 0.6rem; }
+  .filtros-container button { font-size: 0.9rem; padding: 0.8rem; }
+  /* aprendiz-item SIN MODIFICACIONES */
+}
+@media (max-width: 480px) {
+  .gestion-aprendices-container { padding: 0.75rem; }
+  .gestion-aprendices-container h2 { font-size: 1.2rem; }
+  .filtros-container { gap: 0.5rem; }
+  .filtros-container input { font-size: 0.85rem; padding: 0.5rem; }
+  .filtros-container button { font-size: 0.85rem; padding: 0.6rem; }
+  /* aprendiz-item SIN MODIFICACIONES */
 }

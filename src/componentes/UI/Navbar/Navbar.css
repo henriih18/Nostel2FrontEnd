@@ -118,7 +118,7 @@ nav > ul > li a.active::before {
   transition: var(--transition);
   width: 60%;
   margin-top: 2rem;
-  box-shadow: 0 10px 25px rgba(76, 175, 80, 0.3);
+ 
   position: relative;
   overflow: hidden;
   margin-bottom: 2rem;
@@ -127,7 +127,7 @@ nav > ul > li a.active::before {
 .botonSalir:hover {
   transform: scale(1.03);
   background-color: var(--warHover);
-  box-shadow: 0 15px 35px rgba(76, 175, 80, 0.4);
+  box-shadow: 0 5px 25px var(--war);
 }
 
 /* Efecto ripple como en login */

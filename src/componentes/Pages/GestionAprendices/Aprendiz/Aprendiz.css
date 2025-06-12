@@ -59,6 +59,7 @@
   overflow: hidden;
   position: absolute;
   overflow: hidden;
+  
 }
 
 /* Encabezado con el selector */
@@ -104,8 +105,8 @@
 
 .containerSelect:hover {
   background: var(--botonesHover);
-
   transform: scale(1.03);
+  box-shadow: 0px 5px 25px var(--boton);
 }
 
 .containerSelect:focus {

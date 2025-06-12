@@ -1,0 +1,118 @@
+:root {
+  --primary: #4CAF50;
+  --primary-hover: #388E3C;
+  --background: rgb(193, 196, 195);
+  --background-container: rgba(236, 236, 236, 0.9);
+  --error: #ff4444;
+  --text-dark: #2d3748;
+  --text-medium: #4a5568;
+  --text-light: #f8fafc;
+  --border: rgba(0, 0, 0, 0.1);
+}
+
+.home-container {
+  position: relative;
+  width: 100%;
+  min-height: 100%;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--background);
+  overflow: hidden;
+}
+
+.welcome-card {
+  position: relative;
+  z-index: 10;
+  background: var(--background-container);
+  padding: 2rem 3rem;
+  border-radius: 16px;
+  text-align: center;
+  max-width: 500px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  border: 1px solid var(--border);
+}
+
+.welcome-card h1 {
+  margin-bottom: 1rem;
+  color: var(--text-dark);
+  font-size: 2rem;
+}
+
+.welcome-card .subtitle {
+  font-size: 1rem;
+  color: var(--text-medium);
+}
+
+/* Base para todos los logos flotantes */
+.logo-float {
+  position: absolute;
+  filter: blur(4px) opacity(0.6);
+  will-change: transform;
+  z-index: 5;
+}
+
+/* Personalizaciones para cada uno */
+.float-1 {
+  width: 60px;
+  top: 15%;
+  left: 10%;
+  animation: f1 12s ease-in-out infinite;
+}
+.float-2 {
+  width: 45px;
+  top: 5%;
+  right: 20%;
+  animation: f2 14s ease-in-out infinite;
+}
+.float-3 {
+  width: 50px;
+  bottom: 15%;
+  left: 25%;
+  animation: f3 10s ease-in-out infinite;
+}
+.float-4 {
+  width: 40px;
+  bottom: 20%;
+  right: 30%;
+  animation: f4 13s ease-in-out infinite;
+}
+.float-5 {
+  width: 55px;
+  top: 45%;
+  left: 5%;
+  animation: f5 11s ease-in-out infinite;
+}
+.float-6 {
+  width: 50px;
+  bottom: 35%;
+  right: 10%;
+  animation: f6 15s ease-in-out infinite;
+}
+
+/* Keyframes */
+@keyframes f1 {
+  0%,100% { transform: translate(0,0); }
+  50%    { transform: translate(20px,-20px); }
+}
+@keyframes f2 {
+  0%,100% { transform: translate(0,0) rotate(0deg); }
+  50%    { transform: translate(-15px,15px) rotate(15deg); }
+}
+@keyframes f3 {
+  0%,100% { transform: translate(0,0); }
+  50%    { transform: translate(25px,10px); }
+}
+@keyframes f4 {
+  0%,100% { transform: translate(0,0) rotate(0deg); }
+  50%    { transform: translate(-10px,-25px) rotate(-10deg); }
+}
+@keyframes f5 {
+  0%,100% { transform: translate(0,0); }
+  50%    { transform: translate(30px,5px); }
+}
+@keyframes f6 {
+  0%,100% { transform: translate(0,0) rotate(0deg); }
+  50%    { transform: translate(-20px,20px) rotate(20deg); }
+}

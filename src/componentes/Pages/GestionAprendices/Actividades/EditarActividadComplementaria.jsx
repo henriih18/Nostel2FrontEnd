@@ -210,6 +210,7 @@ export const EditarActividadComplementaria = ({
                     onChange={handleChange}
                     placeholder="Número de acta"
                     required
+                    disabled
                   />
                 </div>
               </div>
@@ -246,6 +247,7 @@ export const EditarActividadComplementaria = ({
                       value={formData.fecha}
                       onChange={handleChange}
                       required
+                      disabled
                     />
                   </div>
                 </div>
@@ -298,7 +300,7 @@ export const EditarActividadComplementaria = ({
                 </div>
               </div>
 
-              <div className="form-row">
+              {/* <div className="form-row">
                 <div className="form-group">
                   <label>ESTADO</label>
                   <select
@@ -311,7 +313,7 @@ export const EditarActividadComplementaria = ({
                     <option value="Calificado">Calificado</option>
                   </select>
                 </div>
-              </div>
+              </div> */}
             </div>
 
             {/* Sección 2: Agenda y Objetivos */}

@@ -11,7 +11,7 @@ export const Navbar = () => {
   };
   return (
     <>
-      <nav>
+      <nav className="navBar">
         <img src={logoSenaN} alt="" />
         <ul>
           <li>
@@ -32,11 +32,10 @@ export const Navbar = () => {
           <li>
             <NavLink to="/aboutUs">Acerca de Nosotros</NavLink>
           </li>
-          
         </ul>
         <button className="botonSalir" onClick={handleLogout}>
-            Cerrar Sesión
-          </button>
+          Cerrar Sesión
+        </button>
       </nav>
     </>
   );

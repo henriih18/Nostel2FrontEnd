@@ -162,6 +162,8 @@ export const AgregarComentario = ({ onComentarioAgregado }) => {
                                 value={formData.fechaComentario}
                                 onChange={handleChange}
                                 required
+                                min={ new Date().toISOString().split('T')[0] }
+                                disabled
                             />
                         </div>
                         <div className="form-group">
