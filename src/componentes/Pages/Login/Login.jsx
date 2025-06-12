@@ -9,7 +9,9 @@ export const Login = ({ onLogin }) => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  
+  const API_URL = import.meta.env.VITE_API_URL;
+
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,7 +24,7 @@ export const Login = ({ onLogin }) => {
     try {
       setLoading(true);
 
-      const response = await axios.post('http://localhost:8080/auth/login', {
+      const response = await axios.post(`${API_URL}/auth/login`, {
         correo,
         contrasena,
       }, {
