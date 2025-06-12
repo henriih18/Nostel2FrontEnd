@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Routes, Route } from "react-router-dom";
+import {  Routes, Route } from "react-router-dom";
 import { Container } from "./componentes/Layouts/Container/Container";
 import { Home } from "./componentes/Pages/Home/Home";
 import { AboutUs } from "./componentes/Pages/AboutUs/AboutUs";
@@ -28,9 +28,11 @@ function App() {
   });
   const [data, setData] = useState(null);
 
+  const API_URL = import.meta.env.VITE_API_URL;
+
   useEffect(() => {
     if (isAuthenticated) {
-      fetch("http://localhost:3001/data")
+      fetch(`${API_URL}/data`)
         .then((response) => response.json())
         .then((data) => setData(data))
         .catch((error) => console.error("Error:", error));
