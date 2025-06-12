@@ -9,10 +9,13 @@ export const RegistroAprendiz = () => {
   const [errores, setErrores] = useState({});
   const [loading, setLoading] = useState(false);
 
+
+  const API_URL = import.meta.env.VITE_API_URL;
+
   useEffect(() => {
     const cargarFichas = async () => {
       try {
-        const response = await axios.get("http://localhost:8080/fichas/disponibles");
+        const response = await axios.get(`${API_URL}/fichas/disponibles`);
         
         console.log("Respuesta de fichas:", response.data);
         setFichas(response.data);
