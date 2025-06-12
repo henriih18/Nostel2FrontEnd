@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+/* import React, { useState, useEffect } from "react";
 import {  Routes, Route } from "react-router-dom";
 import { Container } from "./componentes/Layouts/Container/Container";
 import { Home } from "./componentes/Pages/Home/Home";
@@ -32,7 +32,7 @@ function App() {
 
   useEffect(() => {
     if (isAuthenticated) {
-      fetch(/* "http://localhost:3001/data" */)
+      fetch( "http://localhost:3001/data" )
         .then((response) => response.json())
         .then((data) => setData(data))
         .catch((error) => console.error("Error:", error));
@@ -102,88 +102,126 @@ function App() {
 }
 
 export default App;
+ */
 
-/*
-import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { Login } from './componentes/Pages/Login/Login';
-import Navbar from './componentes/Layout/Navbar/Navbar';
-// Importa tus otros componentes aquí
+// src/App.jsx
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { Routes, Route, Navigate } from "react-router-dom";
+import ContainerNavbar from "./componentes/Layouts/ContainerNavbar/ContainerNavbar";
+import { Container } from "./componentes/Layouts/Container/Container";
+import { Home } from "./componentes/Pages/Home/Home";
+import { AboutUs } from "./componentes/Pages/AboutUs/AboutUs";
+import { Login } from "./componentes/Pages/Login/Login";
+import { GestionProgramas } from "./componentes/Pages/GestionProgramas/GestionProgramas";
+import { AgregarPrograma } from "./componentes/Pages/GestionProgramas/AgregarPrograma";
+import { GestionFichas } from "./componentes/Pages/GestionFichas/GestionFichas";
+import { AgregarFicha } from "./componentes/Pages/GestionFichas/AgregarFicha";
+import { GestionInstructores } from "./componentes/Pages/GestionInstructores/GestionInstructores";
+import { AgregarInstructor } from "./componentes/Pages/GestionInstructores/AgregarInstructor";
+import { GestionAprendices } from "./componentes/Pages/GestionAprendices/GestionAprendices";
+import AgregarActividadComplementaria from "./componentes/Pages/GestionAprendices/Actividades/AgregarActividadComplementaria";
+import Aprendiz from "./componentes/Pages/GestionAprendices/Aprendiz/Aprendiz";
+import AgregarPlanMejoramiento from "./componentes/Pages/GestionAprendices/PlanesMejoramiento/AgregarPlanMejoramiento";
+import Comentarios from "./componentes/Pages/GestionAprendices/Comentarios/Comentarios";
+import AgregarComentario from "./componentes/Pages/GestionAprendices/Comentarios/AgregarComentario";
+import EditarComentario from "./componentes/Pages/GestionAprendices/Comentarios/EditarComentario";
+import ChatbotWidget from "./componentes/Chatbot/ChatbotWidget";
+import ForgotPassword from "./componentes/PasswordReset/ForgotPassword";
+import ResetPassword from "./componentes/PasswordReset/ResetPassword";
 
 function App() {
-  const [token, setToken] = useState(sessionStorage.getItem('token'));
+  const [isAuthenticated, setIsAuthenticated] = useState(
+    !!sessionStorage.getItem("token")
+  );
+  const [data, setData] = useState(null);
+  const API_URL = import.meta.env.VITE_API_URL;
 
-  // Función para manejar el inicio de sesión exitoso
-  const handleLogin = (newToken) => {
-    setToken(newToken);
+  useEffect(() => {
+    if (isAuthenticated) {
+      axios
+        .get(/* `${API_URL}/data` */)
+        .then((res) => setData(res.data))
+        .catch((err) => console.error("Error fetching data:", err));
+    }
+  }, [isAuthenticated, API_URL]);
+
+  const handleLogin = (token) => {
+    sessionStorage.setItem("token", token);
+    setIsAuthenticated(true);
   };
 
-  // Componente para rutas protegidas
-  const ProtectedRoute = ({ children, allowedRoles }) => {
-    const userToken = sessionStorage.getItem('token');
-    const userRole = sessionStorage.getItem('rol');
-    
-    if (!userToken) {
-      return <Navigate to="/" replace />;
-    }
-    
-    if (allowedRoles && !allowedRoles.includes(userRole)) {
-      return <Navigate to="/" replace />;
-    }
-    
-    return children;
-  };
+  // Si no está autenticado, muestra el Login (sin rutas protegidas)
+  if (!isAuthenticated) {
+    return <Login onLogin={handleLogin} />;
+  }
 
   return (
-    <Router>
-      El Navbar se mostrará en todas las páginas 
-      <Navbar />
-      
-      <Routes>
-         Ruta pública - Login 
-        <Route path="/" element={!token ? <Login onLogin={handleLogin} /> : 
-          <Navigate to={
-            sessionStorage.getItem('rol') === "ROLE_APRENDIZ" ? "/aprendices" : 
-            sessionStorage.getItem('rol') === "ROLE_INSTRUCTOR" ? "/instructor" : 
-            sessionStorage.getItem('rol') === "ROLE_ADMIN" ? "/admin" : "/"
-          } />
-        } />
-        
-         Ruta de registro 
-        <Route path="/registroAprendiz" element={<RegistroAprendiz />} />
-        
-        Rutas protegidas 
-        <Route path="/aprendices" element={
-          <ProtectedRoute allowedRoles={["ROLE_APRENDIZ"]}>
-            <DashboardAprendiz />
-          </ProtectedRoute>
-        } />
-        
-        <Route path="/instructor" element={
-          <ProtectedRoute allowedRoles={["ROLE_INSTRUCTOR"]}>
-            <DashboardInstructor />
-          </ProtectedRoute>
-        } />
-        
-        <Route path="/admin" element={
-          <ProtectedRoute allowedRoles={["ROLE_ADMIN"]}>
-            <DashboardAdmin />
-          </ProtectedRoute>
-        } />
-        
-         Ruta para página no encontrada
-        <Route path="*" element={<PaginaNoEncontrada />} />
-      </Routes>
-    </Router>
+    <div className="container-app">
+      <ContainerNavbar />
+      <Container className="container-main">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about-us" element={<AboutUs />} />
+
+          <Route
+            path="/gestion-programas"
+            element={<GestionProgramas />}
+          />
+          <Route
+            path="/agregar-programa"
+            element={<AgregarPrograma />}
+          />
+
+          <Route path="/gestion-fichas" element={<GestionFichas />} />
+          <Route path="/agregar-ficha" element={<AgregarFicha />} />
+
+          <Route
+            path="/gestion-instructores"
+            element={<GestionInstructores />}
+          />
+          <Route
+            path="/agregar-instructor"
+            element={<AgregarInstructor />}
+          />
+
+          <Route
+            path="/gestion-aprendices"
+            element={<GestionAprendices />}
+          />
+          <Route
+            path="/agregar-actividad/:idAprendiz"
+            element={<AgregarActividadComplementaria />}
+          />
+          <Route
+            path="/agregar-plan/:idAprendiz"
+            element={<AgregarPlanMejoramiento />}
+          />
+
+          <Route
+            path="/aprendices/:idAprendiz/comentarios"
+            element={<Comentarios />}
+          />
+          <Route
+            path="/agregar-comentario/:idAprendiz"
+            element={<AgregarComentario />}
+          />
+          <Route
+            path="/aprendices/:idAprendiz/comentarios/:idComentario/editar"
+            element={<EditarComentario />}
+          />
+          <Route
+            path="/aprendices/:idAprendiz"
+            element={<Aprendiz />}
+          />
+
+          {/* Fallback interno: redirige al home */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </Container>
+      <ChatbotWidget />
+    </div>
   );
 }
 
-// Componentes temporales para las rutas que no has implementado aún
-// Reemplaza estos con tus componentes reales
-const DashboardAprendiz = () => <div>Dashboard Aprendiz</div>;
-const DashboardInstructor = () => <div>Dashboard Instructor</div>;
-const DashboardAdmin = () => <div>Dashboard Admin</div>;
-const RegistroAprendiz = () => <div>Registro de Aprendiz</div>;
-const PaginaNoEncontrada = () => <div>Página no encontrada</div>;
-
-export default App; */
+export default App;
