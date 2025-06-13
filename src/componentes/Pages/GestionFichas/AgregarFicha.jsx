@@ -6,11 +6,12 @@ export const AgregarFicha = () => {
     const [programas, setProgramas] = useState([]);
     const [error, setError] = useState(null);
     const navigate = useNavigate();
+    const API_URL = import.meta.env.VITE_API_URL;
 
     useEffect(() => {
         const cargarProgramas = async () => {
             try {
-                const response = await axios.get("http://localhost:8080/api/programas");
+                const response = await axios.get(`${API_URL}/api/programas`);
                 setProgramas(response.data);
             } catch (error) {
                 console.error("Error cargando programas:", error);
@@ -59,7 +60,8 @@ export const AgregarFicha = () => {
                 numeroAmbiente: parseInt(data.numeroAmbiente, 10)
             };
 
-            await axios.post('http://localhost:8080/api/fichas', nuevaFicha, config);
+            /* await axios.post('http://localhost:8080/api/fichas', nuevaFicha, config); */
+            await axios.post(`${API_URL}/fichas`, nuevaFicha, config);
 
             // Redirigir a la lista de fichas después de agregar
             navigate('/gestion-fichas');

@@ -50,6 +50,7 @@ export const EditarActividadComplementaria = ({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
+  const API_URL = import.meta.env.VITE_API_URL;
 
   const quillModules = {
     toolbar: [
@@ -159,7 +160,7 @@ export const EditarActividadComplementaria = ({
       console.log("Enviando datos actualizados de la actividad:", actividadActualizada);
 
       const response = await axios.put(
-        `http://localhost:8080/actividadComplementarias/${formData.idAprendiz}/${formData.idActividad}`,
+        `${API_URL}/actividadComplementarias/${formData.idAprendiz}/${formData.idActividad}`,
         actividadActualizada,
         {
           headers: {

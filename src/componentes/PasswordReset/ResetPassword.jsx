@@ -10,6 +10,7 @@ export const ResetPassword = () => {
   const [success, setSuccess] = useState(false);
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const API_URL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     // Extraer el token de los parámetros de la URL
@@ -31,7 +32,7 @@ export const ResetPassword = () => {
 
     try {
       const token = searchParams.get("token");
-      await axios.post("http://localhost:8080/password-reset/reset", {
+      await axios.post(`${API_URL}/password-reset/reset`, {
         token,
         newPassword,
       });

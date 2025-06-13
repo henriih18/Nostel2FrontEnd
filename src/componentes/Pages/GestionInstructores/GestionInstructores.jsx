@@ -8,6 +8,7 @@ export const GestionInstructores = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const API_URL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     fetchInstructores();
@@ -39,10 +40,9 @@ export const GestionInstructores = () => {
         timeout: 5000 // 5 segundos
       };
 
-      console.log("Realizando petición a http://localhost:8080/instructores");
 
       // Realizar la petición para obtener los instructores
-      const response = await axios.get('http://localhost:8080/instructores', config);
+      const response = await axios.get(`${API_URL}/instructores`, config);
 
       console.log("Datos recibidos:", response.data);
 

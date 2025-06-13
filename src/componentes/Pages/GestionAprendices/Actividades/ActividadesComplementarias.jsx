@@ -25,6 +25,8 @@ const ActividadesComplementarias = ({ idAprendiz }) => {
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [currentSection, setCurrentSection] = useState("actividades"); // Nuevo estado para controlar la sección
 
+  const API_URL = import.meta.env.VITE_API_URL;
+
   // Referencias específicas para cada sección
   const actaRef = useRef();
   const registroRef = useRef();
@@ -64,7 +66,7 @@ const ActividadesComplementarias = ({ idAprendiz }) => {
         }
 
         const response = await axios.get(
-          `http://localhost:8080/actividadComplementarias/${idAprendiz}`,
+          `${API_URL}/actividadComplementarias/${idAprendiz}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -98,7 +100,7 @@ const ActividadesComplementarias = ({ idAprendiz }) => {
         }
 
         const response = await axios.get(
-          `http://localhost:8080/instructores/usuario/${idUsuario}`,
+          `${API_URL}/instructores/usuario/${idUsuario}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -146,7 +148,7 @@ const ActividadesComplementarias = ({ idAprendiz }) => {
       const token = sessionStorage.getItem("token");
       if (!token) throw new Error("Sin token de autenticación");
       const res = await axios.delete(
-        `http://localhost:8080/actividadComplementarias/${idAprendiz}/${idActividad}`,
+        `${API_URL}/actividadComplementarias/${idAprendiz}/${idActividad}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       if (res.status >= 200 && res.status < 300) {

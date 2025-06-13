@@ -12,6 +12,7 @@ export const AgregarActividadComplementaria = () => {
   const navigate = useNavigate();
   const { idAprendiz } = useParams();
   const location = useLocation();
+  const API_URL = import.meta.env.VITE_API_URL;
 
   const [formData, setFormData] = useState({
     idInstructor: null,
@@ -88,7 +89,7 @@ export const AgregarActividadComplementaria = () => {
         }
 
         const response = await axios.get(
-          `http://localhost:8080/instructores/usuario/${idUsuario}`,
+          `${API_URL}/instructores/usuario/${idUsuario}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -149,7 +150,7 @@ export const AgregarActividadComplementaria = () => {
         }
 
         const response = await axios.get(
-          `http://localhost:8080/aprendices/${idAprendiz}`,
+          `${API_URL}/aprendices/${idAprendiz}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -409,7 +410,7 @@ export const AgregarActividadComplementaria = () => {
       }
 
       const response = await axios.post(
-        `http://localhost:8080/actividadComplementarias/${idAprendiz}`,
+        `${API_URL}/actividadComplementarias/${idAprendiz}`,
         formData,
         {
           headers: {

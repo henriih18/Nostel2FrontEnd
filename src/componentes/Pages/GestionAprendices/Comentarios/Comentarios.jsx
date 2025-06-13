@@ -14,6 +14,7 @@ export const Comentarios = ({ idAprendiz }) => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(null);
   const [instructor, setInstructor] = useState(null);
+  const API_URL = import.meta.env.VITE_API_URL;
 
   const fetchComentarios = async () => {
     if (!idAprendiz || isNaN(idAprendiz)) {
@@ -31,7 +32,7 @@ export const Comentarios = ({ idAprendiz }) => {
       }
 
       const response = await axios.get(
-        `http://localhost:8080/comentarios/${idAprendiz}`,
+        `${API_URL}/comentarios/${idAprendiz}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -99,7 +100,7 @@ export const Comentarios = ({ idAprendiz }) => {
       }
 
       await axios.delete(
-        `http://localhost:8080/comentarios/${idAprendiz}/${idComentario}`,
+        `${API_URL}/comentarios/${idAprendiz}/${idComentario}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -140,7 +141,7 @@ export const Comentarios = ({ idAprendiz }) => {
         }
 
         const response = await axios.get(
-          `http://localhost:8080/instructores/usuario/${idUsuario}`,
+          `${API_URL}/instructores/usuario/${idUsuario}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

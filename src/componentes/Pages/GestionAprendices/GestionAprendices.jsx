@@ -8,6 +8,7 @@ export const GestionAprendices = () => {
   const [loading, setLoading] = useState(true);
   const [busqueda, setBusqueda] = useState("");
   const [error, setError] = useState(null);
+  const API_URL = import.meta.env.VITE_API_URL;
 
   const navigate = useNavigate();
 
@@ -37,7 +38,7 @@ export const GestionAprendices = () => {
       };
 
       const response = await axios.get(
-        "http://localhost:8080/aprendices",
+        `${API_URL}/aprendices`,
         config
       );
 

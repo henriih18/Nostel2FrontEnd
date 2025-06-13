@@ -9,6 +9,7 @@ export const GestionFichas = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const navigate = useNavigate();
+    const API_URL = import.meta.env.VITE_API_URL;
 
     useEffect(() => {
         fetchFichas();
@@ -45,7 +46,7 @@ export const GestionFichas = () => {
             };
 
             // URL correcta con el context-path configurado
-            const response = await axios.get('http://localhost:8080/fichas', config);
+            const response = await axios.get(`${API_URL}/fichas`, config);
             
             setFichas(response.data);
             setLoading(false);
@@ -98,7 +99,7 @@ export const GestionFichas = () => {
                 };
 
                 // Realizar la petición DELETE
-                await axios.delete(`http://localhost:8080/fichas/${idFicha}`, config);
+                await axios.delete(`${API_URL}/fichas/${idFicha}`, config);
                 
                 // Actualizar la lista de fichas después de eliminar
                 fetchFichas();

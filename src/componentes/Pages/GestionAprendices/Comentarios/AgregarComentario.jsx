@@ -19,6 +19,7 @@ export const AgregarComentario = ({ onComentarioAgregado }) => {
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(false);
     const [showModal , setShowModal] = useState(false);
+    const API_URL = import.meta.env.VITE_API_URL;
 
     const quillModules = {
         toolbar: [
@@ -42,7 +43,7 @@ export const AgregarComentario = ({ onComentarioAgregado }) => {
                     return;
                 }
 
-                const response = await axios.get(`http://localhost:8080/instructores/usuario/${idUsuario}`, {
+                const response = await axios.get(`${API_URL}/instructores/usuario/${idUsuario}`, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json',
@@ -95,7 +96,7 @@ export const AgregarComentario = ({ onComentarioAgregado }) => {
             }
 
             const response = await axios.post(
-                `http://localhost:8080/comentarios/${idAprendiz}`,
+                `${API_URL}/comentarios/${idAprendiz}`,
                 {
                     idAprendiz: idAprendiz,
                     fechaComentario: formData.fechaComentario,

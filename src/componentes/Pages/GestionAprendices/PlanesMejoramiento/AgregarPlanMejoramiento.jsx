@@ -9,6 +9,7 @@ const AgregarPlanMejoramiento = () => {
   const navigate = useNavigate();
   const { idAprendiz } = useParams();
   const location = useLocation();
+  const API_URL = import.meta.env.VITE_API_URL;
 
   const [formData, setFormData] = useState({
     idInstructor: null,
@@ -84,7 +85,7 @@ const AgregarPlanMejoramiento = () => {
         }
 
         const response = await axios.get(
-          `http://localhost:8080/instructores/usuario/${idUsuario}`,
+          `${API_URL}/instructores/usuario/${idUsuario}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -145,7 +146,7 @@ const AgregarPlanMejoramiento = () => {
         }
 
         const response = await axios.get(
-          `http://localhost:8080/aprendices/${idAprendiz}`,
+          `${API_URL}/aprendices/${idAprendiz}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -418,7 +419,7 @@ const AgregarPlanMejoramiento = () => {
       }
 
       const response = await axios.post(
-        `http://localhost:8080/planMejoramientos/${idAprendiz}`,
+        `${API_URL}/planMejoramientos/${idAprendiz}`,
         formData,
         {
           headers: {

@@ -12,6 +12,8 @@ const ChatbotWidget = () => {
   const widgetRef = useRef(null);
   const messagesEndRef = useRef(null);
 
+  const API_URL = import.meta.env.VITE_API_URL;
+
   // Mantener el scroll al fondo cada vez que cambian los mensajes
   useEffect(() => {
     if (messagesEndRef.current) {
@@ -51,7 +53,8 @@ const ChatbotWidget = () => {
     try {
       const token = sessionStorage.getItem("token");
       if (!token) {
-        const errTxt = "No hay token de autenticación disponible. Redirigiendo al login.";
+        const errTxt =
+          "No hay token de autenticación disponible. Redirigiendo al login.";
         addBotMessage(errTxt);
         setLoading(false);
         setTimeout(() => {
@@ -64,7 +67,8 @@ const ChatbotWidget = () => {
       const documentoMatch = input.match(/documento\s+(\d+)/i);
       const documento = documentoMatch ? documentoMatch[1] : null;
       if (!documento) {
-        const msg = "Por favor, incluye un número de documento en el prompt (ej: 'documento 123422').";
+        const msg =
+          "Por favor, incluye un número de documento en el prompt (ej: 'documento 123422').";
         addBotMessage(msg);
         setLoading(false);
         return;
@@ -79,7 +83,7 @@ const ChatbotWidget = () => {
       };
 
       const { data: actividadGenerada } = await axios.post(
-        "http://localhost:8080/gemini/generate",
+        `${API_URL}/gemini/generate`,
         requestBody,
         {
           headers: {
@@ -91,7 +95,10 @@ const ChatbotWidget = () => {
 
       if (actividadGenerada.status === "success") {
         // Construir texto con saltos de línea para la burbuja
-        const tipoDocumento = actividadGenerada.tipoDocumento === "actividad complementaria" ? "Actividad Complementaria" : "Plan de Mejoramiento";
+        const tipoDocumento =
+          actividadGenerada.tipoDocumento === "actividad complementaria"
+            ? "Actividad Complementaria"
+            : "Plan de Mejoramiento";
         const respuestaTexto = `
 ${tipoDocumento} generada:
 Nombre del Comité: ${actividadGenerada.nombreComite}

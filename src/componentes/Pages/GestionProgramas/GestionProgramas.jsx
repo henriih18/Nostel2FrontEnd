@@ -9,6 +9,7 @@ export const GestionProgramas = () => {
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const API_URL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     obtenerProgramas();
@@ -42,7 +43,7 @@ export const GestionProgramas = () => {
       };
 
       // Realizar la petición para obtener los programas
-      const respuesta = await axios.get('http://localhost:8080/programas', config);
+      const respuesta = await axios.get(`${API_URL}/programas`, config);
 
       // Actualizar el estado con los programas obtenidos
       setProgramas(respuesta.data);

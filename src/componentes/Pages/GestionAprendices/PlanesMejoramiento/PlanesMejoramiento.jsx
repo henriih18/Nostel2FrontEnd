@@ -32,6 +32,7 @@ const PlanesMejoramiento = ({ idAprendiz }) => {
   // Referencias para impresión (idéntico a Actividades)
   const actaRef = useRef();
   const registroRef = useRef();
+  const API_URL = import.meta.env.VITE_API_URL;
 
   // 0) Manejo de ESC para cerrar
   useEffect(() => {
@@ -66,7 +67,7 @@ const PlanesMejoramiento = ({ idAprendiz }) => {
           return;
         }
         const resp = await axios.get(
-          `http://localhost:8080/planMejoramientos/${idAprendiz}`,
+          `${API_URL}/planMejoramientos/${idAprendiz}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -95,7 +96,7 @@ const PlanesMejoramiento = ({ idAprendiz }) => {
         const idUsuario = sessionStorage.getItem("idUsuario");
         if (!token || !idUsuario) return;
         const response = await axios.get(
-          `http://localhost:8080/instructores/usuario/${idUsuario}`,
+          `${API_URL}/instructores/usuario/${idUsuario}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -152,7 +153,7 @@ const PlanesMejoramiento = ({ idAprendiz }) => {
       const token = sessionStorage.getItem("token");
       if (!token) throw new Error("Sin token de autenticación");
       const res = await axios.delete(
-        `http://localhost:8080/planMejoramiento/${idAprendiz}/${idPlan}`,
+        `${API_URL}/planMejoramiento/${idAprendiz}/${idPlan}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }

@@ -9,6 +9,7 @@ export const ForgotPassword = () => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
   const navigate = useNavigate();
+  const API_URL = import.meta.env.VITE_API_URL;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,7 +20,7 @@ export const ForgotPassword = () => {
     try {
       console.log("Enviando email:", email); // Depuración
       const response = await axios.post(
-        "http://localhost:8080/password-reset/request",
+        `${API_URL}/password-reset/request`,
         { email }
       );
       setSuccess(true);

@@ -6,6 +6,7 @@ export const AgregarPrograma = () => {
     const [nombrePrograma, setNombrePrograma] = useState('');
     const [error, setError] = useState(null);
     const navigate = useNavigate();
+    const API_URL = import.meta.env.VITE_API_URL;
 
     const manejarSubmit = async (e) => {
         e.preventDefault();
@@ -31,7 +32,7 @@ export const AgregarPrograma = () => {
 
             const nuevoPrograma = { nombrePrograma };
 
-            await axios.post('http://localhost:8080/programas', nuevoPrograma, config);
+            await axios.post(`${API_URL}/programas`, nuevoPrograma, config);
 
             // Redirigir a la lista de programas después de agregar
             navigate('/gestion-programas');

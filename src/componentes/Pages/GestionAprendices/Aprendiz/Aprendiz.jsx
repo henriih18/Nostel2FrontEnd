@@ -13,6 +13,7 @@ const Aprendiz = () => {
   const [error, setError] = useState(null);
   const [seccion, setSeccion] = useState("informacion");
   const navigate = useNavigate();
+  const API_URL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     const fetchAprendiz = async () => {
@@ -32,7 +33,7 @@ const Aprendiz = () => {
         };
 
         const response = await axios.get(
-          `http://localhost:8080/aprendices/${idAprendiz}`,
+          `${API_URL}/aprendices/${idAprendiz}`,
           config
         );
         setAprendiz(response.data);

@@ -127,7 +127,7 @@ export const RegistroAprendiz = () => {
 
     try {
       console.log("Datos enviados:", formData);
-      await axios.post("http://localhost:8080/aprendices/RegistroAprendiz", formData);
+      await axios.post(`${API_URL}/aprendices/RegistroAprendiz`, formData);
       alert("Registro exitoso.");
       // Enviar correo utilizando la función de Azure
       await enviarCorreo(formData.correo);
@@ -185,7 +185,7 @@ export const RegistroAprendiz = () => {
         template: "registro.html",
       };
 
-      await axios.post("http://localhost:7071/api/httpTrigger1", emailData);
+      await axios.post("https://nostel.up.railway.app/httpTrigger1", emailData);
       console.log("Correo enviado exitosamente");
     } catch (error) {
       console.error(

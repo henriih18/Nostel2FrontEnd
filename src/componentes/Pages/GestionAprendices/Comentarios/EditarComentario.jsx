@@ -10,6 +10,7 @@ const EditarComentario = ({ comentario, onComentarioActualizado, onClose }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
+  const API_URL = import.meta.env.VITE_API_URL;
 
   const handleChange = e => {
     const { name, value } = e.target;
@@ -26,7 +27,7 @@ const EditarComentario = ({ comentario, onComentarioActualizado, onClose }) => {
       const token = sessionStorage.getItem('token');
       if (!token) throw new Error('Sin token de autenticación');
 
-      const url = `http://localhost:8080/comentarios/${comentario.idAprendiz}/${comentario.idComentario}`;
+      const url = `${API_URL}/comentarios/${comentario.idAprendiz}/${comentario.idComentario}`;
       const res = await axios.put(
         url,
         {
