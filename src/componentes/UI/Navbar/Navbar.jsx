@@ -1,13 +1,20 @@
 import React from "react";
 import "./Navbar.css";
-import { NavLink } from "react-router-dom";
 import logoSenaN from "../../../assets/images/logoNostelN.png";
+import { NavLink, useNavigate } from "react-router-dom";
 
 export const Navbar = () => {
+  /* const handleLogout = () => {
+    console.log("Cerrando sesión...");
+    sessionStorage.removeItem("token");
+    window.location.reload();
+  }; */
+
+  const navigate = useNavigate();
   const handleLogout = () => {
     console.log("Cerrando sesión...");
     sessionStorage.removeItem("token"); // Eliminar el token
-    window.location.reload(); // Recargar la página para volver al login
+    navigate("/login"); // Navegar a la página de login
   };
   return (
     <>

@@ -140,7 +140,7 @@ function App() {
   useEffect(() => {
     if (isAuthenticated) {
       axios
-        .get(/* `${API_URL}/data` */)
+        .get( `${API_URL}/data` )
         .then((res) => setData(res.data))
         .catch((err) => console.error("Error fetching data:", err));
     }
