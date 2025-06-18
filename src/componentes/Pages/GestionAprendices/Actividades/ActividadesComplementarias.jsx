@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react"; // Corregimos la importación de useRef
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useReactToPrint } from "react-to-print";
@@ -20,14 +20,14 @@ const ActividadesComplementarias = ({ idAprendiz }) => {
     type: "",
     message: "",
   });
+  const [showDeleteFeedback, setShowDeleteFeedback] = useState(false); // Controla la visibilidad del mensaje
   const [instructor, setInstructor] = useState(null);
   const [selectedActividad, setSelectedActividad] = useState(null);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
-  const [currentSection, setCurrentSection] = useState("actividades"); // Nuevo estado para controlar la sección
-
+  const [currentSection, setCurrentSection] = useState("actividades");
   const API_URL = import.meta.env.VITE_API_URL;
 
-  // Referencias específicas para cada sección
+  // Inicializamos las referencias con useRef
   const actaRef = useRef();
   const registroRef = useRef();
 
@@ -152,31 +152,31 @@ const ActividadesComplementarias = ({ idAprendiz }) => {
         { headers: { Authorization: `Bearer ${token}` } }
       );
       if (res.status >= 200 && res.status < 300) {
-        setActividades((prev) =>
-          prev.filter((a) => a.idActividad !== idActividad)
-        );
-        /* setDeleteFeedback({ type: "success", message: "Eliminado con éxito." }); */
+        setActividades((prev) => prev.filter((a) => a.idActividad !== idActividad));
+        setDeleteFeedback({ type: "success", message: "Actividad eliminada con éxito." });
+        setShowDeleteFeedback(true); // Mostrar el mensaje inmediatamente
         setTimeout(() => {
-          setActividadAEliminar(null);
-          setDeleteFeedback({
-            type: "success",
-            message: "Actividad eliminada con éxito.",
-          });
+          setShowDeleteFeedback(false); // Ocultar después de 2 segundos
+          setActividadAEliminar(null); // Cerrar el modal después
+          setDeleteFeedback({ type: "", message: "" }); // Limpiar feedback
         }, 2000);
       } else {
+        setDeleteFeedback({ type: "error", message: "No se pudo eliminar la actividad." });
+        setShowDeleteFeedback(true);
         setTimeout(() => {
+          setShowDeleteFeedback(false);
           setActividadAEliminar(null);
-          setDeleteFeedback({
-            type: "error",
-            message: "No se pudo eliminar la actividad.",
-          });
+          setDeleteFeedback({ type: "", message: "" });
         }, 2000);
       }
     } catch (err) {
-      setDeleteFeedback({
-        type: "error",
-        message: "Error al eliminar la actividad.",
-      });
+      setDeleteFeedback({ type: "error", message: "Error al eliminar la actividad." });
+      setShowDeleteFeedback(true);
+      setTimeout(() => {
+        setShowDeleteFeedback(false);
+        setActividadAEliminar(null);
+        setDeleteFeedback({ type: "", message: "" });
+      }, 2000);
     }
   };
 
@@ -186,45 +186,6 @@ const ActividadesComplementarias = ({ idAprendiz }) => {
     return actividad.idInstructor === instructor.idInstructor;
   };
 
-  // Manejador de descarga para la sección de Acta
-  /* const handleDownloadActa = () => {
-    if (!actaRef.current) return;
-
-    const opt = {
-      margin: 25.4,
-      filename: `Acta_${selectedActividad.idActividad}.pdf`,
-      image: { type: "jpeg", quality: 0.98 },
-      html2canvas: { scale: 2 },
-      jsPDF: {
-        unit: "mm",
-        format: "letter",
-        orientation: "portrait",
-      },
-    };
-
-    html2pdf().set(opt).from(actaRef.current).save();
-  }; */
-
-  // Manejador de descarga para la sección de Registro
-  /* const handleDownloadRegistro = () => {
-    if (!registroRef.current) return;
-
-    const opt = {
-      margin: [30, 25, 25, 25],
-      filename: `Registro_Asistencia_${selectedActividad.idActividad}.pdf`,
-      image: { type: "jpeg", quality: 0.98 },
-      html2canvas: { scale: 2 },
-      jsPDF: {
-        unit: "mm",
-        format: "letter",
-        orientation: "landscape",
-      },
-    };
-
-    html2pdf().set(opt).from(registroRef.current).save();
-  }; */
-
-  // Manejador de impresión para la sección de Acta
   const handlePrintActa = useReactToPrint({
     contentRef: actaRef,
     documentTitle: `Acta_${selectedActividad?.idActividad || "default"}`,
@@ -240,42 +201,33 @@ const ActividadesComplementarias = ({ idAprendiz }) => {
         .acta-imprimible, .acta-imprimible * {
           visibility: visible;
         }
-
-        
-
         .acta-imprimible {
           position: absolute;
-        top:    0;    
-        left:   0;    
-        right:  0;    
-        bottom: 0;    
-        box-sizing: border-box;
-        padding-top:    0mm;  /* altura del logo + pequeño hueco */
-        padding-bottom: 0mm;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          box-sizing: border-box;
+          padding-top: 0mm;
+          padding-bottom: 0mm;
         }
-
         .acta-tabla {
-        margin-top: 0;
-        
-      }
-
-       .containerFooterActa {
-    position: fixed;
-    bottom: 0;            /* justo al límite del área imprimible */
-    left: 50%;
-    transform: translateX(-50%);
-    font-family: Calibri, sans-serif;
-    font-size: 12pt;
-    text-align: center;
-    z-index: 999;
-  }
-
-  .acta-tabla tbody.block-group3 {
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
-  }
-
-        
+          margin-top: 0;
+        }
+        .containerFooterActa {
+          position: fixed;
+          bottom: 0;
+          left: 50%;
+          transform: translateX(-50%);
+          font-family: Calibri, sans-serif;
+          font-size: 12pt;
+          text-align: center;
+          z-index: 999;
+        }
+        .acta-tabla tbody.block-group3 {
+          page-break-inside: avoid !important;
+          break-inside: avoid !important;
+        }
       }
     `,
     onAfterPrint: () => console.log("Impresión del acta completada."),
@@ -283,61 +235,48 @@ const ActividadesComplementarias = ({ idAprendiz }) => {
 
   const handlePrintRegistro = useReactToPrint({
     contentRef: registroRef,
-    documentTitle: `Registro_Asistencia_${
-      selectedActividad?.idActividad || "default"
-    }`,
+    documentTitle: `Registro_Asistencia_${selectedActividad?.idActividad || "default"}`,
     pageStyle: `
-    /* Márgenes oficiales */
-    @page {
-      size: letter landscape;
-      margin: 3cm 2.5cm 2.5cm 2.5cm;
-      
-    }
-
-    @media print {
-      /* oculta todo menos el registro */
-      body, body * {
-        visibility: hidden;
-        margin: 0; padding: 0;
+      @page {
+        size: letter landscape;
+        margin: 3cm 2.5cm 2.5cm 2.5cm;
       }
-      .registro-imprimible, .registro-imprimible * {
-        visibility: visible;
+      @media print {
+        body, body * {
+          visibility: hidden;
+          margin: 0;
+          padding: 0;
+        }
+        .registro-imprimible, .registro-imprimible * {
+          visibility: visible;
+        }
+        .registro-imprimible {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          box-sizing: border-box;
+        }
+        .logoRegistroContainer {
+          position: absolute;
+          top: 0;
+          left: 50%;
+          transform: translateX(-50%);
+          max-height: 15mm;
+        }
+        .registro-full-table {
+          margin-top: 20mm;
+        }
+        .containerFooter {
+          position: absolute;
+          bottom: 0;
+          left: 50%;
+          transform: translateX(-50%);
+          font-size: 8pt;
+        }
       }
-
-      /* área imprimible = exactamente el interior de los márgenes */
-      .registro-imprimible {
-        position: absolute;
-        top:    0;    /* justo 3 cm debajo del tope físico */
-        left:   0;    /* justo 2.5 cm a la derecha del borde físico */
-        right:  0;    /* deja 2.5 cm a la derecha */
-        bottom: 0;    /* deja 2.5 cm arriba del pie físico */
-        box-sizing: border-box;
-      }
-
-      /* LOGO pegado al margen superior */
-      .logoRegistroContainer {
-        position: absolute;
-        top:    0;    /* arranca al tope del área imprimible */
-        left:   50%;
-        transform: translateX(-50%);
-        max-height: 15mm;
-      }
-
-      /* la tabla entra justo bajo el logo */
-      .registro-full-table {
-        margin-top: 20mm; /* = altura del logo */
-      }
-
-      /* FOOTER pegado al margen inferior */
-      .containerFooter {
-        position: absolute;
-        bottom: 0;     /* al límite inferior del área imprimible */
-        left:   50%;
-        transform: translateX(-50%);
-        font-size: 8pt;
-      }
-    }
-  `,
+    `,
     onAfterPrint: () => console.log("Impresión del registro completada."),
   });
 
@@ -477,7 +416,10 @@ const ActividadesComplementarias = ({ idAprendiz }) => {
       {actividadAEliminar && (
         <div
           className="modal-overlay"
-          onClick={() => setActividadAEliminar(null)}
+          onClick={() => {
+            setActividadAEliminar(null);
+            if (showDeleteFeedback) setShowDeleteFeedback(false); // Cerrar feedback si está visible
+          }}
         >
           <div
             className="modal-container-delete"
@@ -488,7 +430,7 @@ const ActividadesComplementarias = ({ idAprendiz }) => {
             </div>
             <div className="modal-body">
               <p>Esta acción no se puede deshacer.</p>
-              {deleteFeedback.message && (
+              {showDeleteFeedback && deleteFeedback.message && (
                 <div
                   className={
                     deleteFeedback.type === "error"
@@ -505,8 +447,10 @@ const ActividadesComplementarias = ({ idAprendiz }) => {
                 className="cancel-button"
                 onClick={() => {
                   setActividadAEliminar(null);
+                  if (showDeleteFeedback) setShowDeleteFeedback(false);
                   setDeleteFeedback({ type: "", message: "" });
                 }}
+                disabled={showDeleteFeedback}
               >
                 No
               </button>
@@ -514,8 +458,8 @@ const ActividadesComplementarias = ({ idAprendiz }) => {
                 className="submit-button"
                 onClick={() =>
                   handleEliminarActividad(actividadAEliminar.idActividad)
-                  
                 }
+                disabled={showDeleteFeedback}
               >
                 Sí, eliminar
               </button>
@@ -582,7 +526,6 @@ const ActividadesComplementarias = ({ idAprendiz }) => {
                           <strong>HORA INICIO:</strong>{" "}
                           {selectedActividad.horaInicio || ""}
                         </td>
-
                         <td className="fila-celda">
                           <strong>HORA FIN:</strong>{" "}
                           {selectedActividad.horaFin || ""}
@@ -713,16 +656,8 @@ const ActividadesComplementarias = ({ idAprendiz }) => {
                         </td>
                       </tr>
                     </tbody>
-                    {/* <tfoot>
-                      
-                      <tr>
-                        <td colSpan="5" className="containerFooterActa">
-                          <p>GOR-F-084 V02</p>
-                        </td>
-                      </tr>
-                    </tfoot> */}
+                    <div className="containerFooterActa">GOR-F-084 V02</div>
                   </table>
-                  <div className="containerFooterActa">GOR-F-084 V02</div>
                 </div>
               )}
 
@@ -752,9 +687,6 @@ const ActividadesComplementarias = ({ idAprendiz }) => {
                     cellSpacing="0"
                   >
                     <thead>
-                      {/* LOGO */}
-
-                      {/* TÍTULO */}
                       <tr>
                         <th colSpan="11" className="registro-title-cell">
                           REGISTRO DE ASISTENCIA / DÍA{" "}
@@ -765,10 +697,9 @@ const ActividadesComplementarias = ({ idAprendiz }) => {
                           {formatFechaModal(selectedActividad.fecha).anio}
                         </th>
                       </tr>
-                      {/* OBJETIVOS */}
                       <tr>
                         <th colSpan="11" className="registro-objetivo-cell">
-                          <strong>OBJETIVO(S):</strong>&nbsp;
+                          <strong>OBJETIVO(S):</strong> 
                           <span
                             dangerouslySetInnerHTML={{
                               __html: selectedActividad.objetivos,
@@ -776,7 +707,6 @@ const ActividadesComplementarias = ({ idAprendiz }) => {
                           />
                         </th>
                       </tr>
-                      {/* CABECERAS DE COLUMNA */}
                       <tr>
                         <th>N°</th>
                         <th>NOMBRES Y APELLIDOS</th>
@@ -792,7 +722,6 @@ const ActividadesComplementarias = ({ idAprendiz }) => {
                       </tr>
                     </thead>
                     <tbody>
-                      {/* FILAS DE DATOS */}
                       {(selectedActividad.asistentes || []).map((asis, i) => (
                         <tr key={i}>
                           <td>{i + 1}</td>
@@ -860,24 +789,12 @@ const ActividadesComplementarias = ({ idAprendiz }) => {
                 </button>
                 {currentSection === "actividades" ? (
                   <>
-                    {/* <button
-                      className="submit-button"
-                      onClick={handleDownloadActa}
-                    >
-                      Descargar Acta
-                    </button> */}
                     <button className="submit-button" onClick={handlePrintActa}>
                       Imprimir Acta
                     </button>
                   </>
                 ) : (
                   <>
-                    {/* <button
-                      className="submit-button"
-                      onClick={handleDownloadRegistro}
-                    >
-                      Descargar Registro
-                    </button> */}
                     <button
                       className="submit-button"
                       onClick={handlePrintRegistro}
