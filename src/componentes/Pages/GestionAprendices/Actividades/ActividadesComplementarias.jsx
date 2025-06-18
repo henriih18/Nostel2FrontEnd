@@ -25,11 +25,11 @@ const ActividadesComplementarias = ({ idAprendiz }) => {
   const [selectedActividad, setSelectedActividad] = useState(null);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [currentSection, setCurrentSection] = useState("actividades");
-  const API_URL = import.meta.env.VITE_API_URL;
+   const API_URL = import.meta.env.VITE_API_URL;
 
   // Inicializamos las referencias con useRef
   const actaRef = useRef();
-  const registroRef = useRef();
+  const registroRef = useRef(); 
 
   useEffect(() => {
     const handleEsc = (e) => {
