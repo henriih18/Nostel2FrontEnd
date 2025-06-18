@@ -477,7 +477,7 @@ export const AgregarActividadComplementaria = () => {
                 value={formData.actaNumber}
                 onChange={handleChange}
                 placeholder="Número de acta"
-                required
+                
               />
             </div>
           </div>

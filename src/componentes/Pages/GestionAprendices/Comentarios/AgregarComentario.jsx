@@ -446,7 +446,7 @@ export const AgregarComentario = ({ onComentarioAgregado }) => {
                 <div className="success-modal-overlay" onClick={closeModal}>
                     <div className="success-modal-content" onClick={(e) => e.stopPropagation()}>
                         {error && <p className="modal-error">{error}</p>}
-                        {success && <p className="modal-success">Comentario guardado exitosamente!</p>}
+                        {success && <h2 className="modal-success">Comentario guardado exitosamente!</h2>}
                         
                     </div>
                 </div>
