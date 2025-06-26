@@ -7,9 +7,7 @@ import Comentarios from "../Comentarios/Comentarios";
 import "./Aprendiz.css";
 
 const Aprendiz = () => {
-  /* const { idAprendiz } = useParams(); */
-  const idAprendiz = sessionStorage.getItem("idAprendiz");
-
+  const { idAprendiz } = useParams();
   const [aprendiz, setAprendiz] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);

@@ -586,7 +586,7 @@ export const Navbar = () => {
           : userInfo.rol === "ROLE_APRENDIZ"
           ? [
               {
-                to: `/aprendices`,
+                to: `/aprendices/${userInfo.idAprendiz}`,
                 icon: Users,
                 label: "Mi Perfil",
               },

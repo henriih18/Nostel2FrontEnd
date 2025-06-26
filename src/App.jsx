@@ -201,9 +201,7 @@ function App() {
             path="/aprendices/:idAprendiz/comentarios/:idComentario/editar"
             element={<EditarComentario />}
           />
-          {/* <Route path="/aprendices/:idAprendiz" element={<Aprendiz />} /> */}
-          <Route path="/perfil-aprendiz" element={<Aprendiz />} />
-
+          <Route path="/aprendices/:idAprendiz" element={<Aprendiz />} />
 
           
           {/* <Route path="/perfil-instructor/:id" element={<PerfilInstructor />} /> */}
