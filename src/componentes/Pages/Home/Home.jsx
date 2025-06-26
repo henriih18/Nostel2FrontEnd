@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { NavLink } from 'react-router-dom';
-import { 
-  Users, 
-  BookOpen, 
-  UserCheck, 
+import React, { useState, useEffect } from "react";
+import { NavLink } from "react-router-dom";
+import {
+  Users,
+  BookOpen,
+  UserCheck,
   GraduationCap,
   TrendingUp,
   TrendingDown,
@@ -16,63 +16,64 @@ import {
   BarChart3,
   Clock,
   CheckCircle,
-  AlertCircle
-} from 'lucide-react';
-import './Home.css';
+  AlertCircle,
+} from "lucide-react";
+import "./Home.css";
 
 export const Home = () => {
   const [userInfo, setUserInfo] = useState({
-    nombre: '',
-    rol: ''
+    nombre: "",
+    rol: "",
   });
-  
+
   const [stats, setStats] = useState({
     aprendices: 1245,
     instructores: 89,
     programas: 24,
-    actividades: 156
+    actividades: 156,
   });
 
   useEffect(() => {
-    const nombre = sessionStorage.getItem('nombre') || 'Usuario';
-    const rol = sessionStorage.getItem('rol') || 'ROLE_USER';
+    const nombre = sessionStorage.getItem("nombre") || "Usuario";
+    const rol = sessionStorage.getItem("rol") || "ROLE_USER";
     setUserInfo({ nombre, rol });
   }, []);
 
   const formatRole = (role) => {
-    switch(role) {
-      case 'ROLE_ADMIN':
-        return 'Administrador';
-      case 'ROLE_INSTRUCTOR':
-        return 'Instructor';
-      case 'ROLE_APRENDIZ':
-        return 'Aprendiz';
+    switch (role) {
+      case "ROLE_ADMIN":
+        return "Administrador";
+      case "ROLE_INSTRUCTOR":
+        return "Instructor";
+      case "ROLE_APRENDIZ":
+        return "Aprendiz";
       default:
-        return 'Usuario';
+        return "Usuario";
     }
   };
 
   const getWelcomeMessage = (role) => {
-    switch(role) {
-      case 'ROLE_ADMIN':
+    switch (role) {
+      case "ROLE_ADMIN":
         return {
-          title: '¡Bienvenido, Administrador!',
-          subtitle: 'Gestiona usuarios, instructores y reportes del sistema Nostel.'
+          title: "¡Bienvenido, Administrador!",
+          subtitle:
+            "Gestiona usuarios, instructores y reportes del sistema Nostel.",
         };
-      case 'ROLE_INSTRUCTOR':
+      case "ROLE_INSTRUCTOR":
         return {
-          title: '¡Hola, Instructor!',
-          subtitle: 'Consulta tus fichas y asigna tareas a tus aprendices.'
+          title: "¡Hola, Instructor!",
+          subtitle: "Consulta tus fichas y asigna tareas a tus aprendices.",
         };
-      case 'ROLE_APRENDIZ':
+      case "ROLE_APRENDIZ":
         return {
-          title: '¡Qué tal, Aprendiz!',
-          subtitle: 'Revisa tus actividades, planes y comentarios asignados.'
+          title: "¡Qué tal, Aprendiz!",
+          subtitle: "Revisa tus actividades, planes y comentarios asignados.",
         };
       default:
         return {
-          title: '¡Bienvenido a Nostel!',
-          subtitle: 'Selecciona una opción del menú para comenzar.'
+          title: "¡Bienvenido a Nostel!",
+          subtitle: "Selecciona una opción del menú para comenzar.",
         };
     }
   };
@@ -82,46 +83,47 @@ export const Home = () => {
   const recentActivities = [
     {
       icon: Users,
-      title: 'Nuevo aprendiz registrado',
-      description: 'Juan Pérez se ha registrado en el programa de Desarrollo Web',
-      time: 'Hace 2 horas'
+      title: "Nuevo aprendiz registrado",
+      description:
+        "Juan Pérez se ha registrado en el programa de Desarrollo Web",
+      time: "Hace 2 horas",
     },
     {
       icon: FileText,
-      title: 'Plan de mejoramiento creado',
-      description: 'Se creó un nuevo plan para el aprendiz María González',
-      time: 'Hace 4 horas'
+      title: "Plan de mejoramiento creado",
+      description: "Se creó un nuevo plan para el aprendiz María González",
+      time: "Hace 4 horas",
     },
     {
       icon: CheckCircle,
-      title: 'Actividad completada',
-      description: 'Carlos Rodríguez completó la actividad de JavaScript',
-      time: 'Hace 6 horas'
+      title: "Actividad completada",
+      description: "Carlos Rodríguez completó la actividad de JavaScript",
+      time: "Hace 6 horas",
     },
     {
       icon: Bell,
-      title: 'Recordatorio de evaluación',
-      description: 'Evaluación programada para mañana a las 10:00 AM',
-      time: 'Hace 1 día'
-    }
+      title: "Recordatorio de evaluación",
+      description: "Evaluación programada para mañana a las 10:00 AM",
+      time: "Hace 1 día",
+    },
   ];
 
   const notifications = [
     {
       icon: AlertCircle,
-      title: 'Evaluaciones pendientes',
-      message: 'Tienes 3 evaluaciones por revisar'
+      title: "Evaluaciones pendientes",
+      message: "Tienes 3 evaluaciones por revisar",
     },
     {
       icon: Calendar,
-      title: 'Reunión programada',
-      message: 'Reunión de coordinación a las 3:00 PM'
+      title: "Reunión programada",
+      message: "Reunión de coordinación a las 3:00 PM",
     },
     {
       icon: Clock,
-      title: 'Plazo próximo',
-      message: 'Entrega de informes en 2 días'
-    }
+      title: "Plazo próximo",
+      message: "Entrega de informes en 2 días",
+    },
   ];
 
   return (
@@ -147,7 +149,7 @@ export const Home = () => {
       </div>
 
       {/* Grid de Estadísticas */}
-      <div className="stats-grid">
+      {/* <div className="stats-grid">
         <div className="stat-card">
           <div className="stat-header">
             <div className="stat-info">
@@ -211,7 +213,7 @@ export const Home = () => {
             +8% esta semana
           </div>
         </div>
-      </div>
+      </div> */}
 
       {/* Grid Principal */}
       <div className="dashboard-grid">
@@ -239,8 +241,7 @@ export const Home = () => {
 
         {/* Sidebar con acciones rápidas y notificaciones */}
         <div>
-          {/* Panel de Acciones Rápidas */}
-          <div className="quick-actions-panel">
+          {/* <div className="quick-actions-panel">
             <div className="panel-header">
               <h2 className="panel-title">Acciones Rápidas</h2>
             </div>
@@ -262,7 +263,7 @@ export const Home = () => {
                 <span className="quick-action-label">Programas</span>
               </NavLink>
             </div>
-          </div>
+          </div> */}
 
           {/* Panel de Notificaciones */}
           {/* <div className="notifications-panel">
@@ -285,4 +286,3 @@ export const Home = () => {
     </div>
   );
 };
-
