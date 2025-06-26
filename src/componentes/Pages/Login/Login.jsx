@@ -1,28 +1,60 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { NavLink, useNavigate } from "react-router-dom";
+import { Mail, Lock, Eye, EyeOff, AlertCircle, Loader2, Heart } from "lucide-react";
 import "./Login.css";
+import logoNostel from "../../../assets/images/logoNostelN.png";
 
 export const Login = ({ onLogin }) => {
   const [correo, setCorreo] = useState("");
   const [contrasena, setContrasena] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const navigate = useNavigate();
-
   const API_URL = import.meta.env.VITE_API_URL;
-
 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
 
     if (!correo || !contrasena) {
-      alert("Por favor, completa todos los campos.");
+      setError("Por favor, completa todos los campos.");
       return;
     }
 
     try {
       setLoading(true);
+
+      /* // Simulación de login exitoso para demostración
+      if (correo === "admin@sena.edu.co" && contrasena === "Admin123!") {
+        setLoading(false);
+        
+        // Simular datos de respuesta exitosa
+        const mockResponse = {
+          token: "mock-jwt-token-12345",
+          rol: "ROLE_ADMIN",
+          correo: correo,
+          nombreCompleto: "Administrador Sistema",
+          idUsuario: "admin-001"
+        };
+
+        const { token, rol, correo: correoResp, nombreCompleto, idUsuario } = mockResponse;
+
+        sessionStorage.setItem("token", token);
+        sessionStorage.setItem("rol", rol);
+        sessionStorage.setItem("correo", correoResp);
+        sessionStorage.setItem("nombre", nombreCompleto);
+        sessionStorage.setItem("idUsuario", idUsuario);
+
+        onLogin(token);
+        setError("");
+        
+        // Navegar al dashboard
+        navigate("/");
+        return;
+      } */
 
       const response = await axios.post(`${API_URL}/auth/login`, {
         correo,
@@ -31,12 +63,12 @@ export const Login = ({ onLogin }) => {
         headers: {
           "Content-Type": "application/json",
         },
-      }
-    );
+      });
 
       setLoading(false);
 
       const { token, rol, correo: correoResp, nombreCompleto, idUsuario } = response.data;
+      console.log("Login response:", response.data);
 
       if (token && rol) {
         sessionStorage.setItem("token", token);
@@ -47,17 +79,19 @@ export const Login = ({ onLogin }) => {
 
         onLogin(token);
 
-        alert("Bienvenido " + rol);
-
-         /* const rutasPorRol = {
-          ROLE_APRENDIZ: `/aprencides/${idAprendiz}`,
+        // Mostrar mensaje de bienvenida elegante
+        setError("");
+        
+        // Navegar según el rol
+        const rutasPorRol = {
+          ROLE_APRENDIZ: `/aprendices/${idUsuario}`,
           ROLE_INSTRUCTOR: "/",
           ROLE_ADMIN: "/",
         };
 
-        navigate(rutasPorRol[rol] || "/");  */
+        navigate(rutasPorRol[rol] || "/");
       } else {
-        alert("Respuesta del servidor inválida.");
+        setError("Respuesta del servidor inválida.");
       }
     } catch (error) {
       setLoading(false);
@@ -65,200 +99,104 @@ export const Login = ({ onLogin }) => {
 
       if (error.response) {
         console.error("Detalles del error:", error.response.status, error.response.data);
-      }
-
-      alert("Credenciales incorrectas o error de servidor.");
-    }
-  };
-
-  return (
-    <div className="PrincipalContainer">
-      <div className="loginContainer">
-        <h1>Iniciar Sesión</h1>
-        <form onSubmit={handleSubmit} className="loginForm">
-          <div>
-            <label htmlFor="correo">Correo:</label>
-            <input
-              id="correo"
-              type="email"
-              value={correo}
-              onChange={(e) => setCorreo(e.target.value)}
-            />
-          </div>
-          <div>
-            <label htmlFor="contrasena">Contraseña:</label>
-            <input
-              id="contrasena"
-              type="password"
-              value={contrasena}
-              onChange={(e) => setContrasena(e.target.value)}
-            />
-          </div>
-          <button type="submit" disabled={loading}>
-            {loading ? "Ingresando..." : "Iniciar Sesión"}
-          </button>
-        </form>
-        <ul className="registro">
-          <li>
-            <NavLink to="/registroAprendiz">Registrarse</NavLink>
-            <NavLink to="/forgot-password">Recuperar Contraseña</NavLink>
-          </li>
-        </ul>
-      </div>
-    </div>
-  );
-};
-
-
-
-
-/* 
-
-
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { NavLink, useNavigate } from "react-router-dom";
-import "./Login.css";
-
-export const Login = ({ onLogin }) => {
-  const [correo, setCorreo] = useState("");
-  const [contrasena, setContrasena] = useState("");
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
-
-  // Estados para el modal de bienvenida
-  const [showWelcomeModal, setShowWelcomeModal] = useState(false);
-  const [welcomeMessage, setWelcomeMessage] = useState("");
-  const [nextRoute, setNextRoute] = useState(null);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    if (!correo || !contrasena) {
-      alert("Por favor, completa todos los campos.");
-      return;
-    }
-
-    try {
-      setLoading(true);
-
-      const response = await axios.post(
-        "http://localhost:8080/api/auth/login",
-        { correo, contrasena },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      setLoading(false);
-
-      // Extraemos rol y nombreCompleto de la respuesta
-      const { token, rol, correo: correoResp, nombreCompleto, idUsuario } =
-        response.data;
-
-      if (token && rol) {
-        // Guardamos en sessionStorage
-        sessionStorage.setItem("token", token);
-        sessionStorage.setItem("rol", rol);
-        sessionStorage.setItem("correo", correoResp);
-        sessionStorage.setItem("nombre", nombreCompleto);
-        sessionStorage.setItem("idUsuario", idUsuario);
-
-        onLogin(token);
-
-        // Aquí definimos el mensaje y mostramos el modal (3 segundos)
-        setWelcomeMessage(`¡Bienvenido ${rol}, ${nombreCompleto}!`);
-        
-
-        // Mapeo de rutas según rol (si lo necesitas)
-        const rutasPorRol = {
-          ROLE_APRENDIZ: "/aprendices/:idApreniz",
-          ROLE_INSTRUCTOR: "/",
-          ROLE_ADMIN: "/",
-        };
-        setNextRoute(rutasPorRol[rol] || "/");
-        setShowWelcomeModal(true);
+        setError("Credenciales incorrectas. Verifica tu correo y contraseña.");
       } else {
-        alert("Respuesta del servidor inválida.");
+        setError("Error de conexión. Verifica tu conexión a internet.");
       }
-    } catch (error) {
-      setLoading(false);
-      console.error("Error de login:", error);
-      if (error.response) {
-        console.error(
-          "Detalles del error:",
-          error.response.status,
-          error.response.data
-        );
-      }
-      alert("Credenciales incorrectas o error de servidor.");
     }
   };
 
-  // Cuando se muestre el modal, autoocultarlo tras 3 segundos
-  useEffect(() => {
-    if (showWelcomeModal) {
-      const timer = setTimeout(() => {
-        setShowWelcomeModal(false);
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [showWelcomeModal, nextRoute, navigate]);
-
-  const closeWelcomeModal = () => {
-    setShowWelcomeModal(false);
-     if (nextRoute) {
-      navigate(nextRoute);
-     }
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
   };
 
   return (
-    <div className="PrincipalContainer">
-      <div className="loginContainer">
-        <h1>Iniciar Sesión</h1>
-        <form onSubmit={handleSubmit} className="loginForm">
-          <div>
-            <label htmlFor="correo">Correo:</label>
-            <input
-              id="correo"
-              type="email"
-              value={correo}
-              onChange={(e) => setCorreo(e.target.value)}
-            />
+    <div className="login-container">
+      <div className="login-card">
+        {/* Header con logo */}
+        <div className="login-header">
+          <div className="login-logo">
+            <img src={logoNostel} alt="Logo Nostel" className="logo-image" />
+            
           </div>
-          <div>
-            <label htmlFor="contrasena">Contraseña:</label>
-            <input
-              id="contrasena"
-              type="password"
-              value={contrasena}
-              onChange={(e) => setContrasena(e.target.value)}
-            />
+          <h1 className="login-title">Nostel</h1>
+          
+        </div>
+
+        {/* Formulario */}
+        <form onSubmit={handleSubmit} className="login-form">
+          {/* Campo de correo */}
+          <div className="form-group">
+            <label htmlFor="correo">Correo electrónico</label>
+            <div className="input-wrapper">
+              <input
+                id="correo"
+                type="email"
+                value={correo}
+                onChange={(e) => setCorreo(e.target.value)}
+                className="form-input"
+                placeholder="tu@correo.com"
+                disabled={loading}
+              />
+              <Mail className="input-icon" />
+            </div>
           </div>
-          <button type="submit" disabled={loading}>
-            {loading ? "Ingresando..." : "Iniciar Sesión"}
+
+          {/* Campo de contraseña */}
+          <div className="form-group">
+            <label htmlFor="contrasena">Contraseña</label>
+            <div className="input-wrapper">
+              <input
+                id="contrasena"
+                type={showPassword ? "text" : "password"}
+                value={contrasena}
+                onChange={(e) => setContrasena(e.target.value)}
+                className="form-input"
+                placeholder="Tu contraseña"
+                disabled={loading}
+              />
+              <Lock className="input-icon" />
+              <button
+                type="button"
+                onClick={togglePasswordVisibility}
+                className="password-toggle"
+                disabled={loading}
+              >
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
+            </div>
+          </div>
+
+          {/* Mensaje de error */}
+          {error && (
+            <div className="error-message">
+              <AlertCircle className="error-icon" />
+              {error}
+            </div>
+          )}
+
+          {/* Botón de envío */}
+          <button 
+            type="submit" 
+            disabled={loading}
+            className="login-button"
+          >
+            {loading && <Loader2 className="loading-spinner" />}
+            {loading ? "Iniciando sesión..." : "Iniciar Sesión"}
           </button>
         </form>
-        <ul className="registro">
-          <li>
-            <NavLink to="/registroAprendiz">Registrarse</NavLink>
-            <NavLink to="/recuperarContrasena">Recuperar Contraseña</NavLink>
-          </li>
-        </ul>
-      </div>
 
-      
-      {showWelcomeModal && (
-        <div className="overlay-modal">
-          <div className="modal-content">
-            <h2>{welcomeMessage}</h2>
-            <button onClick={closeWelcomeModal}>Aceptar</button>
-          </div>
+        {/* Enlaces adicionales */}
+        <div className="login-links">
+          <NavLink to="/registroAprendiz" className="login-link">
+            Registrarse
+          </NavLink>
+          <NavLink to="/forgot-password" className="login-link">
+            Recuperar Contraseña
+          </NavLink>
         </div>
-      )}
+      </div>
     </div>
   );
 };
- */
+

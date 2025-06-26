@@ -8,9 +8,9 @@ export const RegistroAprendiz = () => {
   const [fichas, setFichas] = useState([]);
   const [errores, setErrores] = useState({});
   const [loading, setLoading] = useState(false);
-
-
   const API_URL = import.meta.env.VITE_API_URL;
+
+
 
   useEffect(() => {
     const cargarFichas = async () => {
@@ -197,7 +197,7 @@ export const RegistroAprendiz = () => {
 
   return (
     <div className="registro-container">
-      <h1>Registro de Aprendiz</h1>
+      <h1 className="login-title">Registro de Aprendiz</h1>
 
       <form onSubmit={handleSubmit} className="registro-form">
         {/* Sección de Información Personal */}

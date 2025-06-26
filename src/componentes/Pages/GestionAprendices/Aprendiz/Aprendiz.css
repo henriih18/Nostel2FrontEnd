@@ -1,352 +1,138 @@
-/* :root {
-  --boton: #4caf50;
-  --botonesHover: #388e3c;
-  --background: rgb(193, 196, 195);
-  --backgroundContainer: #ececec;
-  --war: #ff4444;
-  --warHover: #cc0000;
-  --text-dark: #2d3748;
-  --text-medium: #4a5568;
-  --text-light: #f8fafc;
-  --border: rgba(0, 0, 0, 0.1);
-}
-
-.containerHeaderSelect{
-    border-top: solid 1px;
-    display: flex;
-    flex-direction: row;
-    
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem; 
-}
-
-.containerSelect {
-    width: 20rem;
-    height: 3rem;
-    background-color: var();
-}
-
-
-
- */
-
-/* Variables definidas en el root proporcionado */
-:root {
-  --boton: #4caf50;
-  --botonesHover: #388e3c;
-  --background: rgb(193, 196, 195);
-  --backgroundContainer: #ececec;
-  --war: #ff4444;
-  --warHover: #cc0000;
-  --text-dark: #2d3748;
-  --text-medium: #4a5568;
-  --text-light: #f8fafc;
-  --border: rgba(0, 0, 0, 0.1);
-}
-
-/* Estilos base */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-}
-
 .containerAprendiz {
-  border-radius: 10px;
-  height: 100%;
-  overflow: hidden;
-  position: absolute;
-  overflow: hidden;
+  margin-left: 280px;
+  padding: var(--spacing-8);
+  min-height: 100vh;
+  background: linear-gradient(135deg, 
+        rgba(76, 175, 80, 0.1) 0%);
+  animation: slideInUp 0.6s ease-out;
+
+  /* Más ancho */
+  width: 100vw;
+  
   
 }
 
-/* Encabezado con el selector */
+/* Header con selector más grande */
 .containerHeaderSelect {
-  width: 79vw;
-  padding: 1rem;
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(2px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: var(--border-radius-xl);
+  padding: var(--spacing-6);
+  margin-bottom: var(--spacing-8);
+  box-shadow: var(--shadow-glass);
   display: flex;
   justify-content: space-between;
+  gap: var(--spacing-6);
+ 
 }
 
 .containerHeaderSelect h2 {
-  text-align: left;
-  color: var(--text-dark);
-  font-size: 1.8rem;
-  font-weight: 700;
-  position: relative;
+  font-size: var(--font-size-2xl);
+  font-weight: 800;
+  color: var(--gray-800);
+  background: linear-gradient(135deg, var(--gray-800), var(--primary-green));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-.containerHeaderSelect h2::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 80px;
-  height: 4px;
-  background: linear-gradient(90deg, var(--boton));
-  border-radius: 5px;
-}
-
+/* Selector más ancho y alto */
 .containerSelect {
-  padding: 0.6rem 1rem;
-  border-radius: 10px;
-  border: none;
-  background: var(--boton);
-  color: var(--text-light);
-  font-size: 1.1rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  width: 16rem;
-  text-align: center;
+  padding: var(--spacing-4);
+  font-size: var(--font-size-base);
+  max-width: 400px;
+  border-radius: var(--border-radius-lg);
+  background: rgba(255, 255, 255, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
-.containerSelect:hover {
-  background: var(--botonesHover);
-  transform: scale(1.03);
-  box-shadow: 0px 5px 25px var(--boton);
-}
-
-.containerSelect:focus {
-  outline: none;
-
-  box-shadow: 0 0 5px rgba(76, 175, 80, 0.3);
-}
-
-/* Contenedor de información del aprendiz */
+/* Información general más grande */
 .containerInfo {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  overflow-x: hidden;
-}
-
-.containerInfo::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 6px;
-  background: linear-gradient(
-    90deg,
-    var(--boton),
-    var(--botonesHover),
-    var(--boton)
-  );
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(24px);
+  border-radius: var(--border-radius-xl);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: var(--spacing-8);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.08);
+  animation: slideInUp 0.4s ease-out;
 }
 
 .containerInfo h3 {
-  text-align: left;
-  color: var(--text-dark);
-  font-size: 1.6rem;
-  font-weight: 700;
-  position: relative;
-  padding-bottom: 1rem;
-  margin-top: 3rem;
+  font-size: var(--font-size-xl);
+  font-weight: 800;
+  color: var(--gray-800);
+  margin-bottom: var(--spacing-6);
+  background: linear-gradient(135deg, var(--gray-800), var(--primary-green));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-.info {
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: 10px;
-  padding: 1.5rem;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.3);
-  margin-top: 6rem;
-  width: 70rem;
-  height: 35rem;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-/* Contenedor de columnas */
+/* Grid de info más clara y amplia */
 .info {
   display: grid;
-  grid-template-columns: repeat(2, 1fr); /* Dos columnas de igual ancho */
-  gap: 1rem 2rem; /* Espacio entre filas y columnas */
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-6) var(--spacing-12);
 }
 
-/* Estilo de cada fila */
 .info p {
+  font-size: var(--font-size-base);
+  color: var(--gray-800);
   margin: 0;
-  padding: 0.5rem;
-  color: var(--text-medium);
-  font-size: 1.2rem;
-  transition: background 0.2s ease;
-  border-radius: 6px;
 }
 
-/* Estilo del contenido dentro de cada p */
-.info p span {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem; /* Espacio entre etiqueta y valor */
+.info strong {
+  font-weight: 700;
+  color: var(--primary-green-dark);
 }
 
-/* Estilo de la etiqueta */
-.info p strong {
-  color: var(--text-dark);
+/* Botón más grande y prominente */
+.info button {
+  grid-column: span 2;
+  padding: var(--spacing-4) var(--spacing-6);
+  font-size: var(--font-size-base);
   font-weight: 600;
+  background: linear-gradient(135deg, var(--primary-green), var(--accent-emerald));
+  color: white;
+  border: none;
+  border-radius: var(--border-radius-lg);
+  margin-top: var(--spacing-6);
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
-/* Efecto hover */
-.info p:hover {
-  background: rgba(76, 175, 80, 0.05);
-}
-
-/* Animaciones */
-@keyframes float {
-  0% {
-    transform: translate(0, 0);
-  }
-  25% {
-    transform: translate(-5%, -5%);
-  }
-  50% {
-    transform: translate(-10%, 0);
-  }
-  75% {
-    transform: translate(-5%, 5%);
-  }
-  100% {
-    transform: translate(0, 0);
-  }
-}
-
-@keyframes gradientShift {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
+.info button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(76, 175, 80, 0.4);
 }
 
 /* Responsive */
-@media (max-width: 1024px) {
+@media (max-width: 768px) {
   .containerAprendiz {
-    width: 78vw;
-    height: 85vh;
-    padding: 1.5rem;
-  }
-
-  .containerHeaderSelect h2 {
-    font-size: 1.6rem;
-  }
-
-  .containerSelect {
-    padding: 0.5rem;
-    font-size: 0.85rem;
+    margin-left: 0;
+    padding: var(--spacing-4);
   }
 
   .info {
-    padding: 1.2rem;
+    grid-template-columns: 1fr;
+  }
+
+  .containerSelect {
     max-width: 100%;
   }
 
-  .info h3 {
-    font-size: 1.4rem;
-  }
-
-  .info p {
-    font-size: 0.95rem;
-    padding: 0.4rem;
-  }
-
-  .info-columns {
-    gap: 0.8rem 1.5rem;
+  .info button {
+    grid-column: span 1;
   }
 }
 
-@media (max-width: 768px) {
-  .content {
-    margin: 0.2rem;
+/* Animación */
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
   }
-
-  .containerAprendiz {
-    width: 88vw;
-    height: 80vh;
-    padding: 1rem;
-  }
-
-  .containerHeaderSelect h2 {
-    font-size: 1.4rem;
-  }
-
-  .containerSelect {
-    padding: 0.4rem;
-    font-size: 0.8rem;
-  }
-
-  .info {
-    padding: 1rem;
-  }
-
-  .info h3 {
-    font-size: 1.3rem;
-    padding-left: 0.8rem;
-  }
-
-  .info-columns {
-    grid-template-columns: 1fr; /* Una sola columna en pantallas pequeñas */
-    gap: 0.5rem;
-  }
-
-  .containerInfo p {
-    font-size: 0.9rem;
-    padding: 0.4rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .content {
-    margin: 0.1rem;
-  }
-
-  containerAprendiz {
-    width: 95vw;
-    height: 75vh;
-    padding: 0.8rem;
-  }
-
-  .containerHeaderSelect {
-    flex-direction: column;
-    gap: 0.8rem;
-    align-items: flex-start;
-  }
-
-  .containerHeaderSelect h2 {
-    font-size: 1.2rem;
-  }
-
-  .containerSelect {
-    width: 100%;
-    padding: 0.5rem;
-    font-size: 0.8rem;
-  }
-
-  .info {
-    padding: 0.8rem;
-  }
-
-  .info h3 {
-    font-size: 1.2rem;
-    padding-left: 0.6rem;
-  }
-
-  .info p {
-    font-size: 0.85rem;
-    padding: 0.3rem;
-  }
-
-  .info-columns {
-    gap: 0.4rem;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

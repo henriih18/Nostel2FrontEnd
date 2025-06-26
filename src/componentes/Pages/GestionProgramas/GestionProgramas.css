@@ -1,17 +1,16 @@
-.gestion-instructores-container {
+.gestion-programas-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-left: 280px;
   min-height: 100vh;
   padding: var(--spacing-6);
-  position: relative;
   animation: slideInUp 0.6s ease-out;
   background: linear-gradient(135deg, 
         rgba(76, 175, 80, 0.1) 0%);
 }
 
-.gestion-instructores-container h2 {
+.programas-header h2 {
   font-size: var(--font-size-2xl);
   font-weight: 700;
   color: var(--gray-800);
@@ -21,85 +20,24 @@
   -webkit-text-fill-color: transparent;
 }
 
-.gestion-instructores-header{
-     background: rgba(255, 255, 255, 0.25);
-  backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: var(--border-radius-xl);
-  padding: var(--spacing-6);
-  margin-bottom: var(--spacing-8);
-  box-shadow: var(--shadow-glass);
-  display: flex;
-  justify-content: space-between;
-  gap: var(--spacing-6);
-  width: 100%;
-}
-
-.container-instructores{
-    width: 80vw;
-  display: grid;
-  height: 66vh;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--spacing-6);
-}
-
-.instructores-grid {
-  display: flex;
-    flex-direction: column;
-    background: rgba(255, 255, 255, 0.25);
+/* Contenedor principal de tarjetas y botón */
+.programas-grid {
+  width: 83vw;
+  background: rgba(255, 255, 255, 0.25);
   backdrop-filter: blur(24px);
   border-radius: var(--border-radius-xl);
   border: 1px solid rgba(255, 255, 255, 0.2);
   padding: var(--spacing-8);
   box-shadow: 0 12px 36px rgba(0, 0, 0, 0.08);
   animation: slideInUp 0.4s ease-out;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-6);
 }
 
-.instructor-card {
-  background: rgba(255, 255, 255, 0.25);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: var(--border-radius-lg);
-  padding: var(--spacing-6);
-  box-shadow: var(--shadow-glass);
-  transition: all var(--transition-normal);
-  cursor: pointer;
-  animation: slideInUp 0.4s ease-out;
-}
-
-.instructor-card:hover {
-  transform: translateY(-4px);
-  background: rgba(255, 255, 255, 0.35);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1), var(--shadow-glass);
-}
-
-.instructor-nombre {
-  color: var(--boton);
-  font-size: 1.2rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-}
-
-.instructor-especialidad,
-.instructor-docente {
-  color: var(--text-dark);
-  font-size: 0.95rem;
-  margin-bottom: 0.3rem;
-}
-
-.no-instructores {
-  font-size: var(--font-size-base);
-  color: var(--error);
-  background: rgba(255, 0, 0, 0.05);
-  border: 1px solid rgba(255, 0, 0, 0.2);
-  padding: var(--spacing-4);
-  border-radius: var(--border-radius);
-  box-shadow: var(--shadow-glass);
-  text-align: center;
-}
-
-.agregar-instructor-button {
+/* Botón dentro del grid */
+.add-program-button {
+  align-self: flex-end;
   background-color: var(--boton);
   color: white;
   padding: 0.6rem 1.2rem;
@@ -110,10 +48,55 @@
   font-weight: 600;
   box-shadow: 0 5px 15px rgba(76, 175, 80, 0.2);
   transition: all 0.3s ease;
-  margin-top: var(--spacing-6);
 }
 
-.agregar-instructor-button:hover {
+.add-program-button:hover {
   background-color: var(--botonesHover);
   transform: scale(1.03);
+}
+
+/* Grid de tarjetas individuales */
+.container-programas {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-6);
+}
+
+/* Tarjeta de programa */
+.programa-card {
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-6);
+  box-shadow: var(--shadow-glass);
+  transition: all var(--transition-normal);
+  animation: slideInUp 0.4s ease-out;
+  text-align: center;
+}
+
+.programa-card:hover {
+  transform: translateY(-4px);
+  background: rgba(255, 255, 255, 0.35);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1), var(--shadow-glass);
+}
+
+.programa-nombre {
+  color: var(--boton);
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+/* Estado vacío */
+.no-programas {
+  font-size: var(--font-size-base);
+  color: var(--error);
+  background: rgba(255, 0, 0, 0.05);
+  border: 1px solid rgba(255, 0, 0, 0.2);
+  padding: var(--spacing-4);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-glass);
+  text-align: center;
+  margin-top: var(--spacing-6);
 }

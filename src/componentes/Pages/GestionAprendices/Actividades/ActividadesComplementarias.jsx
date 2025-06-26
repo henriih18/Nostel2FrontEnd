@@ -24,8 +24,9 @@ const ActividadesComplementarias = ({ idAprendiz }) => {
   const [instructor, setInstructor] = useState(null);
   const [selectedActividad, setSelectedActividad] = useState(null);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
-  const [currentSection, setCurrentSection] = useState("actividades");
-   const API_URL = import.meta.env.VITE_API_URL;
+  const [currentSection, setCurrentSection] = useState("actividades"); // Nuevo estado para controlar la sección
+
+  const API_URL = import.meta.env.VITE_API_URL;
 
   // Inicializamos las referencias con useRef
   const actaRef = useRef();
@@ -152,31 +153,31 @@ const ActividadesComplementarias = ({ idAprendiz }) => {
         { headers: { Authorization: `Bearer ${token}` } }
       );
       if (res.status >= 200 && res.status < 300) {
-        setActividades((prev) => prev.filter((a) => a.idActividad !== idActividad));
-        setDeleteFeedback({ type: "success", message: "Actividad eliminada con éxito." });
-        setShowDeleteFeedback(true); // Mostrar el mensaje inmediatamente
+        setActividades((prev) =>
+          prev.filter((a) => a.idActividad !== idActividad)
+        );
+        /* setDeleteFeedback({ type: "success", message: "Eliminado con éxito." }); */
         setTimeout(() => {
-          setShowDeleteFeedback(false); // Ocultar después de 2 segundos
-          setActividadAEliminar(null); // Cerrar el modal después
-          setDeleteFeedback({ type: "", message: "" }); // Limpiar feedback
+          setActividadAEliminar(null);
+          setDeleteFeedback({
+            type: "success",
+            message: "Actividad eliminada con éxito.",
+          });
         }, 2000);
       } else {
-        setDeleteFeedback({ type: "error", message: "No se pudo eliminar la actividad." });
-        setShowDeleteFeedback(true);
         setTimeout(() => {
-          setShowDeleteFeedback(false);
           setActividadAEliminar(null);
-          setDeleteFeedback({ type: "", message: "" });
+          setDeleteFeedback({
+            type: "error",
+            message: "No se pudo eliminar la actividad.",
+          });
         }, 2000);
       }
     } catch (err) {
-      setDeleteFeedback({ type: "error", message: "Error al eliminar la actividad." });
-      setShowDeleteFeedback(true);
-      setTimeout(() => {
-        setShowDeleteFeedback(false);
-        setActividadAEliminar(null);
-        setDeleteFeedback({ type: "", message: "" });
-      }, 2000);
+      setDeleteFeedback({
+        type: "error",
+        message: "Error al eliminar la actividad.",
+      });
     }
   };
 
@@ -201,33 +202,42 @@ const ActividadesComplementarias = ({ idAprendiz }) => {
         .acta-imprimible, .acta-imprimible * {
           visibility: visible;
         }
+
+        
+
         .acta-imprimible {
           position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          box-sizing: border-box;
-          padding-top: 0mm;
-          padding-bottom: 0mm;
+        top:    0;    
+        left:   0;    
+        right:  0;    
+        bottom: 0;    
+        box-sizing: border-box;
+        padding-top:    0mm;  /* altura del logo + pequeño hueco */
+        padding-bottom: 0mm;
         }
+
         .acta-tabla {
-          margin-top: 0;
-        }
-        .containerFooterActa {
-          position: fixed;
-          bottom: 0;
-          left: 50%;
-          transform: translateX(-50%);
-          font-family: Calibri, sans-serif;
-          font-size: 12pt;
-          text-align: center;
-          z-index: 999;
-        }
-        .acta-tabla tbody.block-group3 {
-          page-break-inside: avoid !important;
-          break-inside: avoid !important;
-        }
+        margin-top: 0;
+        
+      }
+
+       .containerFooterActa {
+    position: fixed;
+    bottom: 0;            /* justo al límite del área imprimible */
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: Calibri, sans-serif;
+    font-size: 12pt;
+    text-align: center;
+    z-index: 999;
+  }
+
+  .acta-tabla tbody.block-group3 {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+        
       }
     `,
     onAfterPrint: () => console.log("Impresión del acta completada."),
@@ -491,18 +501,18 @@ const ActividadesComplementarias = ({ idAprendiz }) => {
                       : "slide-out-right"
                   }`}
                 >
+                  
                   <table className="acta-tabla">
                     <thead>
-                      <tr>
-                        <th colSpan="5" className="logoActaCell">
-                          <img
-                            src={logoSena}
-                            alt="Logo SENA"
-                            className="registro-logo"
-                          />
-                        </th>
-                      </tr>
+                      <div colSpan="5" className="logoActaCell">
+                    <img
+                      src={logoSena}
+                      alt="Logo SENA"
+                      className="registro-logo"
+                    />
+                  </div>
                     </thead>
+                    
                     <tbody>
                       <tr>
                         <td colSpan="5" className="titulo-principal">
@@ -656,8 +666,16 @@ const ActividadesComplementarias = ({ idAprendiz }) => {
                         </td>
                       </tr>
                     </tbody>
-                    <div className="containerFooterActa">GOR-F-084 V02</div>
+                    {/* <tfoot>
+                      
+                      <tr>
+                        <td colSpan="5" className="containerFooterActa">
+                          <p>GOR-F-084 V02</p>
+                        </td>
+                      </tr>
+                    </tfoot> */}
                   </table>
+                  <div className="containerFooterActa">GOR-F-084 V02</div>
                 </div>
               )}
 

@@ -1,5 +1,6 @@
 import React from 'react'
 import './Container.css'
+import ContainerNavbar from "../ContainerNavbar/ContainerNavbar";
 
 export const Container = ({children}) => {
 
@@ -8,8 +9,13 @@ export const Container = ({children}) => {
   ` */
 
   return (
+    <>
+    <ContainerNavbar />
     <div className= "content" >
+      
       { children }
     </div>
+    </>
+    
   )
 }

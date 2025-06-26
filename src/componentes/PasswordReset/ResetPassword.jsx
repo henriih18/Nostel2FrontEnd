@@ -2,6 +2,15 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import "./ResetPassword.css";
+import {
+  Mail,
+  Lock,
+  Eye,
+  EyeOff,
+  AlertCircle,
+  Loader2,
+  Heart,
+} from "lucide-react";
 
 export const ResetPassword = () => {
   const [newPassword, setNewPassword] = useState("");
@@ -39,48 +48,55 @@ export const ResetPassword = () => {
       setSuccess(true);
       setTimeout(() => navigate("/login"), 5000); // Redirigir después de 5 segundos
     } catch (err) {
-      setError(err.response?.data?.message || "Error al restablecer la contraseña.");
+      setError(
+        err.response?.data?.message || "Error al restablecer la contraseña."
+      );
     }
   };
 
   return (
-    <div className="principal-container">
-        <div className="loginContainer">
-
-        
-      <h1>Restablecer Contraseña</h1>
-      <p>Ingresa tu nueva contraseña a continuación.</p>
-      <form onSubmit={handleSubmit} className="loginForm">
-        <div className="form-group">
-          <label>Nueva Contraseña</label>
-          <input
-            type="password"
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
-            placeholder="Ingresa nueva contraseña"
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label>Confirmar Contraseña</label>
-          <input
-            type="password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            placeholder="Confirma nueva contraseña"
-            required
-          />
-        </div>
-        <button type="submit" className="submit-button">
-          Cambiar Contraseña
-        </button>
-      </form>
-      {error && <div className="error-message">{error}</div>}
-      {success && (
-        <div className="success-message">
-          Contraseña restablecida con éxito. Serás redirigido al login en 5 segundos.
-        </div>
-      )}
+    <div className="recuperacion-wrapper">
+      <div className="tarjeta-recuperacion">
+        <h1>Restablecer Contraseña</h1>
+        <p>Ingresa tu nueva contraseña a continuación.</p>
+        <form onSubmit={handleSubmit} className="formulario-recuperacion">
+          <div className="form-group">
+            <label>Nueva Contraseña</label>
+            <div className="input-wrapper">
+              <input
+                type="password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                placeholder="Ingresa nueva contraseña"
+                required
+              />
+              <Lock className="input-icon" />
+            </div>
+          </div>
+          <div className="form-group">
+            <label>Confirmar Contraseña</label>
+            <div className="input-wrapper">
+              <input
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="Confirma nueva contraseña"
+                required
+              />
+              <Lock className="input-icon" />
+            </div>
+          </div>
+          <button type="submit" className="submit-button">
+            Cambiar Contraseña
+          </button>
+        </form>
+        {error && <div className="error-message">{error}</div>}
+        {success && (
+          <div className="success-message">
+            Contraseña restablecida con éxito. Serás redirigido al login en 5
+            segundos.
+          </div>
+        )}
       </div>
     </div>
   );

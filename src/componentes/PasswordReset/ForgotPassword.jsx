@@ -2,6 +2,15 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./ForgotPassword.css"; // Asegúrate de crear este archivo para los estilos
+import {
+  Mail,
+  Lock,
+  Eye,
+  EyeOff,
+  AlertCircle,
+  Loader2,
+  Heart,
+} from "lucide-react";
 
 export const ForgotPassword = () => {
   const [email, setEmail] = useState("");
@@ -36,7 +45,77 @@ export const ForgotPassword = () => {
   };
 
   return (
-    <div className="PrincipalContainer">
+    <div className="recuperacion-wrapper">
+      <div className="tarjeta-recuperacion">
+        <h1>Recuperar Contraseña</h1>
+        <p>
+          Ingresa tu correo electrónico para recibir un enlace de
+          restablecimiento.
+        </p>
+        <form className="formulario-recuperacion" onSubmit={handleSubmit}>
+          <div>
+            <label>Correo Electrónico</label>
+            <div className="input-wrapper">
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Ingresa tu correo"
+                required
+                disabled={success || loading}
+              />
+              <Mail className="input-icon" />
+            </div>
+          </div>
+          <div className="botones-recuperacion">
+            <button
+              type="button"
+              className="boton-cancelar"
+              onClick={() => navigate("/login")}
+              disabled={loading || success}
+            >
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              className="boton-enviar"
+              disabled={loading || success}
+            >
+              {loading ? "Enviando..." : "Enviar"}
+            </button>
+          </div>
+        </form>
+        {/* {error && <div className="error-message">{error}</div>}
+        {success && (
+          <div className="success-modal-overlay">
+            <div className="success-modal-content">
+              <h2>¡Enlace de restablecimiento enviado exitosamente!</h2>
+              <p>
+                Se ha enviado un enlace de restablecimiento a tu correo. Serás
+                redirigido al login.
+              </p>
+            </div>
+          </div>
+        )} */}
+      </div>
+      {error && <div className="error-message">{error}</div>}
+        {success && (
+          <div className="success-modal-overlay">
+            <div className="success-modal-content">
+              <h2>¡Enlace de restablecimiento enviado exitosamente!</h2>
+              <p>
+                Se ha enviado un enlace de restablecimiento a tu correo. Serás
+                redirigido al login.
+              </p>
+            </div>
+          </div>
+        )}
+    </div>
+  );
+};
+
+{
+  /* <div className="PrincipalContainer">
       <div className="loginContainer">
         <h1>Recuperar Contraseña</h1>
         <p>Ingresa tu correo electrónico para recibir un enlace de restablecimiento.</p>
@@ -71,8 +150,7 @@ export const ForgotPassword = () => {
           </div>
         )}
       </div>
-    </div>
-  );
-};
+    </div> */
+}
 
 export default ForgotPassword;

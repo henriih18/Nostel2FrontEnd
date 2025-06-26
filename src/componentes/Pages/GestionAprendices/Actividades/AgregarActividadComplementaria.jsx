@@ -12,7 +12,6 @@ export const AgregarActividadComplementaria = () => {
   const navigate = useNavigate();
   const { idAprendiz } = useParams();
   const location = useLocation();
-  const API_URL = import.meta.env.VITE_API_URL;
 
   const [formData, setFormData] = useState({
     idInstructor: null,
@@ -65,6 +64,7 @@ export const AgregarActividadComplementaria = () => {
   const [showModal, setShowModal] = useState(false);
   const [asistenciaData, setAsistenciaData] = useState([]);
   const [aprendizData, setAprendizData] = useState(null);
+  const API_URL = import.meta.env.VITE_API_URL;
 
   const quillModules = {
     toolbar: [
@@ -803,13 +803,13 @@ export const AgregarActividadComplementaria = () => {
         <div className="form-actions">
           <button
             type="button"
-            className="cancel-button"
+            className="boton-cancelar"
             onClick={() => navigate(`/aprendices/${idAprendiz}`)}
             disabled={loading}
           >
             Cancelar
           </button>
-          <button type="submit" className="submit-button" disabled={loading}>
+          <button type="submit" className="submit-button-act" disabled={loading}>
             {loading ? "Avanzando" : "Siguiente"}
           </button>
         </div>

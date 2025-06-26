@@ -20,6 +20,7 @@ export const AgregarComentario = ({ onComentarioAgregado }) => {
     const [success, setSuccess] = useState(false);
     const [showModal , setShowModal] = useState(false);
     const API_URL = import.meta.env.VITE_API_URL;
+   
 
     const quillModules = {
         toolbar: [
@@ -213,10 +214,10 @@ export const AgregarComentario = ({ onComentarioAgregado }) => {
 
           
             {showModal && (
-                <div className="modal-overlay" onClick={closeModal}>
-                    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                <div className="success-modal-overlay" onClick={closeModal}>
+                    <div className="success-modal-content" onClick={(e) => e.stopPropagation()}>
                         {error && <p className="modal-error">{error}</p>}
-                        {success && <p className="modal-success">Comentario guardado exitosamente!</p>}
+                        {success && <h2 className="modal-success">Comentario guardado exitosamente!</h2>}
                         
                     </div>
                 </div>

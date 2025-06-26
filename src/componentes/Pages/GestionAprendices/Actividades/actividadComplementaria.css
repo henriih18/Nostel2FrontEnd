@@ -18,57 +18,24 @@
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
+
+
 .card {
-  width: 79vw;
-
-  height: 91.3vh;
-  padding: 2rem;
-  background: var(--backgroundContainer);
-  border-radius: 0px 0px 10px 10px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 15px 60px rgba(0, 0, 0, 0.15),
-    0 0 0 1px rgba(255, 255, 255, 0.1) inset;
   position: relative;
-  overflow-x: hidden;
-}
+  background: rgba(255, 255, 255, 0.25);
+  -webkit-backdrop-filter: blur(24px);
+  backdrop-filter: blur(24px);
+  border-radius: var(--border-radius-xl);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: var(--spacing-8);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.08);
+  animation: slideInUp 0.4s ease-out;
 
-.card::before {
-  content: "";
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(
-      circle at 30% 30%,
-      rgba(76, 175, 80, 0.08) 0%,
-      transparent 40%
-    ),
-    radial-gradient(
-      circle at 70% 70%,
-      rgba(56, 142, 60, 0.08) 0%,
-      transparent 40%
-    );
-  animation: float 20s linear infinite;
-  z-index: -1;
-}
+  /** NUEVO **/
 
-.card::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 6px;
-  background: linear-gradient(
-    90deg,
-    var(--boton),
-    var(--botonesHover),
-    var(--boton)
-  );
-  background-size: 200% 100%;
-  animation: gradientShift 6s ease infinite;
-  z-index: 1;
+  height: 80vh;
+  overflow-y: visible;
+  margin: 2rem auto;
 }
 
 .card-header {
@@ -94,38 +61,39 @@
   left: 0;
   width: 100px;
   height: 4px;
-  
+
   border-radius: 5px;
 }
 
 .add-button {
-  background: var(--boton);
-  color: var(--text-light);
-  border: none;
-  padding: 0.5rem 0.7rem;
-  border-radius: 10px;
-  cursor: pointer;
-  font-weight: 600;
-  font-size: 0.9rem;
-  transition: all 0.3s ease;
-  box-shadow: 0 5px 15px rgba(76, 175, 80, 0.2);
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  background: linear-gradient(135deg, var(--primary-green), var(--accent-emerald));
+    color: white;
+    border: none;
+    padding: var(--spacing-3) var(--spacing-6);
+    border-radius: var(--border-radius);
+    font-size: var(--font-size-base);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 
+        0 4px 15px rgba(76, 175, 80, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .add-button:hover {
-  transform: scale(1.03);
-  background-color: var(--botonesHover);
- box-shadow: 0 5px 25px var(--boton);
+  transform: scale(1.01);
+
+    box-shadow: 
+        0 8px 25px rgba(76, 175, 80, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
 .add-button .icon-plus {
   font-size: 1.2rem;
-}
-
-.card-body {
-  padding: 1rem 0;
 }
 
 .loading-state,
@@ -151,25 +119,30 @@
 
 .actividades-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 1.5rem;
   padding: 1rem 0;
 }
 
 .actividad-card {
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  padding: 1.5rem;
-  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-6);
+  box-shadow: var(--shadow-glass);
+  transition: all var(--transition-normal);
+  position: relative;
+  overflow: hidden;
   cursor: pointer;
-  border: 1px solid var(--border);
+  animation: slideInUp 0.4s ease-out;
 }
 
 .actividad-card:hover {
-  transform: scale(1.03);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-  background: rgba(255, 255, 255, 1);
+  transform: translateY(-4px);
+  background: rgba(255, 255, 255, 0.35);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1), var(--shadow-glass);
 }
 
 .actividad-card h4 {
@@ -233,16 +206,10 @@
 
 /* Estilos para el modal */
 .modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 2;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  position: absolute;
+
+  overflow: auto;
+  border-radius: 20px;
 }
 
 .modal-container {
@@ -252,11 +219,16 @@
   max-width: 1200px; /* Añadido para limitar el ancho máximo en pantallas grandes */
   padding: 1px;
   max-height: 90vh;
-  overflow-y: auto;
+
+  overflow: auto;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
   animation: fadeIn 0.3s ease;
   -ms-overflow-style: none;
-  scrollbar-width: none;
+
+  max-height: 95%; /* <- quita el límite que te está cortando */
+  overflow-y: auto;
+
+  
 }
 
 .modal-container-delete {
@@ -270,7 +242,6 @@
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
   animation: fadeIn 0.3s ease;
   -ms-overflow-style: none;
-  scrollbar-width: none;
 }
 
 .modal-container::-webkit-scrollbar {
@@ -321,7 +292,7 @@
 }
 
 /* Botones del footer */
-.cancel-button,
+/* .cancel-button,
 .submit-button {
   margin: 0 8px;
   padding: 8px 16px;
@@ -350,7 +321,7 @@
 .submit-button:hover {
   transform: scale(1.03);
   background-color: var(--botonesHover);
-}
+} */
 
 /* Navegación entre secciones */
 .modal-navigation {
@@ -374,8 +345,8 @@
   transform: scale(1.03);
 }
 
-/* Estilos para la impresión del acta */
-.acta-imprimible,
+@media screen {
+  .acta-imprimible,
 .acta-imprimible * {
   font-family: Calibri, sans-serif;
   font-size: 12pt;
@@ -396,7 +367,7 @@
 .acta-tabla td {
   font-family: Calibri, sans-serif;
   font-size: 12pt;
-  /* si quieres ajustar el padding, hazlo aquí */
+  
   border: 1px solid #000;
   padding: 8px;
   text-align: center;
@@ -426,6 +397,9 @@
   font-family: Calibri, sans-serif;
   text-align: center;
 }
+}
+/* Estilos para la impresión del acta */
+/*  */
 
 /* Estilos para el Registro de Asistencia */
 

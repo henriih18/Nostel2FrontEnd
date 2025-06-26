@@ -1,23 +1,14 @@
-/* .container {
-  width: 90vw;
-  height: 100vh;
-  background-color: #2e9e0c;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 5rem;
-  animation: changeColor 5s infinite;
-} */
+
 
 .content {
-  margin: .3rem;
-  width: 100vw;
-  border: solid 1px #000;
-  background: #ececec;
+  width: 100%;
+  height: 100%;
   display: flex;
   justify-content: center;
-  align-items: center;
-  border-radius: 10px;
+  background: linear-gradient(135deg, 
+        rgba(76, 175, 80, 0.1) 0%, 
+        rgba(16, 185, 129, 0.1) 50%, 
+        rgba(20, 184, 166, 0.1) 100%);
 }
 
 

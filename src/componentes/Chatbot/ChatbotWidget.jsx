@@ -11,8 +11,9 @@ const ChatbotWidget = () => {
   const [messages, setMessages] = useState([]);
   const widgetRef = useRef(null);
   const messagesEndRef = useRef(null);
-
   const API_URL = import.meta.env.VITE_API_URL;
+
+ 
 
   // Mantener el scroll al fondo cada vez que cambian los mensajes
   useEffect(() => {
@@ -77,9 +78,8 @@ const ChatbotWidget = () => {
       // 3) Llamar al backend para generar la actividad
       const requestBody = {
         messages: [{ content: input }],
-        idFicha: "",
         temperature: 0.2,
-        maxOutputTokens: 1024,
+        maxOutputTokens: 2048,
       };
 
       const { data: actividadGenerada } = await axios.post(

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react"; // Añadimos useEffect para depuración
 import axios from "axios";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
@@ -49,8 +49,12 @@ export const EditarActividadComplementaria = ({
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
   const API_URL = import.meta.env.VITE_API_URL;
+
+  useEffect(() => {
+    console.log("Estado showSuccessModal actualizado:", showSuccessModal); // Depuración en cada cambio de estado
+  }, [showSuccessModal]);
 
   const quillModules = {
     toolbar: [
@@ -84,16 +88,6 @@ export const EditarActividadComplementaria = ({
       [name]: value,
     }));
   };
-
-  /* const addCompromiso = () => {
-    setFormData((prev) => ({
-      ...prev,
-      compromisos: [
-        ...prev.compromisos,
-        { actividadDecision: "", fecha: "", responsable: "", firmaParticipacion: "" },
-      ],
-    }));
-  }; */
 
   const addAsistente = () => {
     setFormData((prev) => ({
@@ -135,7 +129,6 @@ export const EditarActividadComplementaria = ({
     e.preventDefault();
     setLoading(true);
     setError(null);
-    setSuccess(false);
 
     if (!validateForm()) {
       setLoading(false);
@@ -171,15 +164,18 @@ export const EditarActividadComplementaria = ({
       );
 
       console.log("Respuesta del servidor:", response.data);
-      setSuccess(true);
+      setShowSuccessModal(true); // Muestra el modal de éxito
+      setFormData((prev) => ({ ...prev, temporalForceUpdate: !prev.temporalForceUpdate })); // Forzar re-render
 
       if (onActividadActualizada) {
         onActividadActualizada(response.data);
       }
 
+      // Separamos el cierre para asegurar que el modal se muestre primero
       setTimeout(() => {
-        
+        setShowSuccessModal(false);
         onClose();
+        console.log("Modal cerrado, showSuccessModal:", showSuccessModal); // Debug después del cierre
       }, 2000);
     } catch (err) {
       console.error("Error al actualizar actividad:", err);
@@ -191,13 +187,41 @@ export const EditarActividadComplementaria = ({
 
   return (
     <div className="modal-overlay">
+      {showSuccessModal && (
+        <div
+          className="success-modal-overlay"
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            background: "rgba(0,0,0,0.5)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 1001,
+          }}
+        >
+          <div
+            className="success-modal-content"
+            style={{
+              background: "white",
+              padding: "20px",
+              borderRadius: "5px",
+              textAlign: "center",
+              boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
+            }}
+          >
+            <h2>¡Actividad complementaria editada exitosamente!</h2>
+          </div>
+        </div>
+      )}
       <div className="modal-container">
         <div className="modal-header">
           <h2>Editar Actividad Complementaria</h2>
-          {/* <button className="close-button" onClick={onClose}>×</button> */}
         </div>
         <div className="modal-body">
-
           <form onSubmit={handleSubmit}>
             {/* Sección 1: Encabezado del Acta */}
             <div className="form-section">
@@ -300,21 +324,6 @@ export const EditarActividadComplementaria = ({
                   />
                 </div>
               </div>
-
-              {/* <div className="form-row">
-                <div className="form-group">
-                  <label>ESTADO</label>
-                  <select
-                    name="estado"
-                    value={formData.estado}
-                    onChange={handleChange}
-                  >
-                    <option value="Pendiente">Pendiente</option>
-                    <option value="Entregado">Entregado</option>
-                    <option value="Calificado">Calificado</option>
-                  </select>
-                </div>
-              </div> */}
             </div>
 
             {/* Sección 2: Agenda y Objetivos */}
@@ -433,9 +442,6 @@ export const EditarActividadComplementaria = ({
                   ))}
                 </tbody>
               </table>
-              {/* <button type="button" className="add-row-button" onClick={addCompromiso}>
-                Agregar Compromiso
-              </button> */}
             </div>
 
             {/* Sección 5: Asistentes */}
@@ -461,7 +467,7 @@ export const EditarActividadComplementaria = ({
                           value={asistente.nombre}
                           onChange={(e) => handleChange(e, index, "asistentes")}
                           placeholder="Nombre completo"
-                          readOnly={index < 2} // Instructor y aprendiz no editables
+                          readOnly={index < 2}
                           required={index >= 2}
                         />
                       </td>
@@ -530,6 +536,7 @@ export const EditarActividadComplementaria = ({
               </button>
             </div>
           </form>
+          {error && <p className="error-message">{error}</p>}
         </div>
       </div>
     </div>

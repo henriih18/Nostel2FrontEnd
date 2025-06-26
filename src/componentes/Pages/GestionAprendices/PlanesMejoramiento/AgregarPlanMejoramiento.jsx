@@ -9,7 +9,7 @@ const AgregarPlanMejoramiento = () => {
   const navigate = useNavigate();
   const { idAprendiz } = useParams();
   const location = useLocation();
-  const API_URL = import.meta.env.VITE_API_URL;
+  
 
   const [formData, setFormData] = useState({
     idInstructor: null,
@@ -61,6 +61,7 @@ const AgregarPlanMejoramiento = () => {
   const [showModal, setShowModal] = useState(false);
   const [asistenciaData, setAsistenciaData] = useState([]);
   const [aprendizData, setAprendizData] = useState(null);
+  const API_URL = import.meta.env.VITE_API_URL;
 
   const quillModules = {
     toolbar: [

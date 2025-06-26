@@ -1,0 +1,66 @@
+.aboutus-container {
+  margin-left: 280px;
+  padding: 40px;
+  max-width: 960px;
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.08);
+  color: #2d3748;
+  animation: slideInUp 0.4s ease-out;
+}
+
+.aboutus-title {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  background: linear-gradient(135deg, var(--gray-800), var(--primary-green));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.aboutus-subtitle {
+  font-size: 1.5rem;
+  margin-top: 2rem;
+  margin-bottom: 0.5rem;
+  color: var(--gray-800);
+}
+
+.aboutus-text {
+  font-size: 1rem;
+  line-height: 1.7;
+  margin-bottom: 1rem;
+  color: var(--gray-700);
+}
+
+.aboutus-list {
+  list-style: disc;
+  padding-left: 1.5rem;
+  color: var(--gray-700);
+}
+
+.aboutus-list li {
+  margin-bottom: 0.5rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .aboutus-container {
+    margin-left: 0;
+    padding: 20px;
+  }
+}
+
+/* Animación reutilizada */
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

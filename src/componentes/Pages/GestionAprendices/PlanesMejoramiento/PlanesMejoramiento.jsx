@@ -20,7 +20,10 @@ const PlanesMejoramiento = ({ idAprendiz }) => {
   const [planEditar, setPlanEditar] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
   const [planAEliminar, setPlanAEliminar] = useState(null);
-  const [deleteFeedback, setDeleteFeedback] = useState({ type: "", message: "" });
+  const [deleteFeedback, setDeleteFeedback] = useState({
+    type: "",
+    message: "",
+  });
   const [instructor, setInstructor] = useState(null);
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
@@ -28,11 +31,11 @@ const PlanesMejoramiento = ({ idAprendiz }) => {
   // ——— ¡Usamos el MISMO currentSection que Actividades! ———
   // Dejar “actividades” para la primera pestaña (aunque aquí sea Acta de Plan).
   const [currentSection, setCurrentSection] = useState("actividades");
+  const API_URL = import.meta.env.VITE_API_URL;
 
   // Referencias para impresión (idéntico a Actividades)
   const actaRef = useRef();
   const registroRef = useRef();
-  const API_URL = import.meta.env.VITE_API_URL;
 
   // 0) Manejo de ESC para cerrar
   useEffect(() => {
@@ -148,18 +151,20 @@ const PlanesMejoramiento = ({ idAprendiz }) => {
   };
 
   // 7) Eliminar plan
-  const handleEliminarPlan = async (idPlan) => {
+  const handleEliminarPlan = async (idPlanMejoramiento) => {
     try {
       const token = sessionStorage.getItem("token");
       if (!token) throw new Error("Sin token de autenticación");
       const res = await axios.delete(
-        `${API_URL}/planMejoramiento/${idAprendiz}/${idPlan}`,
+        `${API_URL}/planMejoramientos/${idAprendiz}/${idPlanMejoramiento}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
       if (res.status >= 200 && res.status < 300) {
-        setPlanes((prev) => prev.filter((p) => p.idPlanMejoramiento !== idPlan));
+        setPlanes((prev) =>
+          prev.filter((p) => p.idPlanMejoramiento !== idPlanMejoramiento)
+        );
         setTimeout(() => {
           setPlanAEliminar(null);
           setDeleteFeedback({
@@ -239,7 +244,9 @@ const PlanesMejoramiento = ({ idAprendiz }) => {
   // 9) Imprimir “Registro” (idéntico)
   const handlePrintRegistro = useReactToPrint({
     contentRef: registroRef,
-    documentTitle: `Registro_Asistencia_${selectedPlan?.idPlanMejoramiento || "default"}`,
+    documentTitle: `Registro_Asistencia_${
+      selectedPlan?.idPlanMejoramiento || "default"
+    }`,
     pageStyle: `
       /* Márgenes oficiales */
       @page {
@@ -470,14 +477,20 @@ const PlanesMejoramiento = ({ idAprendiz }) => {
                 <div
                   ref={actaRef}
                   className={`acta-imprimible ${
-                    currentSection === "actividades" ? "slide-in-left" : "slide-out-right"
+                    currentSection === "actividades"
+                      ? "slide-in-left"
+                      : "slide-out-right"
                   }`}
                 >
                   <table className="acta-tabla">
                     <thead>
                       <tr>
                         <th colSpan="5" className="logoActaCell">
-                          <img src={logoSena} alt="Logo SENA" className="registro-logo" />
+                          <img
+                            src={logoSena}
+                            alt="Logo SENA"
+                            className="registro-logo"
+                          />
                         </th>
                       </tr>
                     </thead>
@@ -499,9 +512,11 @@ const PlanesMejoramiento = ({ idAprendiz }) => {
                       {/* Fila Ciudad/Fecha - Inicio - Fin */}
                       <tr>
                         <td colSpan="2" className="fila-celda">
-                          <strong>CIUDAD Y FECHA:</strong>{" "}
-                          {selectedPlan.ciudad},{" "}
-                          {new Date(selectedPlan.fecha).toLocaleDateString("es-ES")}
+                          <strong>CIUDAD Y FECHA:</strong> {selectedPlan.ciudad}
+                          ,{" "}
+                          {new Date(selectedPlan.fecha).toLocaleDateString(
+                            "es-ES"
+                          )}
                         </td>
                         <td className="fila-celda"></td>
                         <td className="fila-celda">
@@ -513,10 +528,8 @@ const PlanesMejoramiento = ({ idAprendiz }) => {
                       </tr>
 
                       {/* Fila Lugar/Enlace - Dirección/Regional/Centro */}
-                      {(
-                        selectedPlan.lugarEnlace ||
-                        selectedPlan.direccionRegionalCentro
-                      ) && (
+                      {(selectedPlan.lugarEnlace ||
+                        selectedPlan.direccionRegionalCentro) && (
                         <tr>
                           <td colSpan="2" className="fila-celda">
                             <strong>LUGAR Y/O ENLACE:</strong>{" "}
@@ -542,8 +555,6 @@ const PlanesMejoramiento = ({ idAprendiz }) => {
                           />
                         </td>
                       </tr>
-
-                      
 
                       {/* Desarrollo de la reunión (si existe) */}
                       {selectedPlan.desarrollo && (
@@ -590,7 +601,9 @@ const PlanesMejoramiento = ({ idAprendiz }) => {
                     <tbody>
                       <tr>
                         <td colSpan="5" className="seccion-central">
-                          <strong>ESTABLECIMIENTO Y ACEPTACIÓN DE COMPROMISOS</strong>
+                          <strong>
+                            ESTABLECIMIENTO Y ACEPTACIÓN DE COMPROMISOS
+                          </strong>
                         </td>
                       </tr>
                       <tr>
@@ -644,12 +657,13 @@ const PlanesMejoramiento = ({ idAprendiz }) => {
                       ))}
                       <tr className="acta-legal-text">
                         <td colSpan="5">
-                          De acuerdo con la Ley 1581 de 2012, Protección de Datos
-                          Personales, el Servicio Nacional de Aprendizaje SENA se
-                          compromete a garantizar la seguridad y protección de los
-                          datos personales que se encuentran almacenados en este
-                          documento, y les dará el tratamiento correspondiente en
-                          cumplimiento de lo establecido legalmente.
+                          De acuerdo con la Ley 1581 de 2012, Protección de
+                          Datos Personales, el Servicio Nacional de Aprendizaje
+                          SENA se compromete a garantizar la seguridad y
+                          protección de los datos personales que se encuentran
+                          almacenados en este documento, y les dará el
+                          tratamiento correspondiente en cumplimiento de lo
+                          establecido legalmente.
                         </td>
                       </tr>
                     </tbody>
@@ -663,7 +677,9 @@ const PlanesMejoramiento = ({ idAprendiz }) => {
                 <div
                   ref={registroRef}
                   className={`registro-imprimible ${
-                    currentSection === "registro" ? "slide-in-left" : "slide-out-right"
+                    currentSection === "registro"
+                      ? "slide-in-left"
+                      : "slide-out-right"
                   }`}
                 >
                   <div className="logoRegistroContainer">
@@ -732,11 +748,12 @@ const PlanesMejoramiento = ({ idAprendiz }) => {
                   </table>
                   <div className="regisro-legal-text">
                     <p>
-                      De acuerdo con la Ley 1581 de 2012, Protección de Datos Personales,
-                      el Servicio Nacional de Aprendizaje SENA se compromete a garantizar
-                      la seguridad y protección de los datos personales que se encuentran
-                      almacenados en este documento, y les dará el tratamiento correspondiente
-                      en cumplimiento de lo establecido legalmente.
+                      De acuerdo con la Ley 1581 de 2012, Protección de Datos
+                      Personales, el Servicio Nacional de Aprendizaje SENA se
+                      compromete a garantizar la seguridad y protección de los
+                      datos personales que se encuentran almacenados en este
+                      documento, y les dará el tratamiento correspondiente en
+                      cumplimiento de lo establecido legalmente.
                     </p>
                   </div>
                   <div className="containerFooter">

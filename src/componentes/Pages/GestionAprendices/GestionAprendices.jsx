@@ -83,7 +83,8 @@ export const GestionAprendices = () => {
 
   return (
     <div className="gestion-aprendices-container">
-      <h2>Lista de Aprendices</h2>
+      <div className="gestion-aprendices-header">
+        <h2>Lista de Aprendices</h2>
 
       <input
         type="text"
@@ -92,28 +93,34 @@ export const GestionAprendices = () => {
         onChange={(e) => setBusqueda(e.target.value)}
         className="buscador-aprendices"
       />
+      </div>
+      
 
       {aprendices.length === 0 ? (
         <p className="no-aprendices">No hay aprendices registrados.</p>
       ) : (
-        <ul className="aprendices-list">
+        <div className="aprendices-grid">
           {buscarAprendiz.map((aprendiz) => (
-            <li
+            <div
               key={aprendiz.idAprendiz}
-              className="aprendiz-item"
+              className="aprendiz-card"
               onClick={() => navigate(`/aprendices/${aprendiz.idAprendiz}`)}
             >
-              <strong>
-                {aprendiz.nombres} {aprendiz.apellidos}
-              </strong>
-              <span className="ficha-info">
-                {" "}
-                Programa: {aprendiz.nombrePrograma} Ficha:{" "}
-                {aprendiz.numeroFicha} Ambiente: {aprendiz.numeroAmbiente}
-              </span>
-            </li>
+              <div className="aprendiz-header">
+                <strong>
+                  {aprendiz.nombres} {aprendiz.apellidos}
+                </strong>
+              </div>
+              <div className="aprendiz-detalle">
+                Programa: {aprendiz.nombrePrograma}
+                <br />
+                Ficha: {aprendiz.numeroFicha}
+                <br />
+                Ambiente: {aprendiz.numeroAmbiente}
+              </div>
+            </div>
           ))}
-        </ul>
+        </div>
       )}
     </div>
   );

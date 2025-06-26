@@ -9,29 +9,25 @@
   --accent: #007bff;
   --accent-hover: #0056b3;
   --error: #dc3545;
+  --border-radius-xl: 20px;
 }
 
-/* ---------------------- */
 /* Contenedor general */
 .chatbot-widget {
   position: fixed;
   bottom: 20px;
-  right: 20px;      /* Siempre anclado a la esquina inferior derecha */
-  z-index: 10000;    /* Muy por encima para que no quede oculto */
+  right: 20px;
+  z-index: 10000;
   width: 320px;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  margin: 0;         /* Sin margen adicional */
-  padding: 0;
-  /* Para que el botón no se desplace si se muestra el contenido */
   display: flex;
   flex-direction: column;
   align-items: flex-end;
 }
 
-/* ---------------------- */
-/* Botón circular principal */
+/* Botón circular para abrir/cerrar */
 .chatbot-toggle-button {
-  background-color: var(--boton);
+  background: linear-gradient(135deg, var(--primary-green), var(--accent-emerald));
   color: var(--text-light);
   padding: 12px;
   border: none;
@@ -40,42 +36,43 @@
   font-size: 1.4rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   transition: all 0.3s ease;
-  z-index: 10001;     /* Aún por encima del panel de chat */
+  z-index: 10001;
 }
 
 .chatbot-toggle-button:hover {
-  background-color: var(--botones-hover);
-  transform: scale(1.03);
-  box-shadow: 0 5px 25px var(--boton);
-  
+  transform: scale(1.01);
 
+    box-shadow: 
+        0 8px 25px rgba(76, 175, 80, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
-/* ---------------------- */
 /* Ventana de chatbot */
 .chatbot-content {
-  background: var(--background-container);
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
-  margin-top: 10px;        /* Separación respecto al botón */
+  background: rgba(255, 255, 255, 0.25);
+  -webkit-backdrop-filter: blur(15px);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--border-radius-xl);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.08);
+  margin-top: 10px;
   display: flex;
   flex-direction: column;
-  height: 400px;           /* Altura fija para scroll */
+  height: 440px;
   overflow: hidden;
-  width: 100%;             /* Ocupa el 100% del ancho del contenedor chatbot-widget */
+  width: 110%;
+  animation: slideInUp 0.2s ease-out;
 }
 
-/* ---------------------- */
-/* Área de mensajes (scrollable) */
+/* Área de mensajes */
 .chatbot-messages {
   flex: 1;
   padding: 10px 12px;
-  background: var(--background);
+  background: linear-gradient(135deg, 
+        rgba(76, 175, 80, 0.1) 0%);
   overflow-y: auto;
 }
 
-/* Scrollbar fino */
 .chatbot-messages::-webkit-scrollbar {
   width: 6px;
 }
@@ -87,101 +84,110 @@
   background: transparent;
 }
 
-/* ---------------------- */
-/* Burbuja de mensaje del usuario */
+/* Burbuja del usuario */
 .chatbot-message.user {
   display: flex;
   justify-content: flex-end;
   margin-bottom: 8px;
 }
 .chatbot-message.user .message-content {
-  background-color: var(--boton);
-  color: var(--text-light);
+  background: linear-gradient(135deg, var(--primary-green), var(--accent-emerald));
+  color: white;
   border-radius: 16px 16px 0 16px;
+  padding: 8px 12px;
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.2);
 }
 
-/* Burbuja de mensaje del bot */
+/* Burbuja del bot */
 .chatbot-message.bot {
   display: flex;
   justify-content: flex-start;
   margin-bottom: 8px;
 }
 .chatbot-message.bot .message-content {
-  background-color: var(--background-container);
+  background-color: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   color: var(--text-dark);
-  border: 1px solid var(--border-color);
+  backdrop-filter: blur(12px);
   border-radius: 16px 16px 16px 0;
+  padding: 8px 12px;
 }
 
-/* Estilos generales de burbuja */
-.chatbot-message .message-content {
+/* Estilo común de burbujas */
+.message-content {
   max-width: 75%;
-  padding: 8px 12px;
   font-size: 0.95rem;
   line-height: 1.3;
   word-wrap: break-word;
 }
 
-/* ---------------------- */
 /* Formulario inferior */
 .chatbot-form {
   display: flex;
   flex-direction: column;
-  padding: 10px 12px;
-  border-top: 1px solid var(--border-color);
-  background-color: var(--background-container);
+  padding: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(12px);
 }
 
-/* Input de texto */
+/* Input */
 .chatbot-form input {
   padding: 8px 10px;
   border: 1px solid var(--border-color);
   border-radius: 4px;
   font-size: 0.95rem;
   margin-bottom: 6px;
+  background: white;
 }
 
-/* Botón de envío */
+/* Botón de enviar */
 .chatbot-form button {
   padding: 8px;
   background-color: var(--boton);
-  color: var(--text-light);
+  color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   font-size: 0.95rem;
-  transition:  0.2s ease;
+  transition: all 0.2s ease;
 }
 
-/* Hover del botón */
 .chatbot-form button:hover:not(:disabled) {
   background-color: var(--botones-hover);
   transform: scale(1.03);
   box-shadow: 0px 5px 25px var(--boton);
 }
 
-/* Estado deshabilitado del botón */
 .chatbot-form button:disabled {
   background-color: var(--boton);
   opacity: 0.6;
   cursor: default;
 }
 
-/* ---------------------- */
 /* Animación blink */
 @keyframes blink {
   0% { opacity: 1; }
   50% { opacity: 0.4; }
   100% { opacity: 1; }
 }
-
-/* Clase para parpadear */
 .blink {
   animation: blink 1s infinite;
 }
 
-/* ---------------------- */
-/* Mensaje de error en formulario */
+/* Animación entrada */
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Mensaje de error */
 .error-message {
   color: var(--error);
   font-size: 0.85rem;
