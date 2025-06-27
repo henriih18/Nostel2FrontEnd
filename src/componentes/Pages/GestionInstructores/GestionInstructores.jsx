@@ -1,3 +1,5 @@
+
+
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -7,6 +9,13 @@ export const GestionInstructores = () => {
   const [instructores, setInstructores] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [busqueda, setBusqueda] = useState("");
+
+  // Nuevos estados para filtros y ordenamiento
+  const [selectedArea, setSelectedArea] = useState("");
+  const [sortBy, setSortBy] = useState("nombres"); // Default sort by name
+  const [sortOrder, setSortOrder] = useState("asc"); // Default ascending
+
   const navigate = useNavigate();
   const API_URL = import.meta.env.VITE_API_URL;
 
@@ -14,41 +23,32 @@ export const GestionInstructores = () => {
     fetchInstructores();
   }, []);
 
-  const manejarAgregarInstructor = () => {
-    navigate("/agregarInstructor");
-  };
-
   const fetchInstructores = async () => {
     try {
-      console.log("Iniciando fetchInstructores...");
-
-      // Obtener token del localStorage
       const token = sessionStorage.getItem("token");
+
       if (!token) {
         console.error("No hay token de autenticación");
         setError("Sesión no válida. Por favor inicie sesión nuevamente.");
-        navigate("/login");
+        setTimeout(() => {
+          navigate("/login");
+        }, 3000);
         return;
       }
 
-      // Configurar los headers con el token
       const config = {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
-        timeout: 5000, // 5 segundos
+        timeout: 5000,
       };
 
-      // Realizar la petición para obtener los instructores
       const response = await axios.get(
         `${API_URL}/instructores`,
         config
       );
 
-      console.log("Datos recibidos:", response.data);
-
-      // Extraer la lista de instructores según la estructura de la respuesta
       let listaInstructores = Array.isArray(response.data)
         ? response.data
         : response.data.instructores || [];
@@ -59,12 +59,6 @@ export const GestionInstructores = () => {
       console.error("Error al obtener instructores:", error);
 
       if (error.response) {
-        console.error(
-          "Respuesta de error:",
-          error.response.status,
-          error.response.data
-        );
-
         if (error.response.status === 403 || error.response.status === 401) {
           localStorage.removeItem("token");
           navigate("/login");
@@ -80,49 +74,132 @@ export const GestionInstructores = () => {
     }
   };
 
-  if (loading)
-    return <div className="loading-container">Cargando instructores...</div>;
+  // Lógica de filtrado y ordenamiento combinada
+  const filteredAndSortedInstructores = instructores
+    .filter((instructor) => {
+      const matchesSearch =
+        `${instructor.nombres} ${instructor.apellidos}`
+          .toLowerCase()
+          .includes(busqueda.toLowerCase()) ||
+        instructor.numeroDocente?.toString().includes(busqueda);
+
+      const matchesArea = selectedArea
+        ? instructor.area === selectedArea
+        : true;
+
+      return matchesSearch && matchesArea;
+    })
+    .sort((a, b) => {
+      let compareValue = 0;
+      if (sortBy === "nombres") {
+        compareValue = a.nombres.localeCompare(b.nombres);
+      } else if (sortBy === "area") {
+        compareValue = (a.area || "").localeCompare(b.area || "");
+      }
+
+      return sortOrder === "asc" ? compareValue : -compareValue;
+    });
+
+  // Obtener opciones únicas para los filtros
+  const uniqueAreas = [...new Set(instructores.map((i) => i.area).filter(Boolean))];
+
+  if (loading) return <div className="loading-message">Cargando instructores...</div>;
   if (error) return <div className="error-message">{error}</div>;
 
   return (
     <div className="gestion-instructores-container">
       <div className="gestion-instructores-header">
         <h2>Lista de Instructores</h2>
+        <input
+          type="text"
+          placeholder="Buscar por nombre o número de docente"
+          value={busqueda}
+          onChange={(e) => setBusqueda(e.target.value)}
+          className="buscador-instructores"
+        />
       </div>
 
-      {instructores.length === 0 ? (
-        <p className="no-instructores">No hay instructores registrados.</p>
+      <div className="filters-sort-container">
+        <select
+          value={selectedArea}
+          onChange={(e) => setSelectedArea(e.target.value)}
+          className="filter-select"
+        >
+          <option value="">Todas las Áreas</option>
+          {uniqueAreas.map((area) => (
+            <option key={area} value={area}>
+              {area}
+            </option>
+          ))}
+        </select>
+
+        <select
+          value={sortBy}
+          onChange={(e) => setSortBy(e.target.value)}
+          className="sort-select"
+        >
+          <option value="nombres">Ordenar por Nombre</option>
+          <option value="area">Ordenar por Área</option>
+        </select>
+
+        <button
+          onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
+          className="sort-order-button"
+        >
+          {sortOrder === "asc" ? "Ascendente" : "Descendente"}
+        </button>
+
+        <button
+          onClick={() => navigate("/agregarInstructor")}
+          className="add-button"
+        >
+          Agregar Instructor
+        </button>
+      </div>
+
+      {filteredAndSortedInstructores.length === 0 ? (
+        <p className="no-instructores">No hay instructores registrados que coincidan con los criterios.</p>
       ) : (
         <div className="instructores-grid">
-          <button
-            onClick={manejarAgregarInstructor}
-            className="agregar-instructor-button"
-          >
-            Agregar Instructor
-          </button>
-          <div className="container-instructores">
-            {instructores.map((instructor) => (
-              <div key={instructor.idInstructor} className="instructor-card">
-                <h4 className="instructor-nombre">
-                  {instructor.nombres} {instructor.apellidos}
-                </h4>
-                <p className="instructor-especialidad">
-                  <strong>Especialidad:</strong>{" "}
-                  {instructor.area || "Sin área asignada"}
-                </p>
-                <p className="instructor-docente">
-                  <strong>Número Docente:</strong>{" "}
-                  {instructor.numeroDocente ?? "No disponible"}
-                </p>
+          {filteredAndSortedInstructores.map((instructor) => (
+            <div
+              key={instructor.idInstructor}
+              className="instructor-card"
+              onClick={() => navigate(`/instructores/${instructor.idInstructor}`)} // Asumiendo una ruta de detalle
+            >
+              <div className="card-content">
+                <div className="instructor-name-status">
+                  <h3 className="instructor-name">
+                    {instructor.nombres} {instructor.apellidos}
+                  </h3>
+                  {/*  indicador de estado si los instructores tienen un estado (activo/inactivo) */}
+                  {/* <span className={`status-indicator ${instructor.estado === 'activo' ? 'active' : 'inactive'}`}></span> */}
+                </div>
+                <p className="instructor-area">
+                  <span className="detail-label">Área:</span> {instructor.area || "Sin área asignada"}</p>
+                <div className="instructor-details-row">
+                  <span className="detail-label">Número Docente:</span>
+                  <span className="detail-value">{instructor.numeroDocente ?? "No disponible"}</span>
+                </div>
               </div>
-            ))}
-          </div>
+              {/* <div className="card-actions">
+                <button className="action-button" title="Ver Perfil">
+                  <i className="fas fa-eye"></i>
+                </button>
+                <button className="action-button" title="Editar">
+                  <i className="fas fa-edit"></i>
+                </button>
+                
+                 <button className="action-button delete-button" title="Eliminar Instructor" onClick={(e) => { e.stopPropagation(); handleDelete(instructor.idInstructor); }}><i className="fas fa-trash"></i></button> 
+              </div> */}
+            </div>
+          ))}
         </div>
       )}
-
-      
     </div>
   );
 };
 
 export default GestionInstructores;
+
+

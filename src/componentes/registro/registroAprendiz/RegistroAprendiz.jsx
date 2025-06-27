@@ -433,7 +433,7 @@ export const RegistroAprendiz = () => {
         )}
 
         {/* Botón de envío */}
-        <button type="submit" disabled={loading}>
+        <button className="registro-button" type="submit" disabled={loading}>
           {loading ? "Procesando..." : "Completar Registro"}
         </button>
       </form>

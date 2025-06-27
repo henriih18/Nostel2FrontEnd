@@ -142,9 +142,8 @@
   padding: 0.75rem;
 }
 
-button[type="submit"] {
-  background: linear-gradient(135deg, #4caf50, #10b981);
-  color: white;
+.registro-button {
+  
   border: none;
   padding: 0.85rem 2rem;
   border-radius: 0.75rem;
@@ -157,16 +156,7 @@ button[type="submit"] {
   letter-spacing: 0.5px;
 }
 
-button[type="submit"]:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 25px rgba(76, 175, 80, 0.5);
-}
 
-button[type="submit"]:disabled {
-  background: #ccc;
-  cursor: not-allowed;
-  box-shadow: none;
-}
 
 /* Animaciones */
 @keyframes float {

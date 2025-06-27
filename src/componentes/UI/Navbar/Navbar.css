@@ -90,7 +90,7 @@
     font-size: var(--font-size-3xl);
     font-weight: 700;
     color: var(--gray-800);
-    background: linear-gradient(135deg, var(--gray-800), var(--primary-green));
+    background: linear-gradient(135deg, var(--gray-800));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -270,15 +270,18 @@
     font-size: var(--font-size-base);
     font-weight: 500;
     cursor: pointer;
-    transition: all var(--transition-fast);
+    transition: all var(--transition-normal);
     backdrop-filter: blur(10px);
 }
 
 .logout-button:hover {
     background: rgba(239, 68, 68, 0.15);
     border-color: rgba(239, 68, 68, 0.3);
-    transform: translateY(-1px);
+    transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
+
+
 
 
 

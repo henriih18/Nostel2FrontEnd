@@ -1,19 +1,47 @@
 /* GestionAprendices.css - estilo en tarjetas con Glass Morphism */
 
+/*  :root {
+  --primary-green: #4CAF50;
+  --secondary-green: #8BC34A;
+  --light-green: #DCEDC8;
+  --gray-800: #212121;
+  --gray-600: #757575;
+  --gray-500: #9E9E9E;
+  --white: #FFFFFF;
+  --error: #F44336;
+
+  --spacing-2: 0.5rem; 
+  --spacing-3: 0.75rem; 
+  --spacing-4: 1rem; 
+  --spacing-6: 1.5rem; 
+  --spacing-8: 2rem; 
+
+  --font-size-sm: 0.875rem; 
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem; 
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem; 
+
+  --border-radius: 0.25rem; 
+  --border-radius-lg: 0.5rem; 
+  --border-radius-xl: 0.75rem;
+
+  --shadow-glass: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --transition-fast: 0.15s ease-in-out;
+  --transition-normal: 0.3s ease-in-out;
+}  */
+
+
 .gestion-aprendices-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-   margin-left: 280px; 
-  
+  margin-left: 280px;
   min-height: 100vh;
   padding: var(--spacing-6);
-  
   position: relative;
   animation: slideInUp 0.6s ease-out;
-  background: linear-gradient(135deg, 
-        rgba(76, 175, 80, 0.1) 0%);
-  
+  background: linear-gradient(135deg, rgba(76, 175, 80, 0.1) 0%);
 }
 
 .gestion-aprendices-container h2 {
@@ -21,23 +49,25 @@
   font-weight: 700;
   color: var(--gray-800);
   margin-bottom: var(--spacing-6);
-  background: linear-gradient(135deg, var(--gray-800), var(--primary-green));
+  background: linear-gradient(135deg, var(--gray-800));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-.gestion-aprendices-header{
+.gestion-aprendices-header {
   background: rgba(255, 255, 255, 0.25);
   backdrop-filter: blur(24px);
   border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: var(--border-radius-xl);
-  padding: var(--spacing-6);
-  margin-bottom: var(--spacing-8);
+  padding: var(--spacing-4) var(--spacing-6);
+  margin-bottom: var(--spacing-6);
   box-shadow: var(--shadow-glass);
   display: flex;
   justify-content: space-between;
+  align-items: center;
   gap: var(--spacing-6);
   width: 100%;
+  
 }
 
 .buscador-aprendices {
@@ -66,12 +96,80 @@
   background: rgba(255, 255, 255, 0.35);
 }
 
+/* Filters and Sort */
+.filters-sort-container {
+  display: flex;
+  gap: var(--spacing-4);
+  margin-bottom: var(--spacing-6);
+  width: 100%;
+  justify-content: center;
+  
+  flex-wrap: wrap;
+}
+
+
+
+.container-select {
+  
+  display: flex;
+  flex-direction: row ;
+  width: 100%;
+  gap: var(--spacing-4);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+
+
+.filter-select,
+.sort-select {
+   padding: var(--spacing-3) var(--spacing-4);
+  border-radius: var(--border-radius-lg);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: var(--gray-800);
+  font-size: var(--font-size-base);
+  transition: all var(--transition-fast);
+  box-shadow: var(--shadow-glass);
+  cursor: pointer; 
+  width: 10vw;
+}
+
+.filter-select:focus,
+.sort-select:focus {
+  outline: none;
+  border-color: var(--primary-green);
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.sort-order-button {
+  padding: var(--spacing-3) var(--spacing-4);
+  border-radius: var(--border-radius-lg);
+  border: 1px solid var(--primary-green);
+  background: linear-gradient(135deg, var(--primary-green), var(--accent-emerald));
+    color: white;
+  color: var(--white);
+  font-size: var(--font-size-base);
+  cursor: pointer;
+  
+  /* box-shadow: var(--shadow-glass); */
+  transition: all var(--transition-normal);
+}
+
+
+
+.sort-order-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
 /* Grid de tarjetas */
 .aprendices-grid {
   width: 83vw;
   display: grid;
-  height: 90vh;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); /* Responsive grid */
   gap: var(--spacing-6);
   background: rgba(255, 255, 255, 0.25);
   backdrop-filter: blur(24px);
@@ -80,6 +178,8 @@
   padding: var(--spacing-8);
   box-shadow: 0 12px 36px rgba(0, 0, 0, 0.08);
   animation: slideInUp 0.4s ease-out;
+  min-height: 71vh; /* Ajuste para que el grid no se colapse */
+  overflow: auto;
 }
 
 /* Tarjeta individual de aprendiz */
@@ -93,60 +193,170 @@
   box-shadow: var(--shadow-glass);
   transition: all var(--transition-normal);
   position: relative;
-  overflow: hidden;
+  overflow: auto;
   cursor: pointer;
   animation: slideInUp 0.4s ease-out;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  max-height: 15rem;
+  min-height: 15rem;
+  max-width: 30rem;
+  min-width: 30rem;
 }
 
 .aprendiz-card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-3px);
   background: rgba(255, 255, 255, 0.35);
-  box-shadow: 
+  box-shadow:
     0 20px 40px rgba(0, 0, 0, 0.1),
     var(--shadow-glass);
 }
 
-.aprendiz-header {
-  font-size: var(--font-size-lg);
+.card-content {
+  flex-grow: 1;
+}
+
+.aprendiz-name-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-2);
+}
+
+.aprendiz-name {
+  font-size: var(--font-size-2xl);
   font-weight: 700;
   color: var(--gray-800);
-  margin-bottom: var(--spacing-2);
-  background: linear-gradient(135deg, var(--gray-800), var(--primary-green));
+  margin: 0;
+  background: linear-gradient(135deg, var(--gray-800));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-.aprendiz-detalle {
+.status-indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: var(--gray-500); /* Default inactive */
+  margin-left: var(--spacing-2);
+}
+
+.status-indicator.active {
+  background-color: var(--primary-green);
+}
+
+.status-indicator.inactive {
+  background-color: #DC2626;
+}
+
+.container-info {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: var(--spacing-2);
+  
+}
+
+.aprendiz-program {
   font-size: var(--font-size-sm);
   color: var(--gray-600);
-  line-height: 1.5;
+  margin-bottom: var(--spacing-2);
+  display: flex;
+}
+
+
+
+.aprendiz-details-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: var(--spacing-2);
+  
+}
+
+.detail-label {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--gray-800);
+  margin-right: var(--spacing-2);
+}
+
+.detail-value {
+  font-size: var(--font-size-lg);
+  color: var(--gray-600);
+  
+  flex-grow: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+.ajust {
+  
+  
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: wrap;
+}
+
+.primary-info,.secondary-info {
+  background: rgba(76, 175, 80, 0.1);
+  border: 1px solid rgba(76, 175, 80, 0.2);
+  width: 15rem;
+  padding: var(--spacing-3);
+  border-radius: var(--border-radius-lg);
 }
 
 /* Estados */
+.loading-message,
 .no-aprendices,
 .error-message {
   font-size: var(--font-size-base);
   color: var(--error);
-  background: rgba(255, 0, 0, 0.05);
+  /* background: rgba(255, 0, 0, 0.05); */
   border: 1px solid rgba(255, 0, 0, 0.2);
   padding: var(--spacing-4);
   border-radius: var(--border-radius);
   box-shadow: var(--shadow-glass);
   margin-top: var(--spacing-6);
   text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.loading-message {
+  color: var(--primary-green);
+  background: rgba(76, 175, 80, 0.05);
+  border: 1px solid rgba(76, 175, 80, 0.2);
 }
 
 /* Responsive */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .gestion-aprendices-container {
     margin-left: 0;
     padding: var(--spacing-4);
   }
 
-  .buscador-aprendices {
-    width: 100%;
+  .aprendices-grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    width: 90vw;
   }
 
+  .filters-sort-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .buscador-aprendices {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
   .aprendices-grid {
     grid-template-columns: 1fr;
   }
@@ -163,3 +373,5 @@
     transform: translateY(0);
   }
 }
+
+

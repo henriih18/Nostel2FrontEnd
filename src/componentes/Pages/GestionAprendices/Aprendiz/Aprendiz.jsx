@@ -79,7 +79,7 @@ const Aprendiz = () => {
             <h3>Información del Aprendiz</h3>
             <div className="info">
               <p>
-                <strong>Documento:</strong> {aprendiz.document}
+                <strong>Documento:</strong> {aprendiz.documento}
               </p>
               <p>
                 <strong>Nombres:</strong> {aprendiz.nombres}
@@ -104,8 +104,9 @@ const Aprendiz = () => {
                 <strong>Residencia:</strong> {aprendiz.residencia}{" "}
               </p>
 
-              <button>Editar Informacion</button>
+              
             </div>
+            <button className="edit-button">Editar Informacion</button>
           </div>
         )}
 

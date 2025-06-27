@@ -1,13 +1,20 @@
+
+
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { AgregarPrograma } from "./AgregarPrograma";
 import "./GestionProgramas.css";
 
 export const GestionProgramas = () => {
   const [programas, setProgramas] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(null);
+  const [busqueda, setBusqueda] = useState("");
+
+  // Nuevos estados para ordenamiento (los programas no tienen muchos campos para filtrar)
+  const [sortBy, setSortBy] = useState("nombrePrograma"); // Default sort by name
+  const [sortOrder, setSortOrder] = useState("asc"); // Default ascending
+
   const navigate = useNavigate();
   const API_URL = import.meta.env.VITE_API_URL;
 
@@ -15,14 +22,8 @@ export const GestionProgramas = () => {
     obtenerProgramas();
   }, []);
 
-  const manejarAgregarPrograma = () => {
-    // Navegar al formulario para agregar un nuevo programa
-    navigate("/agregar-programa");
-  };
-
   const obtenerProgramas = async () => {
     try {
-      // Obtener el token del localStorage
       const token = sessionStorage.getItem("token");
 
       if (!token) {
@@ -34,7 +35,6 @@ export const GestionProgramas = () => {
         return;
       }
 
-      // Configurar los headers con el token
       const config = {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -42,19 +42,13 @@ export const GestionProgramas = () => {
         },
       };
 
-      // Realizar la petición para obtener los programas
-      const respuesta = await axios.get(
-        `${API_URL}/programas`,
-        config
-      );
+      const respuesta = await axios.get(`${API_URL}/programas`, config);
 
-      // Actualizar el estado con los programas obtenidos
       setProgramas(respuesta.data);
       setCargando(false);
     } catch (error) {
       console.error("Error al obtener programas:", error);
 
-      // Manejo de errores específicos
       if (error.response) {
         if (error.response.status === 403) {
           setError(
@@ -86,33 +80,101 @@ export const GestionProgramas = () => {
     }
   };
 
+  // Lógica de filtrado y ordenamiento combinada
+  const filteredAndSortedProgramas = programas
+    .filter((programa) => {
+      const matchesSearch = programa.nombrePrograma
+        ?.toLowerCase()
+        .includes(busqueda.toLowerCase());
+
+      return matchesSearch;
+    })
+    .sort((a, b) => {
+      let compareValue = 0;
+      if (sortBy === "nombrePrograma") {
+        compareValue = a.nombrePrograma.localeCompare(b.nombrePrograma);
+      }
+
+      return sortOrder === "asc" ? compareValue : -compareValue;
+    });
+
   if (cargando)
-    return <div className="loading-container">Cargando programas...</div>;
+    return <div className="loading-message">Cargando programas...</div>;
   if (error) return <div className="error-message">{error}</div>;
 
   return (
     <div className="gestion-programas-container">
-      <div className="programas-header">
+      <div className="gestion-programas-header">
         <h2>Lista de Programas Formativos</h2>
+        <input
+          type="text"
+          placeholder="Buscar por nombre de programa"
+          value={busqueda}
+          onChange={(e) => setBusqueda(e.target.value)}
+          className="buscador-programas"
+        />
       </div>
 
-      {programas.length === 0 ? (
-        <p className="no-programas">No hay programas registrados.</p>
+      <div className="filters-sort-container">
+        
+
+        <button
+          onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
+          className="sort-order-button"
+        >
+          {sortOrder === "asc" ? "Ascendente" : "Descendente"}
+        </button>
+
+        <button
+          onClick={() => navigate("/agregar-programa")}
+          className="add-button"
+        >
+          Agregar Nuevo Programa
+        </button>
+      </div>
+
+      {filteredAndSortedProgramas.length === 0 ? (
+        <p className="no-programas">
+          No hay programas registrados que coincidan con los criterios.
+        </p>
       ) : (
         <div className="programas-grid">
-          <button
-            onClick={manejarAgregarPrograma}
-            className="add-program-button"
-          >
-            Agregar Nuevo Programa
-          </button>
-          <div className="container-programas">
-            {programas.map((programa) => (
-              <div key={programa.idPrograma} className="programa-card">
-                <h4 className="programa-nombre">{programa.nombrePrograma}</h4>
+          {filteredAndSortedProgramas.map((programa) => (
+            <div
+              key={programa.idPrograma}
+              className="programa-card"
+              onClick={() => navigate(`/programas/${programa.idPrograma}`)} // Asumiendo una ruta de detalle
+            >
+              <div className="card-content">
+                <div className="programa-header-info">
+                  <h3 className="programa-nombre">{programa.nombrePrograma}</h3>
+                  {/* indicador de estado si los programas tienen un estado (activo/inactivo) */}
+                  {/* <span className={`status-indicator ${programa.estado === 'activo' ? 'active' : 'inactive'}`}></span> */}
+                </div>
+                {/* Puedes añadir más detalles del programa aquí si están disponibles en el objeto programa */}
+                {/* <p className="programa-descripcion">{programa.descripcion}</p> */}
               </div>
-            ))}
-          </div>
+              {/* <div className="card-actions">
+                <button className="action-button" title="Ver Detalles">
+                  <i className="fas fa-eye"></i>
+                </button>
+                <button className="action-button" title="Editar Programa">
+                  <i className="fas fa-edit"></i>
+                </button>
+
+                <button
+                  className="action-button delete-button"
+                  title="Eliminar Programa"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDelete(programa.idPrograma);
+                  }}
+                >
+                  <i className="fas fa-trash"></i>
+                </button>
+              </div> */}
+            </div>
+          ))}
         </div>
       )}
     </div>

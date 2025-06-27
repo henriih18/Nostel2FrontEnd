@@ -71,25 +71,24 @@
     border: none;
     padding: var(--spacing-3) var(--spacing-6);
     border-radius: var(--border-radius);
-    font-size: var(--font-size-base);
+    font-size: var(--font-size-sm);
     font-weight: 600;
     cursor: pointer;
     transition: all var(--transition-normal);
     position: relative;
     overflow: hidden;
-    box-shadow: 
-        0 4px 15px rgba(76, 175, 80, 0.4),
-        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+   /* box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); */
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
 
 .add-button:hover {
-  transform: scale(1.01);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 
-    box-shadow: 
+    /* box-shadow: 
         0 8px 25px rgba(76, 175, 80, 0.5),
-        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        inset 0 1px 0 rgba(255, 255, 255, 0.3); */
 }
 
 .add-button .icon-plus {

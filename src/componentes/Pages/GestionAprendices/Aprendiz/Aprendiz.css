@@ -31,7 +31,7 @@
   font-size: var(--font-size-2xl);
   font-weight: 800;
   color: var(--gray-800);
-  background: linear-gradient(135deg, var(--gray-800), var(--primary-green));
+  background: linear-gradient(135deg, var(--gray-800));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -55,16 +55,34 @@
   padding: var(--spacing-8);
   box-shadow: 0 12px 36px rgba(0, 0, 0, 0.08);
   animation: slideInUp 0.4s ease-out;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  
 }
 
 .containerInfo h3 {
-  font-size: var(--font-size-xl);
+  font-size: var(--font-size-2xl);
   font-weight: 800;
   color: var(--gray-800);
   margin-bottom: var(--spacing-6);
-  background: linear-gradient(135deg, var(--gray-800), var(--primary-green));
+  background: linear-gradient(135deg, var(--gray-800));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+}
+
+.edit-button {
+  padding: var(--spacing-3) var(--spacing-6);
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  background: linear-gradient(135deg, var(--primary-green), var(--accent-emerald));
+  color: white;
+  border: none;
+  border-radius: var(--border-radius-lg);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 15rem;
+  margin-top: var(--spacing-10);
 }
 
 /* Grid de info más clara y amplia */
@@ -76,13 +94,17 @@
 
 .info p {
   font-size: var(--font-size-base);
-  color: var(--gray-800);
+  color: var(--gray-600);
   margin: 0;
+ 
 }
 
 .info strong {
   font-weight: 700;
-  color: var(--primary-green-dark);
+  color: var(--gray-800);
+   margin-right: var(--spacing-4);
+ 
+  font-size: var(--font-size-lg);
 }
 
 /* Botón más grande y prominente */
@@ -97,12 +119,13 @@
   border-radius: var(--border-radius-lg);
   margin-top: var(--spacing-6);
   cursor: pointer;
-  transition: all 0.3s ease;
+ transition: all var(--transition-normal);
 }
+
 
 .info button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 30px rgba(76, 175, 80, 0.4);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
 /* Responsive */

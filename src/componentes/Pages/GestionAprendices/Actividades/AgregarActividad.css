@@ -238,13 +238,15 @@ input[readonly] {
 .submit-button {
   background-color: #27ae60;
   color: white;
-  transition: all 0.3s ease;
+  transition: all var(--transition-normal);
 }
 
 .submit-button:hover {
-  background-color: #219955;
-  transform: scale(1.03);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
+
+
 
 .submit-button:disabled {
   background-color: #95a5a6;
@@ -266,8 +268,8 @@ input[readonly] {
 }
 
 .cancel-button:hover {
-  box-shadow: 0 6px 20px rgba(255, 0, 0, 0.3);
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
 
@@ -507,17 +509,17 @@ input[readonly] {
     transition: all var(--transition-normal);
     position: relative;
     overflow: hidden;
-    box-shadow: 
+    /* box-shadow: 
         0 4px 15px rgba(76, 175, 80, 0.4),
-        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        inset 0 1px 0 rgba(255, 255, 255, 0.2); */
     text-transform: uppercase;
     letter-spacing: 0.5px;
     margin-top: 1rem;
 }
 
 .add-row-button:hover {
-  background-color: #219955;
-  transform: scale(1.03);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
 

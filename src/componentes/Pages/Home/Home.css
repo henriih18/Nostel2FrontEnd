@@ -7,6 +7,11 @@
     background: transparent;
     position: relative;
     
+    display: flex;
+    justify-content: center;
+
+    align-items: center;
+    
 }
 
 /* Header del dashboard */
@@ -52,7 +57,7 @@
     font-weight: 700;
     color: var(--gray-800);
     margin-bottom: var(--spacing-2);
-    background: linear-gradient(135deg, var(--gray-800), var(--primary-green));
+    background: linear-gradient(135deg, var(--gray-800));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;

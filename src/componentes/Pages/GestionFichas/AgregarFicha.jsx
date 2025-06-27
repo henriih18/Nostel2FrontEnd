@@ -13,7 +13,7 @@ export const AgregarFicha = () => {
     useEffect(() => {
         const cargarProgramas = async () => {
             try {
-                const response = await axios.get(`${API_URL}/api/programas`);
+                const response = await axios.get(`${API_URL}/programas`);
                 setProgramas(response.data);
             } catch (error) {
                 console.error("Error cargando programas:", error);

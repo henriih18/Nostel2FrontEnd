@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
-//import "./PerfilInstructor.css";
+import "./Instructor.css";
 
 const Instructor = () => {
   const { idInstructor } = useParams(); // id del usuario
@@ -56,7 +56,7 @@ const Instructor = () => {
     <div className="containerInstructor">
       <h2>Perfil del Instructor</h2>
       <div className="info">
-        <p><strong>Documento:</strong> {instructor.documento}</p>
+        <p><strong>Documento:</strong> {instructor.numeroDocente}</p>
         <p><strong>Nombres:</strong> {instructor.nombres}</p>
         <p><strong>Apellidos:</strong> {instructor.apellidos}</p>
         <p><strong>Correo:</strong> {instructor.correo}</p>

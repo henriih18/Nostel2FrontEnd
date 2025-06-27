@@ -1,3 +1,5 @@
+
+
 .gestion-programas-container {
   display: flex;
   flex-direction: column;
@@ -5,24 +7,118 @@
   margin-left: 280px;
   min-height: 100vh;
   padding: var(--spacing-6);
+  position: relative;
   animation: slideInUp 0.6s ease-out;
-  background: linear-gradient(135deg, 
-        rgba(76, 175, 80, 0.1) 0%);
+  background: linear-gradient(135deg, rgba(76, 175, 80, 0.1) 0%);
 }
 
-.programas-header h2 {
+.gestion-programas-container h2 {
   font-size: var(--font-size-2xl);
   font-weight: 700;
   color: var(--gray-800);
   margin-bottom: var(--spacing-6);
-  background: linear-gradient(135deg, var(--gray-800), var(--primary-green));
+  background: linear-gradient(135deg, var(--gray-800));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-/* Contenedor principal de tarjetas y botón */
+.gestion-programas-header {
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: var(--border-radius-xl);
+  padding: var(--spacing-6);
+  margin-bottom: var(--spacing-8);
+  box-shadow: var(--shadow-glass);
+  display: flex;
+  justify-content: space-between;
+  gap: var(--spacing-6);
+  width: 100%;
+}
+
+.buscador-programas {
+  width: 100%;
+  max-width: 480px;
+  padding: var(--spacing-3) var(--spacing-4);
+  border-radius: var(--border-radius-lg);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: var(--gray-800);
+  font-size: var(--font-size-base);
+  margin-bottom: var(--spacing-6);
+  transition: all var(--transition-fast);
+  box-shadow: var(--shadow-glass);
+}
+
+.buscador-programas::placeholder {
+  color: var(--gray-500);
+}
+
+.buscador-programas:focus {
+  outline: none;
+  border-color: var(--primary-green);
+  background: rgba(255, 255, 255, 0.35);
+}
+
+/* Filters and Sort */
+.filters-sort-container {
+  display: flex;
+  gap: var(--spacing-4);
+  margin-bottom: var(--spacing-6);
+  width: 100%;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.filter-select,
+.sort-select {
+  padding: var(--spacing-3) var(--spacing-4);
+  border-radius: var(--border-radius-lg);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: var(--gray-800);
+  font-size: var(--font-size-base);
+  transition: all var(--transition-fast);
+  box-shadow: var(--shadow-glass);
+  cursor: pointer;
+}
+
+.filter-select:focus,
+.sort-select:focus {
+  outline: none;
+  border-color: var(--primary-green);
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.sort-order-button,
+.add-button {
+  padding: var(--spacing-3) var(--spacing-4);
+  
+  border: 1px solid var(--primary-green);
+  background: var(--primary-green);
+  color: var(--white);
+  font-size: var(--font-size-base);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  box-shadow: var(--shadow-glass);
+}
+
+.sort-order-button:hover,
+.add-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Grid de tarjetas */
 .programas-grid {
   width: 83vw;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Responsive grid */
+  gap: var(--spacing-6);
   background: rgba(255, 255, 255, 0.25);
   backdrop-filter: blur(24px);
   border-radius: var(--border-radius-xl);
@@ -30,39 +126,12 @@
   padding: var(--spacing-8);
   box-shadow: 0 12px 36px rgba(0, 0, 0, 0.08);
   animation: slideInUp 0.4s ease-out;
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-6);
+  min-height: 71vh; /* Ajuste para que el grid no se colapse */
+  
+  overflow: auto; /* Ajuste para que el grid no se colapse */
 }
 
-/* Botón dentro del grid */
-.add-program-button {
-  align-self: flex-end;
-  background-color: var(--boton);
-  color: white;
-  padding: 0.6rem 1.2rem;
-  font-size: 0.9rem;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  font-weight: 600;
-  box-shadow: 0 5px 15px rgba(76, 175, 80, 0.2);
-  transition: all 0.3s ease;
-}
-
-.add-program-button:hover {
-  background-color: var(--botonesHover);
-  transform: scale(1.03);
-}
-
-/* Grid de tarjetas individuales */
-.container-programas {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--spacing-6);
-}
-
-/* Tarjeta de programa */
+/* Tarjeta individual de programa */
 .programa-card {
   background: rgba(255, 255, 255, 0.25);
   backdrop-filter: blur(20px);
@@ -72,24 +141,112 @@
   padding: var(--spacing-6);
   box-shadow: var(--shadow-glass);
   transition: all var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
   animation: slideInUp 0.4s ease-out;
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .programa-card:hover {
   transform: translateY(-4px);
   background: rgba(255, 255, 255, 0.35);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1), var(--shadow-glass);
+  box-shadow:
+    0 20px 40px rgba(0, 0, 0, 0.1),
+    var(--shadow-glass);
+}
+
+.card-content {
+  flex-grow: 1;
+}
+
+.programa-header-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-2);
 }
 
 .programa-nombre {
-  color: var(--boton);
-  font-size: 1.1rem;
-  font-weight: 600;
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  color: var(--gray-800);
+  margin: 0;
+  background: linear-gradient(135deg, var(--gray-800));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-/* Estado vacío */
-.no-programas {
+.status-indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: var(--gray-500); /* Default inactive */
+  margin-left: var(--spacing-2);
+}
+
+.status-indicator.active {
+  background-color: var(--primary-green);
+}
+
+.status-indicator.inactive {
+  background-color: var(--gray-500);
+}
+
+.programa-descripcion {
+  font-size: var(--font-size-lg);
+  color: var(--gray-600);
+  margin-bottom: var(--spacing-3);
+}
+
+.programa-details-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: var(--spacing-2);
+}
+
+.detail-label {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--gray-800);
+  margin-right: var(--spacing-2);
+}
+
+.detail-value {
+  font-size: var(--font-size-sm);
+  color: var(--gray-600);
+}
+
+.card-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-2);
+  margin-top: var(--spacing-4);
+}
+
+.action-button {
+  background: none;
+  border: none;
+  color: var(--gray-600);
+  font-size: var(--font-size-lg);
+  cursor: pointer;
+  transition: color var(--transition-fast);
+}
+
+.action-button:hover {
+  color: var(--primary-green);
+}
+
+.delete-button {
+  color: var(--error);
+}
+
+/* Estados */
+.loading-container,
+.no-programas,
+.error-message {
   font-size: var(--font-size-base);
   color: var(--error);
   background: rgba(255, 0, 0, 0.05);
@@ -97,6 +254,62 @@
   padding: var(--spacing-4);
   border-radius: var(--border-radius);
   box-shadow: var(--shadow-glass);
-  text-align: center;
   margin-top: var(--spacing-6);
+  text-align: center;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
 }
+
+.loading-container {
+  color: var(--primary-green);
+  background: rgba(76, 175, 80, 0.05);
+  border: 1px solid rgba(76, 175, 80, 0.2);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .gestion-programas-container {
+    margin-left: 0;
+    padding: var(--spacing-4);
+  }
+
+  .programas-grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    width: 90vw;
+  }
+
+  .filters-sort-container {
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .buscador-programas {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .programas-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .filters-sort-container {
+    flex-direction: column;
+  }
+}
+
+/* Animación reutilizada del dashboard */
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+

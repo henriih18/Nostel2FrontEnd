@@ -27,35 +27,6 @@ export const Login = ({ onLogin }) => {
     try {
       setLoading(true);
 
-      /* // Simulación de login exitoso para demostración
-      if (correo === "admin@sena.edu.co" && contrasena === "Admin123!") {
-        setLoading(false);
-        
-        // Simular datos de respuesta exitosa
-        const mockResponse = {
-          token: "mock-jwt-token-12345",
-          rol: "ROLE_ADMIN",
-          correo: correo,
-          nombreCompleto: "Administrador Sistema",
-          idUsuario: "admin-001"
-        };
-
-        const { token, rol, correo: correoResp, nombreCompleto, idUsuario } = mockResponse;
-
-        sessionStorage.setItem("token", token);
-        sessionStorage.setItem("rol", rol);
-        sessionStorage.setItem("correo", correoResp);
-        sessionStorage.setItem("nombre", nombreCompleto);
-        sessionStorage.setItem("idUsuario", idUsuario);
-
-        onLogin(token);
-        setError("");
-        
-        // Navegar al dashboard
-        navigate("/");
-        return;
-      } */
-
       const response = await axios.post(`${API_URL}/auth/login`, {
         correo,
         contrasena,
