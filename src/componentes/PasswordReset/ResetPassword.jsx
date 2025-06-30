@@ -16,7 +16,7 @@ export const ResetPassword = () => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(false);
+  const [success, setSuccess] = useState(true);
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const API_URL = import.meta.env.VITE_API_URL;
@@ -91,12 +91,21 @@ export const ResetPassword = () => {
           </button>
         </form>
         {error && <div className="error-message">{error}</div>}
-        {success && (
+        {/* {success && (
           <div className="success-message">
             Contraseña restablecida con éxito. Serás redirigido al login en 5
             segundos.
           </div>
-        )}
+        )} */}
+        {success && (
+  <div className="success-modal-overlay">
+    <div className="success-modal-content">
+      <h2>✅ Contraseña cambiada</h2>
+      <p>Serás redirigido al login en 5 segundos.</p>
+    </div>
+  </div>
+)}
+
       </div>
     </div>
   );
