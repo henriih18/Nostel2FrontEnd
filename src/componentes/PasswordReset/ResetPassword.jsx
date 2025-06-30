@@ -90,7 +90,9 @@ export const ResetPassword = () => {
             Cambiar Contraseña
           </button>
         </form>
-        {error && <div className="error-message">{error}</div>}
+        
+      </div>
+      {error && <div className="error-message">{error}</div>}
         {/* {success && (
           <div className="success-message">
             Contraseña restablecida con éxito. Serás redirigido al login en 5
@@ -98,15 +100,13 @@ export const ResetPassword = () => {
           </div>
         )} */}
         {success && (
-  <div className="success-modal-overlay">
-    <div className="success-modal-content">
-      <h2>✅ Contraseña cambiada</h2>
-      <p>Serás redirigido al login en 5 segundos.</p>
-    </div>
-  </div>
-)}
-
-      </div>
+          <div className="success-modal-overlay">
+            <div className="success-modal-content">
+              <h2>✅ Contraseña actualizada</h2>
+              <p>Serás redirigido al login.</p>
+            </div>
+          </div>
+        )}
     </div>
   );
 };
