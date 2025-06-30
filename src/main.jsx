@@ -15,7 +15,7 @@ createRoot(document.getElementById("root")).render(
       {/* Rutas públicas */}
       <Route path="/registroAprendiz" element={<RegistroAprendiz />} />
       <Route path="/forgot-password"  element={<ForgotPassword />} />
-      <Route path="/reset-password"   element={<ResetPassword />} />
+      <Route path="/password-reset/reset"   element={<ResetPassword />} />
       <Route path="/login"            element={<Login onLogin={(token) => {
         sessionStorage.setItem("token", token);
         window.location.replace("/");  // redirige al root tras login
