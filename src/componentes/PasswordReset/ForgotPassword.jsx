@@ -20,7 +20,7 @@ export const ForgotPassword = () => {
   const navigate = useNavigate();
   const API_URL = import.meta.env.VITE_API_URL;
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => { 
     e.preventDefault();
     setLoading(true);
     setError(null);
@@ -43,6 +43,10 @@ export const ForgotPassword = () => {
       setLoading(false);
     }
   };
+
+
+
+
 
   return (
     <div className="recuperacion-wrapper">
