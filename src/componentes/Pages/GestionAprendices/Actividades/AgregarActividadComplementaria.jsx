@@ -69,7 +69,7 @@ export const AgregarActividadComplementaria = () => {
   const [error, setError] = useState(null);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
-  const [showModal, setShowModal] = useState(true);
+  const [showModal, setShowModal] = useState(false);
   const [asistenciaData, setAsistenciaData] = useState([]);
   const [aprendizData, setAprendizData] = useState(null);
   const [shouldSubmit, setShouldSubmit] = useState(false);
