@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./ChatbotWidget.css";
+import { Mail, Lock, Eye, EyeOff, AlertCircle, Loader2, Heart } from "lucide-react";
 
 const ChatbotWidget = () => {
   const navigate = useNavigate();
@@ -181,6 +182,7 @@ Conclusiones: ${actividadGenerada.conclusiones}
               className={loading ? "blink" : ""}
               disabled={loading || !input.trim()}
             >
+              {loading && <Loader2 className="loading-spinner" />}
               {loading ? "Procesando..." : "Enviar"}
             </button>
           </form>

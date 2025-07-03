@@ -30,6 +30,7 @@
     "react-quill": "^2.0.0",
     "react-router-dom": "^6.27.0",
     "react-to-print": "^3.1.0",
+    "react-toastify": "^11.0.5",
     "sequelize": "^6.37.5",
     "sweetalert2": "^11.17.2",
     "yup": "^1.6.1"

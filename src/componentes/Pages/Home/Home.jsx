@@ -19,6 +19,7 @@ import {
   AlertCircle,
 } from "lucide-react";
 import "./Home.css";
+import { toast } from "react-toastify";
 
 export const Home = () => {
   const [userInfo, setUserInfo] = useState({
@@ -32,6 +33,28 @@ export const Home = () => {
     programas: 24,
     actividades: 156,
   });
+
+   /* const handleToast = (() => {
+    toast.success("Prueba Notificacion, SUCCESS",{
+      autoClose: false
+    })
+
+    toast.error("Prueba Notificacion, ERROR",{
+      autoClose: false,
+      
+    })
+
+    toast.info("Prueba Notificacion, INFORMACION",{
+      autoClose: false,
+      
+    })
+
+    toast.warn("Prueba Notificacion, ADVERTENCIA",{
+      autoClose: false
+    })
+    
+  })  */
+
 
   useEffect(() => {
     const nombre = sessionStorage.getItem("nombre") || "Usuario";
@@ -282,6 +305,10 @@ export const Home = () => {
             ))}
           </div> */}
         </div>
+
+{/* <div>
+  <button onClick={handleToast} >Probar toast</button>
+</div> */}
       </div>
     </div>
   );

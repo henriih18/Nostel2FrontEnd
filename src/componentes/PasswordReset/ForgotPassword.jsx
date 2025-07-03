@@ -20,7 +20,7 @@ export const ForgotPassword = () => {
   const navigate = useNavigate();
   const API_URL = import.meta.env.VITE_API_URL;
 
-  const handleSubmit = async (e) => { 
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
@@ -28,10 +28,9 @@ export const ForgotPassword = () => {
 
     try {
       console.log("Enviando email:", email); // Depuración
-      const response = await axios.post(
-        `${API_URL}/password-reset/request`,
-        { email }
-      );
+      const response = await axios.post(`${API_URL}/password-reset/request`, {
+        email,
+      });
       setSuccess(true);
       setTimeout(() => navigate("/login"), 3000); // Redirigir después de 5 segundos
     } catch (err) {
@@ -43,10 +42,6 @@ export const ForgotPassword = () => {
       setLoading(false);
     }
   };
-
-
-
-
 
   return (
     <div className="recuperacion-wrapper">
@@ -85,7 +80,10 @@ export const ForgotPassword = () => {
               className="boton-enviar"
               disabled={loading || success}
             >
+              {loading && <Loader2 className="loading-spinner" />}
               {loading ? "Enviando..." : "Enviar"}
+              
+              
             </button>
           </div>
         </form>
@@ -103,20 +101,19 @@ export const ForgotPassword = () => {
         )} */}
       </div>
       {error && <div className="error-message">{error}</div>}
-        {success && (
-          <div className="success-modal-overlay">
-            <div className="success-modal-content">
-              <h2>¡Enlace de restablecimiento enviado exitosamente!</h2>
-              <p>
-                Se ha enviado un enlace de restablecimiento a tu correo. Serás
-                redirigido al login.
-              </p>
-            </div>
+      {success && (
+        <div className="success-modal-overlay">
+          <div className="success-modal-content">
+            <h2>¡Enlace de restablecimiento enviado exitosamente!</h2>
+            <p>
+              Se ha enviado un enlace de restablecimiento a tu correo. Serás
+              redirigido al login.
+            </p>
           </div>
-        )}
+        </div>
+      )}
     </div>
   );
 };
-
 
 export default ForgotPassword;

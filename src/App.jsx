@@ -27,6 +27,7 @@ import ResetPassword from "./componentes/PasswordReset/ResetPassword";
 import PerfilAprendiz from "./componentes/Pages/GestionAprendices/Aprendiz/Aprendiz";
 import PerfilInstructor from "./components/PerfilInstructor"; */
 
+
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(
     !!sessionStorage.getItem("token")

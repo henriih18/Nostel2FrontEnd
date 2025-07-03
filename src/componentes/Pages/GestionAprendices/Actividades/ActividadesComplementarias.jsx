@@ -7,6 +7,7 @@ import EditarActividadComplementaria from "./EditarActividadComplementaria";
 import "./actividadComplementaria.css";
 import logoSena from "../../../../assets/images/logoSena.png";
 import html2pdf from "html2pdf.js";
+import { toast } from "react-toastify";
 
 const ActividadesComplementarias = ({ idAprendiz }) => {
   const navigate = useNavigate();
@@ -16,10 +17,7 @@ const ActividadesComplementarias = ({ idAprendiz }) => {
   const [actividadEditar, setActividadEditar] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
   const [actividadAEliminar, setActividadAEliminar] = useState(null);
-  const [deleteFeedback, setDeleteFeedback] = useState({
-    type: "",
-    message: "",
-  });
+
   const [showDeleteFeedback, setShowDeleteFeedback] = useState(false); // Controla la visibilidad del mensaje
   const [instructor, setInstructor] = useState(null);
   const [selectedActividad, setSelectedActividad] = useState(null);
@@ -30,7 +28,7 @@ const ActividadesComplementarias = ({ idAprendiz }) => {
 
   // Inicializamos las referencias con useRef
   const actaRef = useRef();
-  const registroRef = useRef(); 
+  const registroRef = useRef();
 
   useEffect(() => {
     const handleEsc = (e) => {
@@ -75,12 +73,12 @@ const ActividadesComplementarias = ({ idAprendiz }) => {
             },
           }
         );
-        console.log("Actividades recibidas:", response.data);
         setActividades(response.data);
         setError(null);
       } catch (err) {
-        console.error("Error al cargar actividades:", err);
-        setError("Error al cargar las actividades complementarias.");
+        /* console.error("Error al cargar actividades:", err); */
+        /* setError("Error al cargar las actividades complementarias."); */
+        toast.error("Error al cargar las actividades complementarias")
       } finally {
         setLoading(false);
       }
@@ -96,7 +94,7 @@ const ActividadesComplementarias = ({ idAprendiz }) => {
         const idUsuario = sessionStorage.getItem("idUsuario");
 
         if (!token || !idUsuario) {
-          console.log("No se encontró token o idUsuario en sessionStorage");
+          /* console.log("No se encontró token o idUsuario en sessionStorage"); */
           return;
         }
 
@@ -112,7 +110,7 @@ const ActividadesComplementarias = ({ idAprendiz }) => {
 
         setInstructor(response.data);
       } catch (err) {
-        console.error("Error al obtener datos del instructor:", err);
+        /* console.error("Error al obtener datos del instructor:", err); */
       }
     };
 
@@ -121,13 +119,21 @@ const ActividadesComplementarias = ({ idAprendiz }) => {
 
   const handleAgregarActividad = () => {
     if (!idAprendiz || isNaN(idAprendiz)) {
-      setError("ID de aprendiz inválido. No se puede agregar actividad.");
+      toast.error("ID de aprendiz invalido. No se puede agregar actividad")
+      /* setError("ID de aprendiz inválido. No se puede agregar actividad."); */
       return;
     }
     navigate(`/agregar-actividad/${idAprendiz}`);
   };
 
-  const handleActividadActualizada = (actividadActualizada) => {
+
+const handleActividadActualizada = (actividadActualizada) => {
+  try {
+    if (!actividadActualizada?.idActividad) {
+      toast.error("ID de actividad inválido. No se pudo actualizar.");
+      return;
+    }
+
     setActividades((prevActividades) =>
       prevActividades.map((a) =>
         a.idActividad === actividadActualizada.idActividad
@@ -137,7 +143,12 @@ const ActividadesComplementarias = ({ idAprendiz }) => {
     );
     setShowEditModal(false);
     setActividadEditar(null);
-  };
+    toast.success("Actividad complementaria actualizada con éxito.");
+  } catch (err) {
+    toast.error("Error al actualizar la actividad.");
+  }
+};
+
 
   const handleEditarActividad = (actividad) => {
     setActividadEditar(actividad);
@@ -148,6 +159,8 @@ const ActividadesComplementarias = ({ idAprendiz }) => {
     try {
       const token = sessionStorage.getItem("token");
       if (!token) throw new Error("Sin token de autenticación");
+      setActividadAEliminar(null);
+
       const res = await axios.delete(
         `${API_URL}/actividadComplementarias/${idAprendiz}/${idActividad}`,
         { headers: { Authorization: `Bearer ${token}` } }
@@ -157,27 +170,12 @@ const ActividadesComplementarias = ({ idAprendiz }) => {
           prev.filter((a) => a.idActividad !== idActividad)
         );
         /* setDeleteFeedback({ type: "success", message: "Eliminado con éxito." }); */
-        setTimeout(() => {
-          setActividadAEliminar(null);
-          setDeleteFeedback({
-            type: "success",
-            message: "Actividad eliminada con éxito.",
-          });
-        }, 2000);
+        toast.success("Actividad eliminada con exito.");
       } else {
-        setTimeout(() => {
-          setActividadAEliminar(null);
-          setDeleteFeedback({
-            type: "error",
-            message: "No se pudo eliminar la actividad.",
-          });
-        }, 2000);
+        toast.error("No se pudo eliminar la actividad.");
       }
     } catch (err) {
-      setDeleteFeedback({
-        type: "error",
-        message: "Error al eliminar la actividad.",
-      });
+      toast.error("Error al eliminar la actividad.");
     }
   };
 
@@ -245,7 +243,9 @@ const ActividadesComplementarias = ({ idAprendiz }) => {
 
   const handlePrintRegistro = useReactToPrint({
     contentRef: registroRef,
-    documentTitle: `Registro_Asistencia_${selectedActividad?.idActividad || "default"}`,
+    documentTitle: `Registro_Asistencia_${
+      selectedActividad?.idActividad || "default"
+    }`,
     pageStyle: `
       @page {
         size: letter landscape;
@@ -440,7 +440,7 @@ const ActividadesComplementarias = ({ idAprendiz }) => {
             </div>
             <div className="modal-body">
               <p>Esta acción no se puede deshacer.</p>
-              {showDeleteFeedback && deleteFeedback.message && (
+              {/* {showDeleteFeedback && deleteFeedback.message && (
                 <div
                   className={
                     deleteFeedback.type === "error"
@@ -450,7 +450,7 @@ const ActividadesComplementarias = ({ idAprendiz }) => {
                 >
                   {deleteFeedback.message}
                 </div>
-              )}
+              )} */}
             </div>
             <div className="modal-footer">
               <button
@@ -501,18 +501,17 @@ const ActividadesComplementarias = ({ idAprendiz }) => {
                       : "slide-out-right"
                   }`}
                 >
-                  
                   <table className="acta-tabla">
                     <thead>
                       <div colSpan="5" className="logoActaCell">
-                    <img
-                      src={logoSena}
-                      alt="Logo SENA"
-                      className="registro-logo"
-                    />
-                  </div>
+                        <img
+                          src={logoSena}
+                          alt="Logo SENA"
+                          className="registro-logo"
+                        />
+                      </div>
                     </thead>
-                    
+
                     <tbody>
                       <tr>
                         <td colSpan="5" className="titulo-principal">
@@ -745,8 +744,8 @@ const ActividadesComplementarias = ({ idAprendiz }) => {
                           <td>{i + 1}</td>
                           <td>{asis.nombre}</td>
                           <td>{asis.numeroDocumento}</td>
-                          <td>{asis.planta}</td>
-                          <td>{asis.contratista}</td>
+                          <td>{asis.planta ? "SI" : "NO"}</td>
+                          <td>{asis.contratista ? "SI" : "NO"}</td>
                           <td>{asis.otro}</td>
                           <td>{asis.dependenciaEmpresa}</td>
                           <td>{asis.correoElectronico}</td>

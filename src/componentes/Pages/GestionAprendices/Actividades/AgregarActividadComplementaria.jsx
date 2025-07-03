@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./AgregarActividad.css";
@@ -7,6 +5,16 @@ import { useNavigate, useParams, useLocation } from "react-router-dom";
 import logoSena from "../../../../assets/images/logoSena.png";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import {
+  Mail,
+  Lock,
+  Eye,
+  EyeOff,
+  AlertCircle,
+  Loader2,
+  Heart,
+} from "lucide-react";
+import { toast } from "react-toastify";
 
 export const AgregarActividadComplementaria = () => {
   const navigate = useNavigate();
@@ -43,8 +51,8 @@ export const AgregarActividadComplementaria = () => {
         numeroDocumento: "",
         correoElectronico: "",
         telefonoExt: "",
-        planta: "",
-        contratista: "",
+        planta: false,
+        contratista: false,
         otro: "",
         dependenciaEmpresa: "",
         aprueba: "SÍ",
@@ -61,9 +69,10 @@ export const AgregarActividadComplementaria = () => {
   const [error, setError] = useState(null);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
-  const [showModal, setShowModal] = useState(false);
+  const [showModal, setShowModal] = useState(true);
   const [asistenciaData, setAsistenciaData] = useState([]);
   const [aprendizData, setAprendizData] = useState(null);
+  const [shouldSubmit, setShouldSubmit] = useState(false);
   const API_URL = import.meta.env.VITE_API_URL;
 
   const quillModules = {
@@ -83,7 +92,8 @@ export const AgregarActividadComplementaria = () => {
         const idUsuario = sessionStorage.getItem("idUsuario");
 
         if (!token || !idUsuario) {
-          setError("No hay token de autenticación o ID de usuario disponible");
+          /* setError("No hay token de autenticación o ID de usuario disponible"); */
+          toast.error("No hay token de autenticación o ID de usuario disponible.")
           navigate("/login");
           return;
         }
@@ -107,8 +117,8 @@ export const AgregarActividadComplementaria = () => {
               numeroDocumento: response.data.numeroDocente || "",
               correoElectronico: response.data.correo || "",
               telefonoExt: response.data.telefono || "",
-              planta: "",
-              contratista: "",
+              planta: false,
+              contratista: false,
               otro: "",
               dependenciaEmpresa: "Instructor",
               aprueba: "SÍ",
@@ -119,17 +129,19 @@ export const AgregarActividadComplementaria = () => {
           ],
         }));
       } catch (err) {
-        console.error("Error al obtener datos del instructor:", err);
+        
         if (err.response && err.response.status === 401) {
-          setError("Sesión expirada. Por favor, inicie sesión nuevamente.");
+          toast.error("Sesión expirada. Por favor, inicie sesión nuevamente.")
+          /* setError("Sesión expirada. Por favor, inicie sesión nuevamente."); */
           sessionStorage.clear();
           navigate("/login");
         } else {
-          setError(
+          toast.error("Error al cargar datos del instructor.")
+          /* setError(
             `Error al cargar datos del instructor: ${
               err.response?.data?.message || err.message
             }`
-          );
+          ); */
         }
       }
     };
@@ -144,7 +156,8 @@ export const AgregarActividadComplementaria = () => {
         const token = sessionStorage.getItem("token");
 
         if (!token || !idAprendiz) {
-          setError("No hay token de autenticación o ID de aprendiz disponible");
+          toast.error("No hay token de autenticación o ID de aprendiz disponible.")
+          /* setError("No hay token de autenticación o ID de aprendiz disponible"); */
           navigate("/aprendices");
           return;
         }
@@ -171,8 +184,8 @@ export const AgregarActividadComplementaria = () => {
               numeroDocumento: aprendizData.documento || "",
               correoElectronico: aprendizData.correo || "",
               telefonoExt: aprendizData.telefono || "",
-              planta: "",
-              contratista: "",
+              planta: false,
+              contratista: false,
               otro: "",
               dependenciaEmpresa: "Aprendiz",
               aprueba: "SÍ",
@@ -183,20 +196,23 @@ export const AgregarActividadComplementaria = () => {
           ],
         }));
       } catch (err) {
-        console.error("Error al obtener datos del aprendiz:", err);
+        
         if (err.response && err.response.status === 404) {
-          setError("No se encontró un aprendiz con el ID proporcionado.");
+          toast.error("No se encontró un aprendiz con el ID proporcionado.")
+          /* setError("No se encontró un aprendiz con el ID proporcionado."); */
           setTimeout(() => navigate("/aprendices"), 3000);
         } else if (err.response && err.response.status === 401) {
-          setError("Sesión expirada. Por favor, inicie sesión nuevamente.");
+          toast.error("Sesión expirada. Por favor, inicie sesión nuevamente.")
+          /* setError("Sesión expirada. Por favor, inicie sesión nuevamente."); */
           sessionStorage.clear();
           navigate("/login");
         } else {
-          setError(
+          toast.error("Error al cargar datos del aprendiz.")
+          /* setError(
             `Error al cargar datos del aprendiz: ${
               err.response?.data?.message || err.message
             }`
-          );
+          ); */
         }
       }
     };
@@ -210,7 +226,7 @@ export const AgregarActividadComplementaria = () => {
   useEffect(() => {
     if (location.state && location.state.actividadGenerada && aprendizData) {
       const { actividadGenerada } = location.state;
-      console.log("Datos recibidos de location.state:", actividadGenerada); // Depuración
+    
 
       // Función para formatear texto para ReactQuill, preservando saltos de línea
       const formatForQuill = (text) => {
@@ -225,9 +241,12 @@ export const AgregarActividadComplementaria = () => {
         ...prev,
         nombreComite: actividadGenerada.nombreComite || prev.nombreComite,
         agenda: formatForQuill(actividadGenerada.agenda) || prev.agenda,
-        objetivos: formatForQuill(actividadGenerada.objetivos) || prev.objetivos,
-        desarrollo: formatForQuill(actividadGenerada.desarrollo) || prev.desarrollo,
-        conclusiones: formatForQuill(actividadGenerada.conclusiones) || prev.conclusiones,
+        objetivos:
+          formatForQuill(actividadGenerada.objetivos) || prev.objetivos,
+        desarrollo:
+          formatForQuill(actividadGenerada.desarrollo) || prev.desarrollo,
+        conclusiones:
+          formatForQuill(actividadGenerada.conclusiones) || prev.conclusiones,
         compromisos: [
           {
             actividadDecision: "",
@@ -257,8 +276,20 @@ export const AgregarActividadComplementaria = () => {
       }));
     }
   };
+ /*
+  const handleCheckboxChange = (e, index, field) => {
+    const { name, checked } = e.target;
 
-  const hoy = new Date().toISOString().split("T")[0]; 
+    const updatedList = [...formData[field]];
+    updatedList[index] = {
+      ...updatedList[index],
+      [name]: checked,
+    };
+
+    setFormData({ ...formData, [field]: updatedList });
+  }; */
+
+  const hoy = new Date().toISOString().split("T")[0];
   const formatFechaModal = (fecha) => {
     const date = new Date(fecha);
     return {
@@ -291,8 +322,8 @@ export const AgregarActividadComplementaria = () => {
         {
           nombre: "",
           numeroDocumento: "",
-          planta: "",
-          contratista: "",
+          planta: false,
+          contratista: false,
           otro: "",
           dependenciaEmpresa: "",
           correoElectronico: "",
@@ -322,8 +353,8 @@ export const AgregarActividadComplementaria = () => {
       {
         nombre: "",
         numeroDocumento: "",
-        planta: "",
-        contratista: "",
+        planta: false,
+        contratista: false,
         otro: "",
         dependenciaEmpresa: "",
         correoElectronico: "",
@@ -340,9 +371,10 @@ export const AgregarActividadComplementaria = () => {
         (asistente) => !asistente.nombre || !asistente.dependenciaEmpresa
       );
       if (hasMissingFields) {
-        setError(
+        toast.error("Por favor, completa los campos Nombre y Dependencia/Empresa para todos los asistentes antes de continuar.")
+        /* setError(
           "Por favor, completa los campos Nombre y Dependencia/Empresa para todos los asistentes antes de continuar."
-        );
+        ); */
         return;
       }
 
@@ -362,14 +394,15 @@ export const AgregarActividadComplementaria = () => {
       );
       setShowModal(true);
     } catch (err) {
-      console.error("Error al abrir el modal:", err);
-      setError(
+      toast.error("Error al abrir el modal de registro de asistencia. Por favor, intenta nuevamente.")
+      
+      /* setError(
         "Error al abrir el modal de registro de asistencia. Por favor, intenta nuevamente."
-      );
+      ); */
     }
   };
 
-  const handleModalConfirm = () => {
+  /* const handleModalConfirm = () => {
     const hasEmptyRequiredFields = asistenciaData.some(
       (asistente) =>
         !asistente.nombre ||
@@ -393,18 +426,84 @@ export const AgregarActividadComplementaria = () => {
     }));
     setShowModal(false);
     handleSubmit();
+  }; */
+
+  /* const handleModalConfirm = () => {
+  const hasEmptyRequiredFields = asistenciaData.some(
+    (asistente) =>
+      !asistente.nombre ||
+      !asistente.numeroDocumento ||
+      !asistente.firmaParticipacion
+  );
+  if (hasEmptyRequiredFields) {
+    setError(
+      "Todos los campos obligatorios (Nombre, Número de Documento y Firma) deben estar llenos."
+    );
+    return;
+  }
+
+  setFormData((prev) => ({
+    ...prev,
+    asistentes: asistenciaData.map((asistente) => ({
+      ...asistente,
+      planta: asistente.planta === true, // Mantener como boolean
+      contratista: asistente.contratista === true, // Mantener como boolean
+      autorizaGrabacion: asistente.autorizaGrabacion === true, // Mantener como boolean
+      aprueba: asistente.aprueba || "SÍ",
+      observacion: asistente.observacion || "",
+    })),
+  }));
+  setShowModal(false);
+  handleSubmit();
+}; */
+
+  const handleModalConfirm = () => {
+    const hasEmptyRequiredFields = asistenciaData.some(
+      (asistente) =>
+        !asistente.nombre ||
+        !asistente.numeroDocumento ||
+        !asistente.firmaParticipacion
+    );
+    if (hasEmptyRequiredFields) {
+      toast.error("Todos los campos obligatorios (Nombre, Número de Documento y Firma) deben estar llenos.")
+      /* setError(
+        "Todos los campos obligatorios (Nombre, Número de Documento y Firma) deben estar llenos."
+      ); */
+      return;
+    }
+
+    setFormData((prev) => ({
+      ...prev,
+      asistentes: asistenciaData.map((asistente) => ({
+        ...asistente,
+        planta: asistente.planta === true,
+        contratista: asistente.contratista === true,
+        autorizaGrabacion: asistente.autorizaGrabacion === true,
+        aprueba: asistente.aprueba || "SÍ",
+        observacion: asistente.observacion || "",
+      })),
+    }));
+    setShowModal(false);
+    setShouldSubmit(true); // activa el envío en el siguiente useEffect
   };
+
+  useEffect(() => {
+    if (shouldSubmit) {
+      handleSubmit();
+      setShouldSubmit(false);
+    }
+  }, [formData.asistentes, shouldSubmit]);
 
   const handleSubmit = async () => {
     setLoading(true);
     setError(null);
-    
 
     try {
       const token = sessionStorage.getItem("token");
 
       if (!token) {
-        setError("No se ha identificado al instructor");
+        toast.error("No se ha identificado al instructor.")
+        /* setError("No se ha identificado al instructor"); */
         setLoading(false);
         return;
       }
@@ -421,15 +520,15 @@ export const AgregarActividadComplementaria = () => {
       );
       setShowSuccessModal(true);
 
-      
       setTimeout(() => {
         setShowSuccessModal(false);
         navigate(`/aprendices/${idAprendiz}`);
       }, 2000);
     } catch (err) {
-      console.error("Error al guardar el acta:", err);
+      
       if (err.response && err.response.status === 401) {
-        setError("Sesión expirada. Por favor, inicie sesión nuevamente.");
+        toast.error("Sesión expirada. Por favor, inicie sesión nuevamente.")
+        /* setError("Sesión expirada. Por favor, inicie sesión nuevamente."); */
         sessionStorage.clear();
         navigate("/login");
       } else {
@@ -458,7 +557,6 @@ export const AgregarActividadComplementaria = () => {
         </h1>
       </div>
 
-
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -477,7 +575,6 @@ export const AgregarActividadComplementaria = () => {
                 value={formData.actaNumber}
                 onChange={handleChange}
                 placeholder="Número de acta"
-                
               />
             </div>
           </div>
@@ -809,14 +906,17 @@ export const AgregarActividadComplementaria = () => {
           >
             Cancelar
           </button>
-          <button type="submit" className="submit-button-act" disabled={loading}>
+          <button
+            type="submit"
+            className="submit-button-act"
+            disabled={loading}
+          >
             {loading ? "Avanzando" : "Siguiente"}
           </button>
         </div>
       </form>
 
       {error && <div className="error-message">{error}</div>}
-      
 
       {/* Modal para Registro de Asistencia */}
       {showModal && (
@@ -896,32 +996,20 @@ export const AgregarActividadComplementaria = () => {
                         />
                       </td>
                       <td>
-                        <select
+                        <input
+                          type="checkbox"
                           name="planta"
-                          value={asistente.planta}
+                          checked={asistente.planta}
                           onChange={(e) => handleAsistenciaChange(e, index)}
-                          required
-                        >
-                          <option disabled value="">
-                            Seleccione
-                          </option>
-                          <option value="SÍ">SÍ</option>
-                          <option value="NO">NO</option>
-                        </select>
+                        />
                       </td>
                       <td>
-                        <select
+                        <input
+                          type="checkbox"
                           name="contratista"
-                          value={asistente.contratista}
+                          checked={asistente.contratista}
                           onChange={(e) => handleAsistenciaChange(e, index)}
-                          required
-                        >
-                          <option disabled value="">
-                            Seleccione
-                          </option>
-                          <option value="SÍ">SÍ</option>
-                          <option value="NO">NO</option>
-                        </select>
+                        />
                       </td>
                       <td>
                         <input
@@ -1031,6 +1119,7 @@ export const AgregarActividadComplementaria = () => {
                 onClick={handleModalConfirm}
                 disabled={loading}
               >
+                {loading && <Loader2 className="loading-spinner" />}
                 {loading ? "Guardando..." : "Confirmar y Guardar"}
               </button>
             </div>

@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react"; // Añadimos useEffect para 
 import axios from "axios";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import { Mail, Lock, Eye, EyeOff, AlertCircle, Loader2, Heart } from "lucide-react";
+import { toast } from "react-toastify";
 
 export const EditarActividadComplementaria = ({
   actividad,
@@ -53,7 +55,7 @@ export const EditarActividadComplementaria = ({
   const API_URL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
-    console.log("Estado showSuccessModal actualizado:", showSuccessModal); // Depuración en cada cambio de estado
+    /* console.log("Estado showSuccessModal actualizado:", showSuccessModal); */ // Depuración en cada cambio de estado
   }, [showSuccessModal]);
 
   const quillModules = {
@@ -105,7 +107,8 @@ export const EditarActividadComplementaria = ({
         !comp.actividadDecision || !comp.fecha || !comp.responsable || !comp.firmaParticipacion
     );
     if (invalidCompromisos) {
-      setError("Todos los campos de los compromisos son obligatorios.");
+      toast.error("Todos los campos de los compromisos son obligatorios.")
+      /* setError("Todos los campos de los compromisos son obligatorios."); */
       return false;
     }
 
@@ -113,12 +116,14 @@ export const EditarActividadComplementaria = ({
       (asist) => !asist.nombre || !asist.dependenciaEmpresa || !asist.firmaParticipacion
     );
     if (invalidAsistentes) {
-      setError("Los campos nombre, dependencia/empresa y firma son obligatorios para los asistentes adicionales.");
+      toast.error("Los campos nombre, dependencia/empresa y firma son obligatorios para los asistentes adicionales.")
+      /* setError("Los campos nombre, dependencia/empresa y firma son obligatorios para los asistentes adicionales."); */
       return false;
     }
 
     if (formData.asistentes.length < 2) {
-      setError("Se requieren al menos el instructor y el aprendiz como asistentes.");
+      toast.error("Se requieren al menos el instructor y el aprendiz como asistentes.")
+      /* setError("Se requieren al menos el instructor y el aprendiz como asistentes."); */
       return false;
     }
 
@@ -140,7 +145,8 @@ export const EditarActividadComplementaria = ({
       const idUsuario = sessionStorage.getItem("idUsuario");
 
       if (!token || !idUsuario) {
-        setError("Falta información de autenticación");
+        toast.error("Falta información de autenticación.")
+        /* setError("Falta información de autenticación"); */
         setLoading(false);
         return;
       }
@@ -163,7 +169,7 @@ export const EditarActividadComplementaria = ({
         }
       );
 
-      console.log("Respuesta del servidor:", response.data);
+      
       setShowSuccessModal(true); // Muestra el modal de éxito
       setFormData((prev) => ({ ...prev, temporalForceUpdate: !prev.temporalForceUpdate })); // Forzar re-render
 
@@ -175,11 +181,11 @@ export const EditarActividadComplementaria = ({
       setTimeout(() => {
         setShowSuccessModal(false);
         onClose();
-        console.log("Modal cerrado, showSuccessModal:", showSuccessModal); // Debug después del cierre
+        
       }, 2000);
     } catch (err) {
-      console.error("Error al actualizar actividad:", err);
-      setError(`Error al actualizar la actividad: ${err.response?.data?.message || err.message}`);
+      toast.error("Error al actualizar la actividad.")
+      /* setError(`Error al actualizar la actividad: ${err.response?.data?.message || err.message}`); */
     } finally {
       setLoading(false);
     }
@@ -532,6 +538,7 @@ export const EditarActividadComplementaria = ({
                 Cancelar
               </button>
               <button type="submit" className="submit-button" disabled={loading}>
+                {loading && <Loader2 className="loading-spinner" />}
                 {loading ? "Guardando..." : "Actualizar Actividad"}
               </button>
             </div>

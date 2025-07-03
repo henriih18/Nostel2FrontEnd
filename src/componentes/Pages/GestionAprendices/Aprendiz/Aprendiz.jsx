@@ -5,6 +5,7 @@ import ActividadesComplementarias from "../Actividades/ActividadesComplementaria
 import PlanesMejoramiento from "../PlanesMejoramiento/PlanesMejoramiento";
 import Comentarios from "../Comentarios/Comentarios";
 import "./Aprendiz.css";
+import { toast } from "react-toastify";
 
 const Aprendiz = () => {
   const { idAprendiz } = useParams();
@@ -43,7 +44,8 @@ const Aprendiz = () => {
           sessionStorage.removeItem("token");
           navigate("/login");
         } else {
-          setError("Error al cargar el aprendiz.");
+          toast.error("Error al cargar el aprendiz")
+          /* setError("Error al cargar el aprendiz."); */
         }
         setLoading(false);
       }

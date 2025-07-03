@@ -11,6 +11,8 @@ import AgregarPlanMejoramiento from "./AgregarPlanMejoramiento";
 //import "./actividadComplementaria.css";
 
 import logoSena from "../../../../assets/images/logoSena.png";
+import { toast } from "react-toastify";
+
 
 const PlanesMejoramiento = ({ idAprendiz }) => {
   const navigate = useNavigate();
@@ -132,7 +134,7 @@ const PlanesMejoramiento = ({ idAprendiz }) => {
   };
 
   // 5) Actualizar plan
-  const handlePlanActualizado = (planActualizado) => {
+  /* const handlePlanActualizado = (planActualizado) => {
     setPlanes((prev) =>
       prev.map((p) =>
         p.idPlanMejoramiento === planActualizado.idPlanMejoramiento
@@ -142,7 +144,25 @@ const PlanesMejoramiento = ({ idAprendiz }) => {
     );
     setShowEditModal(false);
     setPlanEditar(null);
-  };
+  }; */
+
+  const handlePlanActualizado = (planActualizado) => {
+  try {
+    setPlanes((prev) =>
+      prev.map((p) =>
+        p.idPlanMejoramiento === planActualizado.idPlanMejoramiento
+          ? planActualizado
+          : p
+      )
+    );
+    setShowEditModal(false);
+    setPlanEditar(null);
+    toast.success("Plan de mejoramiento actualizado con éxito.");
+  } catch (err) {
+    toast.error("Error al actualizar el plan de mejoramiento.");
+  }
+};
+
 
   // 6) Abrir modal de edición
   const handleEditarPlan = (plan) => {
@@ -151,7 +171,7 @@ const PlanesMejoramiento = ({ idAprendiz }) => {
   };
 
   // 7) Eliminar plan
-  const handleEliminarPlan = async (idPlanMejoramiento) => {
+  /* const handleEliminarPlan = async (idPlanMejoramiento) => {
     try {
       const token = sessionStorage.getItem("token");
       if (!token) throw new Error("Sin token de autenticación");
@@ -169,7 +189,7 @@ const PlanesMejoramiento = ({ idAprendiz }) => {
           setPlanAEliminar(null);
           setDeleteFeedback({
             type: "success",
-            message: "Plan eliminado con éxito.",
+            message: "El plan de mejoramiento ha sido eliminado correctamente",
           });
         }, 2000);
       } else {
@@ -188,7 +208,34 @@ const PlanesMejoramiento = ({ idAprendiz }) => {
         message: "Error al eliminar el plan de mejoramiento.",
       });
     }
-  };
+  }; */
+  const handleEliminarPlan = async (idPlanMejoramiento) => {
+  try {
+    const token = sessionStorage.getItem("token");
+    if (!token) throw new Error("Sin token de autenticación");
+
+    // Cierra el modal inmediatamente
+    setPlanAEliminar(null);
+
+    const res = await axios.delete(
+      `${API_URL}/planMejoramientos/${idAprendiz}/${idPlanMejoramiento}`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+
+    if (res.status >= 200 && res.status < 300) {
+      setPlanes((prev) =>
+        prev.filter((p) => p.idPlanMejoramiento !== idPlanMejoramiento)
+      );
+      toast.success("plan de mejoramiento eliminado con exito.");
+    } else {
+      toast.error("No se pudo eliminar el plan.");
+    }
+  } catch (err) {
+    toast.error("Error al eliminar el plan de mejoramiento.");
+  }
+};
 
   // 8) Imprimir “Acta” (idéntico a ActividadesComplementarias)
   const handlePrintActa = useReactToPrint({
@@ -444,8 +491,9 @@ const PlanesMejoramiento = ({ idAprendiz }) => {
               </button>
               <button
                 className="submit-button"
-                onClick={() =>
-                  handleEliminarPlan(planAEliminar.idPlanMejoramiento)
+                onClick={() => {
+                  console.log("Plan a eliminar:", planAEliminar);
+                  handleEliminarPlan(planAEliminar.idPlanMejoramiento)}
                 }
               >
                 Sí, eliminar
@@ -734,8 +782,8 @@ const PlanesMejoramiento = ({ idAprendiz }) => {
                           <td>{i + 1}</td>
                           <td>{asis.nombre}</td>
                           <td>{asis.numeroDocumento}</td>
-                          <td>{asis.planta}</td>
-                          <td>{asis.contratista}</td>
+                          <td>{asis.planta ? "SI" : "NO"}</td>
+                          <td>{asis.contratista ? "SI" : "NO"}</td>
                           <td>{asis.otro}</td>
                           <td>{asis.dependenciaEmpresa}</td>
                           <td>{asis.correoElectronico}</td>

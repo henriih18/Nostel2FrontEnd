@@ -239,6 +239,9 @@ input[readonly] {
   background-color: #27ae60;
   color: white;
   transition: all var(--transition-normal);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .submit-button:hover {

@@ -16,7 +16,7 @@ export const ResetPassword = () => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(true);
+  const [success, setSuccess] = useState(false);
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const API_URL = import.meta.env.VITE_API_URL;
@@ -102,7 +102,7 @@ export const ResetPassword = () => {
         {success && (
           <div className="success-modal-overlay">
             <div className="success-modal-content">
-              <h2>✅ Contraseña actualizada</h2>
+              <h2>Contraseña actualizada</h2>
               <p>Serás redirigido al login.</p>
             </div>
           </div>

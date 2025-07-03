@@ -4,6 +4,9 @@ import { useNavigate, useParams, useLocation } from "react-router-dom";
 import logoSena from "../../../../assets/images/logoSena.png";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import { Mail, Lock, Eye, EyeOff, AlertCircle, Loader2, Heart } from "lucide-react";
+import { toast } from "react-toastify";
+
 
 const AgregarPlanMejoramiento = () => {
   const navigate = useNavigate();
@@ -41,8 +44,8 @@ const AgregarPlanMejoramiento = () => {
         numeroDocumento: "",
         correoElectronico: "",
         telefonoExt: "",
-        planta: "",
-        contratista: "",
+        planta: false,
+        contratista: false,
         otro: "",
         dependenciaEmpresa: "",
         aprueba: "SÍ",
@@ -61,6 +64,7 @@ const AgregarPlanMejoramiento = () => {
   const [showModal, setShowModal] = useState(false);
   const [asistenciaData, setAsistenciaData] = useState([]);
   const [aprendizData, setAprendizData] = useState(null);
+   const [shouldSubmit, setShouldSubmit] = useState(false);
   const API_URL = import.meta.env.VITE_API_URL;
 
   const quillModules = {
@@ -80,7 +84,8 @@ const AgregarPlanMejoramiento = () => {
         const idUsuario = sessionStorage.getItem("idUsuario");
 
         if (!token || !idUsuario) {
-          setError("No hay token de autenticación o ID de usuario disponible");
+          toast.error("No hay token de autenticacion")
+          /* setError("No hay token de autenticación o ID de usuario disponible"); */
           navigate("/login");
           return;
         }
@@ -104,8 +109,8 @@ const AgregarPlanMejoramiento = () => {
               numeroDocumento: response.data.numeroDocente || "",
               correoElectronico: response.data.correo || "",
               telefonoExt: response.data.telefono || "",
-              planta: "",
-              contratista: "",
+              planta: false,
+              contratista: false,
               otro: "",
               dependenciaEmpresa: "Instructor",
               aprueba: "SÍ",
@@ -118,15 +123,17 @@ const AgregarPlanMejoramiento = () => {
       } catch (err) {
         console.error("Error al obtener datos del instructor:", err);
         if (err.response && err.response.status === 401) {
-          setError("Sesión expirada. Por favor, inicie sesión nuevamente.");
+          toast.error("Sesion expirada. Por favor, inicie sesion nuevamente")
+          /* setError("Sesión expirada. Por favor, inicie sesión nuevamente."); */
           sessionStorage.clear();
           navigate("/login");
         } else {
-          setError(
+          toast.error("Error al cargar datos del instructor")
+          /* setError(
             `Error al cargar datos del instructor: ${
               err.response?.data?.message || err.message
             }`
-          );
+          ); */
         }
       }
     };
@@ -141,7 +148,8 @@ const AgregarPlanMejoramiento = () => {
         const token = sessionStorage.getItem("token");
 
         if (!token || !idAprendiz) {
-          setError("No hay token de autenticación o ID de aprendiz disponible");
+          toast.error("No hay token de autenticacion")
+          /* setError("No hay token de autenticación o ID de aprendiz disponible"); */
           navigate("/aprendices");
           return;
         }
@@ -168,8 +176,8 @@ const AgregarPlanMejoramiento = () => {
               numeroDocumento: aprendizData.documento || "",
               correoElectronico: aprendizData.correo || "",
               telefonoExt: aprendizData.telefono || "",
-              planta: "",
-              contratista: "",
+              planta: false,
+              contratista: false,
               otro: "",
               dependenciaEmpresa: "Aprendiz",
               aprueba: "SÍ",
@@ -180,20 +188,23 @@ const AgregarPlanMejoramiento = () => {
           ],
         }));
       } catch (err) {
-        console.error("Error al obtener datos del aprendiz:", err);
+        /* console.error("Error al obtener datos del aprendiz:", err); */
         if (err.response && err.response.status === 404) {
-          setError("No se encontró un aprendiz con el ID proporcionado.");
+          toast.error("No se encontro ningun aprendiz")
+          /* setError("No se encontró un aprendiz con el ID proporcionado."); */
           setTimeout(() => navigate("/aprendices"), 3000);
         } else if (err.response && err.response.status === 401) {
-          setError("Sesión expirada. Por favor, inicie sesión nuevamente.");
+          toast.error("Sesion expirada. Por favor, inicie sesion nuevamente")
+          /* setError("Sesión expirada. Por favor, inicie sesión nuevamente."); */
           sessionStorage.clear();
           navigate("/login");
         } else {
-          setError(
+          toast.error("Error al cargar datos del Aprendiz")
+          /* setError(
             `Error al cargar datos del aprendiz: ${
               err.response?.data?.message || err.message
             }`
-          );
+          ); */
         }
       }
     };
@@ -207,13 +218,14 @@ const AgregarPlanMejoramiento = () => {
   useEffect(() => {
     if (location.state && location.state.actividadGenerada && aprendizData) {
       const { actividadGenerada } = location.state;
-      console.log("Datos recibidos de location.state:", actividadGenerada); // Depuración
+      /* console.log("Datos recibidos de location.state:", actividadGenerada); // Depuración */
 
       // Verificar que sea un plan de mejoramiento
       if (actividadGenerada.tipoDocumento !== "plan de mejoramiento") {
-        setError(
+        toast.error("Este formulario solo acepta planes de mejoramiento generados por el chatbot.")
+        /* setError(
           "Este formulario solo acepta planes de mejoramiento generados por el chatbot."
-        );
+        ); */
         return;
       }
 
@@ -248,7 +260,7 @@ const AgregarPlanMejoramiento = () => {
     }
   }, [location.state, aprendizData]);
 
-  const handleChange = (e, index, section) => {
+   const handleChange = (e, index, section) => {
     const { name, value, type, checked } = e.target;
     const newValue = type === "checkbox" ? checked : value;
 
@@ -264,7 +276,7 @@ const AgregarPlanMejoramiento = () => {
         [name]: newValue,
       }));
     }
-  };
+  }; 
 
   const hoy = new Date().toISOString().split("T")[0]; 
   const formatFechaModal = (fecha) => {
@@ -302,8 +314,8 @@ const AgregarPlanMejoramiento = () => {
         {
           nombre: "",
           numeroDocumento: "",
-          planta: "",
-          contratista: "",
+          planta: false,
+          contratista: false,
           otro: "",
           dependenciaEmpresa: "",
           correoElectronico: "",
@@ -333,8 +345,8 @@ const AgregarPlanMejoramiento = () => {
       {
         nombre: "",
         numeroDocumento: "",
-        planta: "",
-        contratista: "",
+        planta: false,
+        contratista: false,
         otro: "",
         dependenciaEmpresa: "",
         correoElectronico: "",
@@ -351,9 +363,10 @@ const AgregarPlanMejoramiento = () => {
         (asistente) => !asistente.nombre || !asistente.dependenciaEmpresa
       );
       if (hasMissingFields) {
-        setError(
+        toast.error("Por favor, completa los campos Nombre y Dependencia/Empresa para todos los asistentes antes de continuar.")
+        /* setError(
           "Por favor, completa los campos Nombre y Dependencia/Empresa para todos los asistentes antes de continuar."
-        );
+        ); */
         return;
       }
 
@@ -373,10 +386,10 @@ const AgregarPlanMejoramiento = () => {
       );
       setShowModal(true);
     } catch (err) {
-      console.error("Error al abrir el modal:", err);
-      setError(
+      toast.error("Error al abrir el modal de registro de asistencia. Por favor, intenta nuevamente.")
+      /* setError(
         "Error al abrir el modal de registro de asistencia. Por favor, intenta nuevamente."
-      );
+      ); */
     }
   };
 
@@ -388,9 +401,10 @@ const AgregarPlanMejoramiento = () => {
         !asistente.firmaParticipacion
     );
     if (hasEmptyRequiredFields) {
-      setError(
+      toast.error("Todos los campos son obligatorios")
+      /* setError(
         "Todos los campos obligatorios (Nombre, Número de Documento y Firma) deben estar llenos."
-      );
+      ); */
       return;
     }
 
@@ -398,13 +412,23 @@ const AgregarPlanMejoramiento = () => {
       ...prev,
       asistentesPlan: asistenciaData.map((asistente) => ({
         ...asistente,
-        aprueba: asistente.aprueba || "SÍ",
-        observacion: asistente.observacion || "",
+        planta: asistente.planta === true,
+      contratista: asistente.contratista === true,
+      autorizaGrabacion: asistente.autorizaGrabacion === true,
+      aprueba: asistente.aprueba || "SÍ",
+      observacion: asistente.observacion || "",
       })),
     }));
     setShowModal(false);
-    handleSubmit();
+    setShouldSubmit(true);
   };
+
+  useEffect(() => {
+      if (shouldSubmit) {
+        handleSubmit();
+        setShouldSubmit(false);
+      }
+    }, [formData.asistentes, shouldSubmit]);
 
   const handleSubmit = async () => {
     setLoading(true);
@@ -429,12 +453,13 @@ const AgregarPlanMejoramiento = () => {
           },
         }
       );
-      setShowSuccessModal(true);
+      /* setShowSuccessModal(true); */
+      toast.success("Actividad guardada con exito.")
 
       setTimeout(() => {
         setShowSuccessModal(false);
         navigate(`/aprendices/${idAprendiz}`);
-      }, 2000);
+      });
     } catch (err) {
       console.error("Error al guardar el plan:", err);
       if (err.response && err.response.status === 401) {
@@ -911,32 +936,20 @@ const AgregarPlanMejoramiento = () => {
                         />
                       </td>
                       <td>
-                        <select
+                        <input
+                          type="checkbox"
                           name="planta"
-                          value={asistente.planta}
+                          checked={asistente.planta}
                           onChange={(e) => handleAsistenciaChange(e, index)}
-                          required
-                        >
-                          <option disabled value="">
-                            Seleccione
-                          </option>
-                          <option value="SÍ">SÍ</option>
-                          <option value="NO">NO</option>
-                        </select>
+                        />
                       </td>
                       <td>
-                        <select
+                        <input
+                          type="checkbox"
                           name="contratista"
-                          value={asistente.contratista}
+                          checked={asistente.contratista}
                           onChange={(e) => handleAsistenciaChange(e, index)}
-                          required
-                        >
-                          <option disabled value="">
-                            Seleccione
-                          </option>
-                          <option value="SÍ">SÍ</option>
-                          <option value="NO">NO</option>
-                        </select>
+                        />
                       </td>
                       <td>
                         <input
@@ -1046,6 +1059,7 @@ const AgregarPlanMejoramiento = () => {
                 onClick={handleModalConfirm}
                 disabled={loading}
               >
+                {loading && <Loader2 className="loading-spinner" />}
                 {loading ? "Guardando..." : "Confirmar y Guardar"}
               </button>
             </div>

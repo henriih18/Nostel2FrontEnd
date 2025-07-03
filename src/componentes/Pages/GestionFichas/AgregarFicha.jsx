@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './AgregarFicha.css'; // Asegúrate de tener un archivo CSS para estilos
 
+
 export const AgregarFicha = () => {
     const [programas, setProgramas] = useState([]);
     const [error, setError] = useState(null);

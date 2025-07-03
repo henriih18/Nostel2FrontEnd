@@ -148,6 +148,8 @@
   cursor: pointer;
   font-size: 0.95rem;
   transition: all 0.2s ease;
+  display: flex;
+  justify-content: center;
 }
 
 .chatbot-form button:hover:not(:disabled) {
