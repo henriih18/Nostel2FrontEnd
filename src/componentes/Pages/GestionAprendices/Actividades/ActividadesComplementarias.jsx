@@ -48,7 +48,8 @@ const ActividadesComplementarias = ({ idAprendiz }) => {
 
   useEffect(() => {
     if (!idAprendiz || isNaN(idAprendiz)) {
-      setError("ID de aprendiz inválido.");
+      toast.error("ID de aprendiz invalido")
+      /* setError("ID de aprendiz inválido."); */
       setLoading(false);
       return;
     }
@@ -59,7 +60,8 @@ const ActividadesComplementarias = ({ idAprendiz }) => {
         const token = sessionStorage.getItem("token");
 
         if (!token) {
-          setError("No hay token de autenticación");
+          toast.error("No hay token de autenticación")
+          /* setError("No hay token de autenticación"); */
           navigate("/login");
           return;
         }
@@ -158,7 +160,10 @@ const handleActividadActualizada = (actividadActualizada) => {
   const handleEliminarActividad = async (idActividad) => {
     try {
       const token = sessionStorage.getItem("token");
-      if (!token) throw new Error("Sin token de autenticación");
+      if (!token) {
+        toast.error("Sin token de autenticacion");
+        return
+      }
       setActividadAEliminar(null);
 
       const res = await axios.delete(

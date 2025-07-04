@@ -75,14 +75,24 @@
   padding: var(--spacing-3) var(--spacing-6);
   font-size: var(--font-size-base);
   font-weight: 600;
-  background: linear-gradient(135deg, var(--primary-green), var(--accent-emerald));
-  color: white;
-  border: none;
+  background: rgba(76, 175, 80, 0.1); /* Verde claro */
+    border: 1px solid rgba(76, 175, 80, 0.2); /* Verde borde */
+   color: #4caf50;
+backdrop-filter: blur(10px);
+
   border-radius: var(--border-radius-lg);
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   width: 15rem;
   margin-top: var(--spacing-10);
+}
+
+.edit-button:hover {
+   background: rgba(76, 175, 80, 0.20);
+    border-color: rgba(76, 175, 80, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+
 }
 
 /* Grid de info más clara y amplia */
@@ -113,9 +123,11 @@
   padding: var(--spacing-4) var(--spacing-6);
   font-size: var(--font-size-base);
   font-weight: 600;
-  background: linear-gradient(135deg, var(--primary-green), var(--accent-emerald));
-  color: white;
-  border: none;
+  background: rgba(76, 175, 80, 0.1); /* Verde claro */
+    border: 1px solid rgba(76, 175, 80, 0.2); /* Verde borde */
+   color: #4caf50;
+backdrop-filter: blur(10px);
+
   border-radius: var(--border-radius-lg);
   margin-top: var(--spacing-6);
   cursor: pointer;
@@ -124,8 +136,11 @@
 
 
 .info button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  background: rgba(76, 175, 80, 0.20);
+    border-color: rgba(76, 175, 80, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+
 }
 
 /* Responsive */

@@ -27,21 +27,28 @@
 
 /* Botón circular para abrir/cerrar */
 .chatbot-toggle-button {
-  background: linear-gradient(135deg, var(--primary-green), var(--accent-emerald));
-  color: var(--text-light);
+  background: rgba(51, 226, 57, 0.266); /* Verde claro */
+    border: 1px solid rgba(76, 175, 80, 0.2); /* Verde borde */
+   color: var(--primary-green);
+backdrop-filter: blur(10px);
+
   padding: 12px;
-  border: none;
+ 
   border-radius: 50%;
   cursor: pointer;
   font-size: 1.4rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-  transition: all var(--transition-normal);
+  transition: all .2s ease-out;
   z-index: 10001;
+  
 }
 
 .chatbot-toggle-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  background: rgba(42, 179, 47, 0.283);
+    border-color: rgba(76, 175, 80, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+
 }
 
 /* Ventana de chatbot */
@@ -141,9 +148,10 @@
 /* Botón de enviar */
 .chatbot-form button {
   padding: 8px;
-  background-color: var(--boton);
-  color: white;
-  border: none;
+   background: rgba(76, 175, 80, 0.1); /* Verde claro */
+    border: 1px solid rgba(76, 175, 80, 0.2); /* Verde borde */
+   color: #4caf50;
+backdrop-filter: blur(10px);
   border-radius: 4px;
   cursor: pointer;
   font-size: 0.95rem;
@@ -153,13 +161,16 @@
 }
 
 .chatbot-form button:hover:not(:disabled) {
-  background-color: var(--botones-hover);
-  transform: scale(1.03);
-  box-shadow: 0px 5px 25px var(--boton);
+  background: rgba(76, 175, 80, 0.20);
+    border-color: rgba(76, 175, 80, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+
 }
 
 .chatbot-form button:disabled {
-  background-color: var(--boton);
+  background: var(--gray-400);
+    color: var(--gray-500);
   opacity: 0.6;
   cursor: default;
 }

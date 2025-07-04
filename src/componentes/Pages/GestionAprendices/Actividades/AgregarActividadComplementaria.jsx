@@ -371,7 +371,7 @@ export const AgregarActividadComplementaria = () => {
         (asistente) => !asistente.nombre || !asistente.dependenciaEmpresa
       );
       if (hasMissingFields) {
-        toast.error("Por favor, completa los campos Nombre y Dependencia/Empresa para todos los asistentes antes de continuar.")
+        toast.warn("Por favor, completa los campos Nombre y Dependencia/Empresa para todos los asistentes antes de continuar.")
         /* setError(
           "Por favor, completa los campos Nombre y Dependencia/Empresa para todos los asistentes antes de continuar."
         ); */
@@ -465,7 +465,7 @@ export const AgregarActividadComplementaria = () => {
         !asistente.firmaParticipacion
     );
     if (hasEmptyRequiredFields) {
-      toast.error("Todos los campos obligatorios (Nombre, Número de Documento y Firma) deben estar llenos.")
+      toast.warn("Todos los campos obligatorios (Nombre, Número de Documento y Firma) deben estar llenos.")
       /* setError(
         "Todos los campos obligatorios (Nombre, Número de Documento y Firma) deben estar llenos."
       ); */
@@ -532,7 +532,9 @@ export const AgregarActividadComplementaria = () => {
         sessionStorage.clear();
         navigate("/login");
       } else {
-        setError(`Error: ${err.response?.data?.message || err.message}`);
+        toast.error(`Error: ${err.response?.data?.message || err.message}`);
+
+        /* setError(`Error: ${err.response?.data?.message || err.message}`); */
       }
     } finally {
       setLoading(false);

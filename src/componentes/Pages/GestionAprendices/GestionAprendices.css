@@ -67,6 +67,10 @@
   align-items: center;
   gap: var(--spacing-6);
   width: 100%;
+  box-shadow: none;
+  box-shadow: 
+        0 8px 32px 0 rgba(0, 0, 0, 0.37),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
   
 }
 
@@ -105,6 +109,7 @@
   justify-content: center;
   
   flex-wrap: wrap;
+  
 }
 
 
@@ -117,6 +122,7 @@
   gap: var(--spacing-4);
   justify-content: center;
   flex-wrap: wrap;
+  
 }
 
 
@@ -135,6 +141,8 @@
   box-shadow: var(--shadow-glass);
   cursor: pointer; 
   width: 10vw;
+  box-shadow: 
+        none;
 }
 
 .filter-select:focus,
@@ -147,22 +155,28 @@
 .sort-order-button {
   padding: var(--spacing-3) var(--spacing-4);
   border-radius: var(--border-radius-lg);
-  border: 1px solid var(--primary-green);
-  background: linear-gradient(135deg, var(--primary-green), var(--accent-emerald));
-    color: white;
-  color: var(--white);
+  background: rgba(76, 175, 80, 0.20); /* Verde claro */
+    border: 1px solid rgba(76, 175, 80, 0.2); /* Verde borde */
+   color: #4caf50;
+backdrop-filter: blur(10px);
+
   font-size: var(--font-size-base);
   cursor: pointer;
   
   /* box-shadow: var(--shadow-glass); */
-  transition: all var(--transition-normal);
+  transition: all .2s ease-out;
+  box-shadow: 
+        none;
 }
 
 
 
 .sort-order-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  background: rgba(76, 175, 80, 0.25);
+    border-color: rgba(76, 175, 80, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+
 }
 
 /* Grid de tarjetas */
@@ -178,8 +192,9 @@
   padding: var(--spacing-8);
   box-shadow: 0 12px 36px rgba(0, 0, 0, 0.08);
   animation: slideInUp 0.4s ease-out;
-  min-height: 71vh; /* Ajuste para que el grid no se colapse */
+  min-height: 74vh; /* Ajuste para que el grid no se colapse */
   overflow: auto;
+  
 }
 
 /* Tarjeta individual de aprendiz */
@@ -191,7 +206,7 @@
   border-radius: var(--border-radius-lg);
   padding: var(--spacing-6);
   box-shadow: var(--shadow-glass);
-  transition: all var(--transition-normal);
+  transition: all .2s ease-out;
   position: relative;
   overflow: auto;
   cursor: pointer;
@@ -203,14 +218,17 @@
   min-height: 15rem;
   max-width: 30rem;
   min-width: 30rem;
+  box-shadow: 
+        0 8px 32px 0 rgba(0, 0, 0, 0.37),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
 .aprendiz-card:hover {
-  transform: translateY(-3px);
+  transform: translateY(-2px);
   background: rgba(255, 255, 255, 0.35);
-  box-shadow:
-    0 20px 40px rgba(0, 0, 0, 0.1),
-    var(--shadow-glass);
+  box-shadow: 
+        0 8px 32px 0 rgba(0, 0, 0, 0.37),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
 .card-content {

@@ -236,18 +236,22 @@ input[readonly] {
 } */
 
 .submit-button {
-  background-color: #27ae60;
-  color: white;
-  transition: all var(--transition-normal);
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  background: rgba(76, 175, 80, 0.1); /* Verde claro */
+    border: 1px solid rgba(76, 175, 80, 0.2); /* Verde borde */
+   color: #4caf50;
+backdrop-filter: blur(10px);
+
+
 }
 
 .submit-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  background: rgba(76, 175, 80, 0.20);
+    border-color: rgba(76, 175, 80, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+
 }
+
 
 
 
@@ -257,22 +261,29 @@ input[readonly] {
 }
 
 .cancel-button {
-  flex: 1;
+  width: 10rem;
   padding: 0.75rem;
   font-size: 1rem;
   font-weight: 600;
   border-radius: 0.75rem;
-  background: #f85454;
-  color: white;
-  border: none;
+  
   cursor: pointer;
   transition: 0.2s;
-  box-shadow: 0 4px 14px rgba(239, 68, 68, 0.3);
+  background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+  color: var(--error);
+transition: 0.2s ease-out;
+backdrop-filter: blur(10px);
+margin-right:2rem;
+
 }
 
 .cancel-button:hover {
-  transform: translateY(-2px);
+   background: rgba(239, 68, 68, 0.20);
+    border-color: rgba(239, 68, 68, 0.3);
+    transform: translateY(-2px);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+
 }
 
 
@@ -501,9 +512,11 @@ input[readonly] {
 
 /* Botón para agregar filas */
 .add-row-button {
-  background: linear-gradient(135deg, var(--primary-green), var(--accent-emerald));
-    color: white;
-    border: none;
+  background: rgba(76, 175, 80, 0.1); /* Verde claro */
+    border: 1px solid rgba(76, 175, 80, 0.2); /* Verde borde */
+   color: #4caf50;
+backdrop-filter: blur(10px);
+
     padding: var(--spacing-3) var(--spacing-2);
     border-radius: var(--border-radius);
     font-size: var(--font-size-base);
@@ -521,8 +534,11 @@ input[readonly] {
 }
 
 .add-row-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  background: rgba(76, 175, 80, 0.20);
+    border-color: rgba(76, 175, 80, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+
 }
 
 

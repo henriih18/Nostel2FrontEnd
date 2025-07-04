@@ -107,7 +107,7 @@ export const EditarActividadComplementaria = ({
         !comp.actividadDecision || !comp.fecha || !comp.responsable || !comp.firmaParticipacion
     );
     if (invalidCompromisos) {
-      toast.error("Todos los campos de los compromisos son obligatorios.")
+      toast.warn("Todos los campos de los compromisos son obligatorios.")
       /* setError("Todos los campos de los compromisos son obligatorios."); */
       return false;
     }
@@ -116,7 +116,7 @@ export const EditarActividadComplementaria = ({
       (asist) => !asist.nombre || !asist.dependenciaEmpresa || !asist.firmaParticipacion
     );
     if (invalidAsistentes) {
-      toast.error("Los campos nombre, dependencia/empresa y firma son obligatorios para los asistentes adicionales.")
+      toast.warn("Los campos nombre, dependencia/empresa y firma son obligatorios para los asistentes adicionales.")
       /* setError("Los campos nombre, dependencia/empresa y firma son obligatorios para los asistentes adicionales."); */
       return false;
     }
@@ -156,7 +156,7 @@ export const EditarActividadComplementaria = ({
         idAprendiz: actividad.idAprendiz, // Aseguramos que idAprendiz no cambie
       };
 
-      console.log("Enviando datos actualizados de la actividad:", actividadActualizada);
+      /* console.log("Enviando datos actualizados de la actividad:", actividadActualizada); */
 
       const response = await axios.put(
         `${API_URL}/actividadComplementarias/${formData.idAprendiz}/${formData.idActividad}`,

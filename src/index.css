@@ -158,13 +158,24 @@ body::before {
 }
 
 button {
-  background: linear-gradient(135deg, #4caf50, #10b981);
-  color: white;
+  background: rgba(76, 175, 80, 0.1); /* Verde claro */
+    border: 1px solid rgba(76, 175, 80, 0.2); /* Verde borde */
+   color: #4caf50;
+backdrop-filter: blur(10px);
+border-radius: 0.75rem;
+font-size: 1rem;
+transition: all .2s ease-out;
+padding: var(--spacing-3) var(--spacing-2);
+font-weight: 600;
 }
 
 button:hover {
   /* transform: translateY(-2px); */
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  background: rgba(76, 175, 80, 0.20);
+    border-color: rgba(76, 175, 80, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+
 }
 
 button:disabled {
@@ -173,14 +184,23 @@ button:disabled {
   box-shadow: none;
 }
 .toast-success {
-  background: linear-gradient(
+  /* background: linear-gradient(
     135deg,
     rgb(76, 175, 80, 0.95),
     rgba(16, 185, 129, 0.95)
   ) !important;
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15) !important;
   color: white !important;
-  border: 1px solid rgba(55, 199, 98, 0.952) !important;
+  border: 1px solid rgba(55, 199, 98, 0.952) !important; */
+  background: rgba(76, 175, 80, 0.1); /* Verde claro */
+    border: 1px solid rgba(76, 175, 80, 0.2); /* Verde borde */
+   color: #4caf50;
+backdrop-filter: blur(10px);
+box-shadow: 
+        0 8px 32px 0 rgba(0, 0, 0, 0.37),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+
+
   padding: var(--spacing-4) var(--spacing-6) !important;
   border-radius: var(--border-radius) !important;
   font-size: var(--font-size-base) !important;
@@ -199,10 +219,13 @@ button:disabled {
 }
 
 .toast-error {
-  background: rgba(230, 90, 90, 0.95) !important;
-  border: 1px solid rgb(239, 68, 68) !important;
-  color: white !important;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15) !important;
+  background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+  color: var(--error);
+backdrop-filter: blur(10px);
+box-shadow: 
+        0 8px 32px 0 rgba(0, 0, 0, 0.37),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
 
   padding: var(--spacing-4) var(--spacing-6) !important;
   border-radius: var(--border-radius) !important;
@@ -222,10 +245,13 @@ button:disabled {
 }
 
 .toast-info {
-  background: rgba(90, 179, 230, 0.95) !important;
-  border: 1px solid rgba(68, 148, 239, 0.89) !important;
-  color: white !important;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15) !important;
+  background: rgba(59, 130, 246, 0.1); /* Azul base */
+border: 1px solid rgba(59, 130, 246, 0.2);
+color: var(--info, #3B82F6); /* Usa variable si la tienes, si no usa el color por defecto */
+backdrop-filter: blur(10px);
+  box-shadow: 
+        0 8px 32px 0 rgba(0, 0, 0, 0.37),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
 
   padding: var(--spacing-4) var(--spacing-6) !important;
   border-radius: var(--border-radius) !important;
@@ -245,10 +271,14 @@ button:disabled {
 }
 
 .toast-warn {
-  background: rgba(250, 164, 94, 0.95) !important;
-  border: 1px solid rgba(239, 151, 68, 0.89) !important;
-  color: white !important;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15) !important;
+  background: rgba(251, 191, 36, 0.1); /* Naranja cálido */
+border: 1px solid rgba(251, 191, 36, 0.2);
+color: var(--warning, #F59E0B); /* Usa variable si la tienes */
+backdrop-filter: blur(10px);
+
+  box-shadow: 
+        0 8px 32px 0 rgba(0, 0, 0, 0.37),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
 
   padding: var(--spacing-4) var(--spacing-6) !important;
   border-radius: var(--border-radius) !important;

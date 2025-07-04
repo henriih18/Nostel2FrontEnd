@@ -6,9 +6,7 @@
   display: flex;
   justify-content: center;
   background: linear-gradient(135deg, 
-        rgba(76, 175, 80, 0.1) 0%, 
-        rgba(16, 185, 129, 0.1) 50%, 
-        rgba(20, 184, 166, 0.1) 100%);
+        rgba(142, 220, 144, 0.1) 0%);
 }
 
 

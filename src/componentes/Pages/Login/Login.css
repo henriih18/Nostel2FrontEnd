@@ -1,4 +1,99 @@
 /* Login.css - Diseño Moderno con Glass Morphism */
+.modal-overlay-r {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(8px);
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content-r {
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: var(--border-radius-xl);
+  padding: var(--spacing-8);
+  box-shadow: 
+        0 8px 32px 0 rgba(0, 0, 0, 0.37),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+   width: 30%; 
+   
+  max-width: 400px;
+  text-align: center;
+  animation: slideInUp 0.4s ease-out;
+}
+
+.modal-content-r h2 {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  color: var(--gray-800);
+  margin-bottom: var(--spacing-6);
+  background: linear-gradient(135deg, var(--gray-800), var(--gray-600));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.modal-buttons-r {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+  margin-bottom: var(--spacing-4);
+}
+
+.registro-btn-r {
+  color: var(--gray-600);
+    text-decoration: none;
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    padding: var(--spacing-2) var(--spacing-4);
+    border-radius: var(--border-radius);
+    transition: all var(--transition-fast);
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    flex: 1;
+    text-align: center;
+    transition: all .2 ease-out;
+}
+
+.registro-btn-r:hover {
+  color: var(--primary-green);
+    background: rgba(76, 175, 80, 0.1);
+    border-color: rgba(76, 175, 80, 0.2);
+    transform: translateY(-1px);
+  /* background: linear-gradient(135deg, var(--accent-emerald), var(--primary-green)); */
+}
+
+.close-modal-r {
+    
+    
+    width: 50%;
+    padding: var(--spacing-1);
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    border-radius: var(--border-radius);
+    color: var(--error);
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all .2s ease-out;
+    backdrop-filter: blur(10px);
+}
+
+.close-modal-r:hover {
+   background: rgba(239, 68, 68, 0.15);
+    border-color: rgba(239, 68, 68, 0.3);
+    transform: translateY(-1px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
 
 .login-container {
     display: flex;
@@ -9,7 +104,7 @@
     padding: var(--spacing-6);
     position: relative;
     background: linear-gradient(135deg, 
-        rgba(76, 175, 80, 0.1) 0%);
+        rgba(142, 220, 144, 0.1) 0%);
 }
 
 /* Partículas flotantes de fondo */
@@ -35,7 +130,7 @@
     border: 1px solid rgba(255, 255, 255, 0.18);
     border-radius: var(--border-radius-xl);
     box-shadow: 
-        0 8px 32px 0 rgba(31, 38, 135, 0.37),
+        0 8px 32px 0 rgba(0, 0, 0, 0.37),
         inset 0 1px 0 rgba(255, 255, 255, 0.3);
     padding: var(--spacing-10);
     width: 70vw;
@@ -223,9 +318,10 @@
 }
 
 .login-button {
-    background: linear-gradient(135deg, var(--primary-green), var(--accent-emerald));
-    color: white;
-    border: none;
+    background: rgba(76, 175, 80, 0.1); /* Verde claro */
+    border: 1px solid rgba(76, 175, 80, 0.2); /* Verde borde */
+   color: var(--primary-green);
+    
     padding: var(--spacing-4) var(--spacing-6);
     border-radius: var(--border-radius);
     font-size: var(--font-size-base);
@@ -240,9 +336,10 @@
     text-transform: uppercase;
     letter-spacing: 0.5px;
     display: flex;
-    
+    transition: all .2s ease-out;
     justify-content: center;
     align-items: center;
+    backdrop-filter: blur(10px);
 }
 
 .login-button::before {
@@ -261,8 +358,10 @@
 }
 
 .login-button:hover {
+   background: rgba(76, 175, 80, 0.20);
+    border-color: rgba(76, 175, 80, 0.3);
     transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
 .login-button:active {
@@ -271,6 +370,7 @@
 
 .login-button:disabled {
     background: var(--gray-400);
+    color: var(--gray-500);
     cursor: not-allowed;
     transform: none;
     box-shadow: none;
@@ -291,7 +391,7 @@
     font-weight: 500;
     padding: var(--spacing-2) var(--spacing-4);
     border-radius: var(--border-radius);
-    transition: all var(--transition-fast);
+    transition: all .2s ease-out;
     background: rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -300,10 +400,10 @@
 }
 
 .login-link:hover {
-    color: var(--primary-green);
-    background: rgba(76, 175, 80, 0.1);
-    border-color: rgba(76, 175, 80, 0.2);
-    transform: translateY(-1px);
+    background: rgba(76, 175, 80, 0.20);
+    border-color: rgba(76, 175, 80, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
 .error-message {
@@ -320,6 +420,13 @@
     gap: var(--spacing-2);
     animation: slideInUp 0.3s ease-out;
 }
+
+
+.form-input.input-error{
+  border: 1px solid rgb(239, 68, 68);
+  
+}
+
 
 .error-icon {
     width: 16px;

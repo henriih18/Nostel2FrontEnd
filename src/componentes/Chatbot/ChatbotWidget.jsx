@@ -126,7 +126,7 @@ Conclusiones: ${actividadGenerada.conclusiones}
         addBotMessage(msg);
       }
     } catch (err) {
-      console.error("Error al procesar la solicitud:", err);
+      /* console.error("Error al procesar la solicitud:", err); */
       const msg =
         err.response?.data?.error ||
         "Error al procesar la solicitud: " + err.message;

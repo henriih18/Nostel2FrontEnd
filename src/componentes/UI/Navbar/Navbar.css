@@ -106,23 +106,31 @@
 
 /* Información del usuario */
 .user-info {
-    background: rgba(255, 255, 255, 0.473);
+    background: rgba(255, 255, 255, 0.35);
     
     border-radius: var(--border-radius);
     padding: var(--spacing-3);
     margin-top: var(--spacing-4);
     border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 
+        -4px 1px 32px 0 rgba(0, 0, 0, 0.37),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+
 }
 
 .user-avatar {
     width: 32px;
     height: 32px;
-    background: linear-gradient(135deg, var(--primary-green), var(--accent-emerald));
+    background: rgba(76, 175, 80, 0.1); /* Verde claro */
+    border: 1px solid rgba(76, 175, 80, 0.2); /* Verde borde */
+   color: #4caf50;
+backdrop-filter: blur(10px);
+
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: white;
+    
     font-weight: 600;
     font-size: var(--font-size-sm);
     margin-bottom: var(--spacing-2);
@@ -139,7 +147,11 @@
 .user-role {
     font-size: var(--font-size-sm);
     color: var(--gray-600);
-    background: rgba(76, 175, 80, 0.1);
+    background: rgba(76, 175, 80, 0.1); /* Verde claro */
+    border: 1px solid rgba(76, 175, 80, 0.2); /* Verde borde */
+   color: #4caf50;
+backdrop-filter: blur(10px);
+
     padding: var(--spacing-1) var(--spacing-2);
     border-radius: var(--border-radius);
     display: inline-block;
@@ -270,8 +282,9 @@
     font-size: var(--font-size-base);
     font-weight: 500;
     cursor: pointer;
-    transition: all var(--transition-normal);
+    transition: all .2s ease-out;
     backdrop-filter: blur(10px);
+    justify-content: center;
 }
 
 .logout-button:hover {

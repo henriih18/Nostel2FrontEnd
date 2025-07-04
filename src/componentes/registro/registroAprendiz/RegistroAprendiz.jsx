@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./RegistroAprendiz.css";
+import { Mail, Lock, Eye, EyeOff, AlertCircle, Loader2, Heart } from "lucide-react";
 
 export const RegistroAprendiz = () => {
   const navigate = useNavigate();
@@ -133,7 +134,7 @@ export const RegistroAprendiz = () => {
       await enviarCorreo(formData.correo);
       navigate("/login");
     } catch (error) {
-      console.error("Error en la respuesta:", error.response);
+      /* console.error("Error en la respuesta:", error.response); */
 
       if (error.response && error.response.data) {
         // Capturar todos los errores de validación del backend
@@ -197,9 +198,10 @@ export const RegistroAprendiz = () => {
 
   return (
     <div className="registro-container">
-      <h1 className="login-title">Registro de Aprendiz</h1>
+      
 
       <form onSubmit={handleSubmit} className="registro-form">
+        <h1 className="login-title">Registro de Aprendiz</h1>
         {/* Sección de Información Personal */}
         <div className="form-section">
           <h2 className="form-section-title">Información Personal</h2>
@@ -434,6 +436,7 @@ export const RegistroAprendiz = () => {
 
         {/* Botón de envío */}
         <button className="registro-button" type="submit" disabled={loading}>
+          {loading && <Loader2 className="loading-spinner" />}
           {loading ? "Procesando..." : "Completar Registro"}
         </button>
       </form>

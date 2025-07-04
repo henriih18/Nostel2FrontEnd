@@ -13,6 +13,7 @@
   "dependencies": {
     "@azure/communication-email": "^1.0.0",
     "@azure/functions": "^4.0.0",
+    "@headlessui/react": "^2.2.4",
     "@react-pdf/renderer": "^4.3.0",
     "axios": "^1.7.9",
     "dotenv": "^16.4.7",

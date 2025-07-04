@@ -34,7 +34,7 @@ export const Home = () => {
     actividades: 156,
   });
 
-   /* const handleToast = (() => {
+  /* const handleToast = (() => {
     toast.success("Prueba Notificacion, SUCCESS",{
       autoClose: false
     })
@@ -54,7 +54,6 @@ export const Home = () => {
     })
     
   })  */
-
 
   useEffect(() => {
     const nombre = sessionStorage.getItem("nombre") || "Usuario";
@@ -306,10 +305,11 @@ export const Home = () => {
           </div> */}
         </div>
 
-{/* <div>
-  <button onClick={handleToast} >Probar toast</button>
-</div> */}
+        {/*<div>
+          <button onClick={handleToast}>Probar toast</button>
+        </div>*/}
       </div>
+      
     </div>
   );
 };

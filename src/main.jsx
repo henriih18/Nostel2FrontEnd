@@ -9,12 +9,14 @@ import ResetPassword from "./componentes/PasswordReset/ResetPassword.jsx";
 import { Login } from "./componentes/Pages/Login/Login";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { RegistroInstructor } from "./componentes/registro/registroInstructor/RegistroInstructor.jsx"
 
 createRoot(document.getElementById("root")).render(
   <BrowserRouter>
     <Routes>
       {/* Rutas públicas */}
       <Route path="/registroAprendiz" element={<RegistroAprendiz />} />
+      <Route path="/registroInstructor" element={<RegistroInstructor />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/password-reset/reset" element={<ResetPassword />} />
       <Route
