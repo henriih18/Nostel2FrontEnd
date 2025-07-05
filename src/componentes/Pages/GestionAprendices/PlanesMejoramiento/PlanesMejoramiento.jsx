@@ -3,6 +3,7 @@ import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useReactToPrint } from "react-to-print";
+import EditarPlanMejoramiento from "./EditarPlanMejoramiento"
 
 import AgregarPlanMejoramiento from "./AgregarPlanMejoramiento";
 //import EditarPlanMejoramiento from "./EditarPlanMejoramiento";
@@ -12,7 +13,9 @@ import AgregarPlanMejoramiento from "./AgregarPlanMejoramiento";
 
 import logoSena from "../../../../assets/images/logoSena.png";
 import { toast } from "react-toastify";
-
+import pdfMake from "pdfmake/build/pdfmake";
+import * as pdfFonts from "pdfmake/build/vfs_fonts";
+pdfMake.vfs = pdfFonts?.default?.pdfMake?.vfs || pdfFonts?.pdfMake?.vfs;
 
 const PlanesMejoramiento = ({ idAprendiz }) => {
   const navigate = useNavigate();
@@ -36,8 +39,8 @@ const PlanesMejoramiento = ({ idAprendiz }) => {
   const API_URL = import.meta.env.VITE_API_URL;
 
   // Referencias para impresión (idéntico a Actividades)
-  const actaRef = useRef();
-  const registroRef = useRef();
+  /* const actaRef = useRef();
+  const registroRef = useRef(); */
 
   // 0) Manejo de ESC para cerrar
   useEffect(() => {
@@ -59,7 +62,8 @@ const PlanesMejoramiento = ({ idAprendiz }) => {
   // 1) Cargar planes de mejoramiento
   useEffect(() => {
     if (!idAprendiz || isNaN(idAprendiz)) {
-      setError("ID de aprendiz inválido.");
+      toast.error("ID del aprendiz invalido.");
+      /* setError("ID de aprendiz inválido."); */
       setLoading(false);
       return;
     }
@@ -80,12 +84,13 @@ const PlanesMejoramiento = ({ idAprendiz }) => {
             },
           }
         );
-        console.log("Planes recibidos:", resp.data);
+        /* console.log("Planes recibidos:", resp.data); */
         setPlanes(resp.data);
         setError(null);
       } catch (err) {
-        console.error("Error al cargar planes:", err);
-        setError("Error al cargar los planes de mejoramiento.");
+        toast.error("Error al cargar los planes de mejormaiento");
+        /* console.error("Error al cargar planes:", err); */
+        /* setError("Error al cargar los planes de mejoramiento."); */
       } finally {
         setLoading(false);
       }
@@ -111,7 +116,8 @@ const PlanesMejoramiento = ({ idAprendiz }) => {
         );
         setInstructor(response.data);
       } catch (err) {
-        console.error("Error al obtener datos del instructor:", err);
+        /* toast.error("Error al obtener datos del instructor") */
+        /*  console.error("Error al obtener datos del instructor:", err); */
       }
     };
     obtenerDatosInstructor();
@@ -127,7 +133,8 @@ const PlanesMejoramiento = ({ idAprendiz }) => {
   // 4) Ir a Crear Plan
   const handleAgregarPlan = () => {
     if (!idAprendiz || isNaN(idAprendiz)) {
-      setError("ID de aprendiz inválido. No se puede agregar plan.");
+      toast.error("ID de aprendiz inválido. No se puede agregar plan.");
+      /* setError("ID de aprendiz inválido. No se puede agregar plan."); */
       return;
     }
     navigate(`/agregar-plan/${idAprendiz}`);
@@ -147,22 +154,21 @@ const PlanesMejoramiento = ({ idAprendiz }) => {
   }; */
 
   const handlePlanActualizado = (planActualizado) => {
-  try {
-    setPlanes((prev) =>
-      prev.map((p) =>
-        p.idPlanMejoramiento === planActualizado.idPlanMejoramiento
-          ? planActualizado
-          : p
-      )
-    );
-    setShowEditModal(false);
-    setPlanEditar(null);
-    toast.success("Plan de mejoramiento actualizado con éxito.");
-  } catch (err) {
-    toast.error("Error al actualizar el plan de mejoramiento.");
-  }
-};
-
+    try {
+      setPlanes((prev) =>
+        prev.map((p) =>
+          p.idPlanMejoramiento === planActualizado.idPlanMejoramiento
+            ? planActualizado
+            : p
+        )
+      );
+      setShowEditModal(false);
+      setPlanEditar(null);
+      toast.success("Plan de mejoramiento actualizado con éxito.");
+    } catch (err) {
+      toast.error("Error al actualizar el plan de mejoramiento.");
+    }
+  };
 
   // 6) Abrir modal de edición
   const handleEditarPlan = (plan) => {
@@ -210,144 +216,537 @@ const PlanesMejoramiento = ({ idAprendiz }) => {
     }
   }; */
   const handleEliminarPlan = async (idPlanMejoramiento) => {
-  try {
-    const token = sessionStorage.getItem("token");
-    if (!token) throw new Error("Sin token de autenticación");
-
-    // Cierra el modal inmediatamente
-    setPlanAEliminar(null);
-
-    const res = await axios.delete(
-      `${API_URL}/planMejoramientos/${idAprendiz}/${idPlanMejoramiento}`,
-      {
-        headers: { Authorization: `Bearer ${token}` },
+    try {
+      const token = sessionStorage.getItem("token");
+      if (!token) {
+        toast.error("Sin token de autenticacion");
       }
-    );
 
-    if (res.status >= 200 && res.status < 300) {
-      setPlanes((prev) =>
-        prev.filter((p) => p.idPlanMejoramiento !== idPlanMejoramiento)
+      // Cierra el modal inmediatamente
+      setPlanAEliminar(null);
+
+      const res = await axios.delete(
+        `${API_URL}/planMejoramientos/${idAprendiz}/${idPlanMejoramiento}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
       );
-      toast.success("plan de mejoramiento eliminado con exito.");
-    } else {
-      toast.error("No se pudo eliminar el plan.");
+
+      if (res.status >= 200 && res.status < 300) {
+        setPlanes((prev) =>
+          prev.filter((p) => p.idPlanMejoramiento !== idPlanMejoramiento)
+        );
+        toast.success("Plan de mejoramiento eliminado con exito.");
+      } else {
+        toast.error("No se pudo eliminar el plan de mejoramiento.");
+      }
+    } catch (err) {
+      toast.error("Error al eliminar el plan de mejoramiento.");
     }
-  } catch (err) {
-    toast.error("Error al eliminar el plan de mejoramiento.");
+  };
+
+  const convertirImagenABase64 = (url, opacity = 0.6) => {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.crossOrigin = "anonymous"; // necesario si la imagen está en otra ruta/origen
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        canvas.width = img.width;
+        canvas.height = img.height;
+
+        const ctx = canvas.getContext("2d");
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.globalAlpha = opacity; // Aplica opacidad al dibujar
+        ctx.drawImage(img, 0, 0);
+
+        resolve(canvas.toDataURL("image/png"));
+      };
+      img.onerror = reject;
+      img.src = url;
+    });
+  };
+
+  function parseParrafosHTML(html) {
+    const div = document.createElement("div");
+    div.innerHTML = html;
+    const paragraphs = Array.from(div.querySelectorAll("p"));
+
+    // Retorna un array de objetos de texto con salto de línea entre párrafos
+    return paragraphs.map((p) => ({
+      text: p.textContent.trim(),
+      margin: [0, 0, 0, 6], // Espacio entre párrafos
+    }));
   }
-};
 
-  // 8) Imprimir “Acta” (idéntico a ActividadesComplementarias)
-  const handlePrintActa = useReactToPrint({
-    contentRef: actaRef,
-    documentTitle: `ActaPlan_${selectedPlan?.idPlanMejoramiento || "default"}`,
-    pageStyle: `
-      @page {
-        size: letter portrait;
-        margin: 3cm 2.5cm 2.5cm 2.5cm;
+  // 8) Imprimir “Acta” 
+  const generarActa = async () => {
+      const logoBase64 = await convertirImagenABase64(logoSena, 0.6);
+      const acta = selectedPlan;
+  
+      const docDefinition = {
+        pageSize: "LETTER",
+        pageMargins: [72, 85, 72, 72],
+        header: {
+          margin: [40, 30, 40, 0],
+          columns: [
+            { width: "*", text: "" }, // espacio izquierdo
+            {
+              image: logoBase64,
+              width: 50,
+              alignment: "center",
+              margin: [0, 0, 0, 0],
+            },
+            { width: "*", text: "" }, // espacio derecho
+          ],
+        },
+        footer: function (currentPage, pageCount) {
+          return {
+            margin: [40, 10, 40, 20],
+            columns: [
+              {
+                text: "GOR-F-084 V02",
+                alignment: "center",
+                fontSize: 12,
+                margin: [0, 5, 0, 0],
+                opacity: 0.6,
+              },
+            ],
+          };
+        },
+        content: [
+          {
+            table: {
+              widths: ["*", "*", "*", "*", "*"],
+              body: [
+                [
+                  {
+                    text: `ACTA No. ${acta?.actaNumber || ""}`,
+                    colSpan: 5,
+                    bold: true,
+                    alignment: "center",
+                  },
+                  {},
+                  {},
+                  {},
+                  {},
+                ],
+                [
+                  {
+                    colSpan: 5,
+                    text: [
+                      { text: "NOMBRE DEL COMITÉ O DE LA REUNIÓN: ", bold: true },
+                      { text: acta?.nombreComite || "" },
+                    ],
+                  },
+                  {},
+                  {},
+                  {},
+                  {},
+                ],
+                [
+                  {
+                    colSpan: 2,
+                    text: [
+                      { text: "CIUDAD Y FECHA: ", bold: true },
+                      {
+                        text: `${acta?.ciudad || ""}, ${
+                          formatDate(acta?.fecha) || ""
+                        }`,
+                      },
+                    ],
+                  },
+  
+                  {},
+                  "",
+                  {
+                    text: [
+                      { text: "HORA INICIO: ", bold: true },
+                      { text: acta?.horaInicio || "" },
+                    ],
+                  },
+                  {
+                    text: [
+                      { text: "HORA FIN: ", bold: true },
+                      { text: acta?.horaFin || "" },
+                    ],
+                  },
+                ],
+                [
+                  {
+                    colSpan: 2,
+                    text: [
+                      { text: "LUGAR Y/O ENLACE: ", bold: true },
+                      { text: acta?.lugarEnlace || "" },
+                    ],
+                  },
+  
+                  {},
+                  "",
+                  {
+                    colSpan: 2,
+                    text: [
+                      { text: "DIRECCIÓN / REGIONAL / CENTRO: ", bold: true },
+                      { text: acta?.direccionRegionalCentro || "" },
+                    ],
+                  },
+                  {},
+                ],
+                [
+                  {
+                    text: "AGENDA O PUNTOS PARA DESARROLLAR:",
+                    colSpan: 5,
+                    bold: true,
+                    alignment: "center",
+                  },
+                  {},
+                  {},
+                  {},
+                  {},
+                ],
+                [
+                  { colSpan: 5, stack: parseParrafosHTML(acta?.agenda || "") },
+                  {},
+                  {},
+                  {},
+                  {},
+                ],
+                [
+                  {
+                    text: "OBJETIVO(S) DE LA REUNIÓN:",
+                    colSpan: 5,
+                    bold: true,
+                    alignment: "center",
+                  },
+                  {},
+                  {},
+                  {},
+                  {},
+                ],
+                [
+                  { colSpan: 5, stack: parseParrafosHTML(acta?.objetivos || "") },
+                  {},
+                  {},
+                  {},
+                  {},
+                ],
+                [
+                  {
+                    text: "DESARROLLO DE LA REUNIÓN",
+                    colSpan: 5,
+                    bold: true,
+                    alignment: "center",
+                  },
+                  {},
+                  {},
+                  {},
+                  {},
+                ],
+                [
+                  {
+                    colSpan: 5,
+                    stack: parseParrafosHTML(acta?.desarrollo || ""),
+                  },
+                  {},
+                  {},
+                  {},
+                  {},
+                ],
+                [
+                  {
+                    text: "CONCLUSIONES",
+                    colSpan: 5,
+                    bold: true,
+                    alignment: "center",
+                  },
+                  {},
+                  {},
+                  {},
+                  {},
+                ],
+                [
+                  {
+                    colSpan: 5,
+                    stack: parseParrafosHTML(acta?.conclusiones || ""),
+                  },
+                  {},
+                  {},
+                  {},
+                  {},
+                ],
+                [
+                  {
+                    text: "ESTABLECIMIENTO Y ACEPTACIÓN DE COMPROMISOS",
+                    colSpan: 5,
+                    bold: true,
+                    alignment: "center",
+                  },
+                  {},
+                  {},
+                  {},
+                  {},
+                ],
+                [
+                  {
+                    text: "ACTIVIDAD / DECISIÓN",
+                    colSpan: 2,
+                    style: "tableHeader",
+                  },
+                  {},
+                  { text: "FECHA", style: "tableHeader" },
+                  { text: "RESPONSABLE", style: "tableHeader" },
+                  { text: "FIRMA O PARTICIPACIÓN VIRTUAL", style: "tableHeader" },
+                ],
+                ...(acta?.compromisosPlan || []).map((c) => [
+                  { text: c.planDecision || "", colSpan: 2 },
+                  {},
+                  formatDate(c.fecha) || "",
+                  c.responsable || "",
+                  c.firmaParticipacion || "",
+                ]),
+                [
+                  {
+                    text: "ASISTENTES Y APROBACIÓN DECISIONES",
+                    colSpan: 5,
+                    bold: true,
+                    alignment: "center",
+                  },
+                  {},
+                  {},
+                  {},
+                  {},
+                ],
+                [
+                  { text: "NOMBRE", style: "tableHeader" },
+                  { text: "DEPENDENCIA / EMPRESA", style: "tableHeader" },
+                  { text: "APRUEBA (SI/NO)", style: "tableHeader" },
+                  { text: "OBSERVACIÓN", style: "tableHeader" },
+                  { text: "FIRMA O PARTICIPACIÓN VIRTUAL", style: "tableHeader" },
+                ],
+                ...(acta?.asistentesPlan || []).map((a) => [
+                  a.nombre || "",
+                  a.dependenciaEmpresa || "",
+                  a.aprueba || "",
+                  a.observacion || "",
+                  a.firmaParticipacion || "",
+                ]),
+                [
+                  {
+                    text: "De acuerdo con la Ley 1581 de 2012, Protección de Datos Personales, el Servicio Nacional de Aprendizaje SENA se compromete a garantizar la seguridad y protección de los datos personales que se encuentran almacenados en este documento, y les dará el tratamiento correspondiente en cumplimiento de lo establecido legalmente.",
+                    colSpan: 5,
+                    fontSize: 9,
+                    alignment: "justify",
+                  },
+                  {},
+                  {},
+                  {},
+                  {},
+                ],
+              ],
+            },
+            layout: {
+              hLineWidth: () => 0.5,
+              vLineWidth: () => 0.5,
+              hLineColor: () => "#000000",
+              vLineColor: () => "#000000",
+            },
+          },
+        ],
+        styles: {
+          titulo: { fontSize: 12, bold: true },
+          tableHeader: { bold: true },
+        },
+      };
+  
+      pdfMake.createPdf(docDefinition).open();
+    };
+  
+
+  // 9) Imprimir “Registro” 
+  const generarRegistroAsistencia = async () => {
+      const logoBase64 = await convertirImagenABase64(logoSena, 0.6);
+      const acta = selectedPlan;
+  
+      // Encabezado fecha desglosada
+      const { dia, mes, anio } = formatFechaModal(acta.fecha || new Date());
+  
+      // Armar filas de asistentes (máximo 15)
+      const asistentes = acta.asistentesPlan || [];
+      const filasAsistentes = [];
+      for (let i = 0; i < asistentes.length; i++) {
+        const a = asistentes[i];
+        filasAsistentes.push([
+          { text: `${i + 1}`, alignment: "center", fontSize: 8, margin: [0, 3] },
+          { text: a.nombre || "", fontSize: 8, margin: [0, 3] },
+          { text: a.numeroDocumento || "", fontSize: 8, margin: [0, 3] },
+          { text: a.planta ? "SI" : "NO", fontSize: 8, margin: [0, 3] },
+          { text: a.contratista ? "SI" : "NO", fontSize: 8, margin: [0, 3] },
+          { text: a.otro || "", fontSize: 8, margin: [0, 3] },
+          { text: a.dependenciaEmpresa || "", fontSize: 8, margin: [0, 3] },
+          { text: a.correoElectronico || "", fontSize: 8, margin: [0, 3] },
+          { text: a.telefonoExt || "", fontSize: 8, margin: [0, 3] },
+          {
+            text: a.autorizaGrabacion ? "SÍ" : "NO",
+            fontSize: 8,
+            margin: [0, 3],
+          },
+          { text: a.firmaParticipacion || "", fontSize: 8, margin: [0, 3] },
+        ]);
       }
-      @media print {
-        body * {
-          visibility: hidden;
-        }
-        .acta-imprimible, .acta-imprimible * {
-          visibility: visible;
-        }
-        .acta-imprimible {
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          box-sizing: border-box;
-          padding-top: 0mm;
-          padding-bottom: 0mm;
-        }
-
-        .acta-tabla {
-          margin-top: 0;
-        }
-
-        .containerFooterActa {
-          position: fixed;
-          bottom: 0;
-          left: 50%;
-          transform: translateX(-50%);
-          font-family: Calibri, sans-serif;
-          font-size: 12pt;
-          text-align: center;
-          z-index: 999;
-        }
-
-        .acta-tabla tbody.block-group3 {
-          page-break-inside: avoid !important;
-          break-inside: avoid !important;
-        }
+      // Luego completas hasta 15 con celdas vacías
+      for (let i = asistentes.length; i < 15; i++) {
+        filasAsistentes.push([
+          { text: `${i + 1}`, alignment: "center", fontSize: 8, margin: [0, 3] },
+          ...Array(10).fill({ text: "", fontSize: 8 }),
+        ]);
       }
-    `,
-    onAfterPrint: () => console.log("Impresión del acta completada."),
-  });
-
-  // 9) Imprimir “Registro” (idéntico)
-  const handlePrintRegistro = useReactToPrint({
-    contentRef: registroRef,
-    documentTitle: `Registro_Asistencia_${
-      selectedPlan?.idPlanMejoramiento || "default"
-    }`,
-    pageStyle: `
-      /* Márgenes oficiales */
-      @page {
-        size: letter landscape;
-        margin: 3cm 2.5cm 2.5cm 2.5cm;
-      }
-
-      @media print {
-        /* oculta todo menos el registro */
-        body, body * {
-          visibility: hidden;
-          margin: 0;
-          padding: 0;
-        }
-        .registro-imprimible, .registro-imprimible * {
-          visibility: visible;
-        }
-
-        /* área imprimible = exactamente el interior de los márgenes */
-        .registro-imprimible {
-          position: absolute;
-          top: 0;    /* justo 3 cm debajo del tope físico */
-          left: 0;   /* justo 2.5 cm a la derecha del borde físico */
-          right: 0;  /* deja 2.5 cm a la derecha */
-          bottom: 0; /* deja 2.5 cm arriba del pie físico */
-          box-sizing: border-box;
-        }
-
-        /* LOGO pegado al margen superior */
-        .logoRegistroContainer {
-          position: absolute;
-          top: 0;    /* arranca al tope del área imprimible */
-          left: 50%;
-          transform: translateX(-50%);
-          max-height: 15mm;
-        }
-
-        /* la tabla entra justo bajo el logo */
-        .registro-full-table {
-          margin-top: 20mm; /* = altura del logo */
-        }
-
-        /* FOOTER pegado al margen inferior */
-        .containerFooter {
-          position: absolute;
-          bottom: 0;   /* al límite inferior del área imprimible */
-          left: 50%;
-          transform: translateX(-50%);
-          font-size: 8pt;
-        }
-      }
-    `,
-    onAfterPrint: () => console.log("Impresión del registro completada."),
-  });
+  
+      const docDefinition = {
+        pageSize: "LETTER",
+        pageOrientation: "landscape",
+        pageMargins: [60, 85, 72, 72],
+        header: {
+          margin: [40, 20, 40, 0],
+          columns: [
+            { width: "*", text: "" },
+            {
+              image: logoBase64,
+              width: 50,
+              alignment: "center",
+              opacity: 0.6,
+            },
+            { width: "*", text: "" },
+          ],
+        },
+        footer: function () {
+          return {
+            margin: [40, 0, 40, 20],
+  
+            text: "GOR-F-085 V02",
+            alignment: "center",
+            fontSize: 9,
+            margin: [0, 5, 0, 0],
+            opacity: 0.6,
+          };
+        },
+        content: [
+          {
+            table: {
+              widths: [
+                25, // Nº
+                90, // NOMBRES Y APELLIDOS
+                60, // No. DOCUMENTO
+                30, // PLANTA
+                30, // CONTRATISTA
+                50, // OTRO / ¿CUÁL?
+                70, // DEPENDENCIA / EMPRESA
+                85, // CORREO ELECTRÓNICO
+                50, // TELÉFONO/EXT.
+                30, // AUTORIZA GRABACIÓN
+                65, // FIRMA O PARTICIPACIÓN VIRTUAL
+              ],
+              body: [
+                [
+                  {
+                    text: `REGISTRO DE ASISTENCIA / DÍA ${dia} DEL MES DE ${mes} DEL AÑO ${anio}`,
+                    colSpan: 11,
+                    alignment: "center",
+                    fontSize: 9,
+                    bold: true,
+                  },
+                  ...Array(10).fill({}),
+                ],
+                [
+                  {
+                    text: "OBJETIVO(S)",
+                    bold: true,
+                    margin: [2, 3, 2, 3],
+                    fontSize: 9,
+                  },
+                  {
+                    stack: parseParrafosHTML(acta?.objetivos || ""),
+                    colSpan: 10,
+                    fontSize: 8,
+                  },
+                  ...Array(9).fill({}),
+                ],
+                [
+                  {
+                    text: "N°",
+                    style: "tableHeader",
+                    alignment: "center",
+                    fontSize: 8,
+                  },
+                  {
+                    text: "NOMBRES Y APELLIDOS",
+                    style: "tableHeader",
+                    fontSize: 8,
+                  },
+                  { text: "No. DOCUMENTO", style: "tableHeader", fontSize: 8 },
+                  {
+                    text: "PLANTA",
+                    style: "tableHeader",
+                    alignment: "center",
+                    fontSize: 8,
+                  },
+                  {
+                    text: "CONTRATISTA",
+                    style: "tableHeader",
+                    alignment: "center",
+                    fontSize: 6.5,
+                  },
+                  { text: "OTRO ¿CUÁL?", style: "tableHeader", fontSize: 8 },
+                  {
+                    text: "DEPENDENCIA / EMPRESA",
+                    style: "tableHeader",
+                    fontSize: 8,
+                  },
+                  {
+                    text: "CORREO ELECTRÓNICO",
+                    style: "tableHeader",
+                    fontSize: 8,
+                  },
+                  { text: "TELÉFONO / EXT.", style: "tableHeader", fontSize: 8 },
+                  {
+                    text: "AUTORIZA GRABACIÓN",
+                    style: "tableHeader",
+                    alignment: "center",
+                    fontSize: 8,
+                  },
+                  {
+                    text: "FIRMA O PARTICIPACIÓN VIRTUAL",
+                    style: "tableHeader",
+                    fontSize: 8,
+                  },
+                ],
+                ...filasAsistentes,
+              ],
+            },
+            layout: {
+              hLineWidth: () => 0.5,
+              vLineWidth: () => 0.5,
+              hLineColor: () => "#000000",
+              vLineColor: () => "#000000",
+            },
+          },
+          {
+            text: "De acuerdo con la Ley 1581 de 2012, Protección de Datos Personales, el Servicio Nacional de Aprendizaje SENA se compromete a garantizar la seguridad y protección de los datos personales que se encuentran almacenados en este documento, y les dará el tratamiento correspondiente en cumplimiento de lo establecido legalmente.",
+            fontSize: 8,
+            alignment: "justify",
+            margin: [40, 15, 0, 0],
+          },
+        ],
+        styles: {
+          tableHeader: {
+            bold: true,
+            fontSize: 8,
+            fillColor: "#ffffff", // sin color de fondo
+          },
+        },
+      };
+  
+      pdfMake.createPdf(docDefinition).open();
+    };
+  
 
   // 10) Al hacer clic en un “plan”, abrimos modal detalle
   const handleRowClick = (plan) => {
@@ -493,8 +892,8 @@ const PlanesMejoramiento = ({ idAprendiz }) => {
                 className="submit-button"
                 onClick={() => {
                   console.log("Plan a eliminar:", planAEliminar);
-                  handleEliminarPlan(planAEliminar.idPlanMejoramiento)}
-                }
+                  handleEliminarPlan(planAEliminar.idPlanMejoramiento);
+                }}
               >
                 Sí, eliminar
               </button>
@@ -523,7 +922,7 @@ const PlanesMejoramiento = ({ idAprendiz }) => {
               {/* —————— SECCIÓN "ACTIVIDADES" (equivale a Acta) —————— */}
               {currentSection === "actividades" && (
                 <div
-                  ref={actaRef}
+                  
                   className={`acta-imprimible ${
                     currentSection === "actividades"
                       ? "slide-in-left"
@@ -723,7 +1122,7 @@ const PlanesMejoramiento = ({ idAprendiz }) => {
               {/* ——— SECCIÓN “REGISTRO” ——— */}
               {currentSection === "registro" && (
                 <div
-                  ref={registroRef}
+                  
                   className={`registro-imprimible ${
                     currentSection === "registro"
                       ? "slide-in-left"
@@ -844,11 +1243,11 @@ const PlanesMejoramiento = ({ idAprendiz }) => {
                 Cerrar
               </button>
               {currentSection === "actividades" ? (
-                <button className="submit-button" onClick={handlePrintActa}>
+                <button className="submit-button" onClick={generarActa}>
                   Imprimir Acta
                 </button>
               ) : (
-                <button className="submit-button" onClick={handlePrintRegistro}>
+                <button className="submit-button" onClick={generarRegistroAsistencia}>
                   Imprimir Registro
                 </button>
               )}

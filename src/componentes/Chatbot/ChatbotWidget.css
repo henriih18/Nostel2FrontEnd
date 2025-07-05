@@ -27,8 +27,8 @@
 
 /* Botón circular para abrir/cerrar */
 .chatbot-toggle-button {
-  background: rgba(51, 226, 57, 0.266); /* Verde claro */
-    border: 1px solid rgba(76, 175, 80, 0.2); /* Verde borde */
+  background: rgba(51, 226, 57, 0.452); /* Verde claro */
+    border: 1px solid rgba(76, 175, 79, 0.521); /* Verde borde */
    color: var(--primary-green);
 backdrop-filter: blur(10px);
 

@@ -2,44 +2,67 @@ import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import { Mail, Lock, Eye, EyeOff, AlertCircle, Loader2, Heart } from "lucide-react";
+import {
+  Mail,
+  Lock,
+  Eye,
+  EyeOff,
+  AlertCircle,
+  Loader2,
+  Heart,
+} from "lucide-react";
 import { toast } from "react-toastify";
-import "./EditarActividad.css"
+//import "./EditarActividad.css" // Asegúrate de que esta ruta sea correcta si la necesitas
 
-export const EditarActividadComplementaria = ({
-  actividad,
-  onActividadActualizada,
+export const EditarPlanMejoramiento = ({
+  plan,
+  onPlanActualizado,
   onClose,
 }) => {
+  // Función auxiliar para generar un ID único
+  const generateUniqueId = () => {
+    return Date.now().toString(36) + Math.random().toString(36).substring(2, 9);
+  };
+
   const [formData, setFormData] = useState({
-    idActividad: actividad.idActividad,
-    idAprendiz: actividad.idAprendiz,
-    idInstructor: actividad.idInstructor,
-    actaNumber: actividad.actaNumber || "",
-    nombreComite: actividad.nombreComite || "",
-    ciudad: actividad.ciudad || "Armenia",
-    fecha: actividad.fecha ? actividad.fecha.split("T")[0] : "",
-    horaInicio: actividad.horaInicio || "",
-    horaFin: actividad.horaFin || "",
-    lugarEnlace: actividad.lugarEnlace || "",
-    direccionRegionalCentro: actividad.direccionRegionalCentro || "",
-    agenda: actividad.agenda || "",
-    objetivos: actividad.objetivos || "",
-    desarrollo: actividad.desarrollo || "",
-    conclusiones: actividad.conclusiones || "",
-    estado: actividad.estado || "Pendiente",
-    compromisos:
-      actividad.compromisos && actividad.compromisos.length > 0
-        ? actividad.compromisos.map((comp) => ({
-            actividadDecision: comp.actividadDecision || "",
+    idPlanMejoramiento: plan.idPlanMejoramiento,
+    idAprendiz: plan.idAprendiz,
+    idInstructor: plan.idInstructor,
+    actaNumber: plan.actaNumber || "",
+    nombreComite: plan.nombreComite || "",
+    ciudad: plan.ciudad || "Armenia",
+    fecha: plan.fecha ? plan.fecha.split("T")[0] : "",
+    horaInicio: plan.horaInicio || "",
+    horaFin: plan.horaFin || "",
+    lugarEnlace: plan.lugarEnlace || "",
+    direccionRegionalCentro: plan.direccionRegionalCentro || "",
+    agenda: plan.agenda || "",
+    objetivos: plan.objetivos || "",
+    desarrollo: plan.desarrollo || "",
+    conclusiones: plan.conclusiones || "",
+    estado: plan.estado || "Pendiente",
+    compromisosPlan:
+      plan.compromisosPlan && plan.compromisosPlan.length > 0
+        ? plan.compromisosPlan.map((comp) => ({
+            id: comp.id || generateUniqueId(), // Asegura un ID único
+            planDecision: comp.planDecision || "",
             fecha: comp.fecha ? comp.fecha.split("T")[0] : "",
             responsable: comp.responsable || "",
             firmaParticipacion: comp.firmaParticipacion || "",
           }))
-        : [{ actividadDecision: "", fecha: "", responsable: "", firmaParticipacion: "" }],
-    asistentes:
-      actividad.asistentes && actividad.asistentes.length > 0
-        ? actividad.asistentes.map((asist) => ({
+        : [
+            {
+              id: generateUniqueId(), // Asegura un ID único para el compromiso inicial
+              planDecision: "",
+              fecha: "",
+              responsable: "",
+              firmaParticipacion: "",
+            },
+          ],
+    asistentesPlan:
+      plan.asistentesPlan && plan.asistentesPlan.length > 0
+        ? plan.asistentesPlan.map((asist) => ({
+            id: asist.id || generateUniqueId(), // Asegura un ID único
             nombre: asist.nombre || "",
             numeroDocumento: asist.numeroDocumento || "",
             planta: asist.planta || false,
@@ -54,8 +77,8 @@ export const EditarActividadComplementaria = ({
             firmaParticipacion: asist.firmaParticipacion || "",
           }))
         : [],
-    version: actividad.version || "02",
-    codigo: actividad.codigo || "GOR-F-084",
+    version: plan.version || "02",
+    codigo: plan.codigo || "GOR-F-084",
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -106,9 +129,10 @@ export const EditarActividadComplementaria = ({
   const addAsistente = () => {
     setFormData((prev) => ({
       ...prev,
-      asistentes: [
-        ...prev.asistentes,
+      asistentesPlan: [
+        ...prev.asistentesPlan,
         {
+          id: generateUniqueId(), // Asegura un ID único para el nuevo asistente
           nombre: "",
           numeroDocumento: "",
           planta: false,
@@ -127,25 +151,40 @@ export const EditarActividadComplementaria = ({
   };
 
   const validateForm = () => {
-    const invalidCompromisos = formData.compromisos.some(
+    const invalidCompromisos = formData.compromisosPlan.some(
       (comp) =>
-        !comp.actividadDecision || !comp.fecha || !comp.responsable || !comp.firmaParticipacion
+        !comp.planDecision ||
+        !comp.fecha ||
+        !comp.responsable ||
+        !comp.firmaParticipacion
     );
     if (invalidCompromisos) {
       toast.warn("Todos los campos de los compromisos son obligatorios.");
       return false;
     }
 
-    const invalidAsistentes = formData.asistentes.slice(2).some(
-      (asist) => !asist.nombre || !asist.dependenciaEmpresa || !asist.firmaParticipacion
-    );
+    // Nota: El slice(2) aquí significa que los primeros dos asistentes (instructor y aprendiz)
+    // no necesitan cumplir con estas validaciones de nombre, dependenciaEmpresa y firmaParticipacion.
+    // Asegúrate de que esto sea el comportamiento deseado.
+    const invalidAsistentes = formData.asistentesPlan
+      .slice(2)
+      .some(
+        (asist) =>
+          !asist.nombre ||
+          !asist.dependenciaEmpresa ||
+          !asist.firmaParticipacion
+      );
     if (invalidAsistentes) {
-      toast.warn("Los campos nombre, dependencia/empresa y firma son obligatorios para los asistentes adicionales.");
+      toast.warn(
+        "Los campos nombre, dependencia/empresa y firma son obligatorios para los asistentes adicionales."
+      );
       return false;
     }
 
-    if (formData.asistentes.length < 2) {
-      toast.error("Se requieren al menos el instructor y el aprendiz como asistentes.");
+    if (formData.asistentesPlan.length < 2) {
+      toast.error(
+        "Se requieren al menos el instructor y el aprendiz como asistentes."
+      );
       return false;
     }
 
@@ -172,16 +211,17 @@ export const EditarActividadComplementaria = ({
         return;
       }
 
-      const actividadActualizada = {
+      const planActualizado = {
         ...formData,
-        idAprendiz: actividad.idAprendiz,
+        idAprendiz: plan.idAprendiz,
       };
 
       /* console.log("Enviando datos actualizados de la actividad:", actividadActualizada); */
 
       const response = await axios.put(
-        `${API_URL}/actividadComplementarias/${formData.idAprendiz}/${formData.idActividad}`,
-        actividadActualizada,
+        `${API_URL}/planMejoramientos/${formData.idAprendiz}/${formData.idPlanMejoramiento}`,
+        
+        planActualizado,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -191,10 +231,13 @@ export const EditarActividadComplementaria = ({
       );
 
       setShowSuccessModal(true);
-      setFormData((prev) => ({ ...prev, temporalForceUpdate: !prev.temporalForceUpdate }));
+      setFormData((prev) => ({
+        ...prev,
+        temporalForceUpdate: !prev.temporalForceUpdate,
+      }));
 
-      if (onActividadActualizada) {
-        onActividadActualizada(response.data);
+      if (onPlanActualizado) {
+        onPlanActualizado(response.data);
       }
 
       setTimeout(() => {
@@ -202,7 +245,8 @@ export const EditarActividadComplementaria = ({
         onClose();
       }, 2000);
     } catch (err) {
-      toast.error("Error al actualizar la actividad.");
+      console.error("Error al actualizar el plan:", err); // Añadir log de error
+      toast.error("Error al actualizar el plan.");
     } finally {
       setLoading(false);
     }
@@ -236,13 +280,13 @@ export const EditarActividadComplementaria = ({
               boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
             }}
           >
-            <h2>¡Actividad complementaria editada exitosamente!</h2>
+            <h2>¡Plan mejoramiento editado exitosamente!</h2>
           </div>
         </div>
       )}
       <div className="modal-container modal-container-e">
         <div className="modal-header">
-          <h2>Editar Actividad Complementaria</h2>
+          <h2>Editar Plan Mejoramiento</h2>
         </div>
         <div className="modal-body modal-body-e">
           <form onSubmit={handleSubmit}>
@@ -250,7 +294,11 @@ export const EditarActividadComplementaria = ({
             {currentSection === "acta" && (
               <div
                 ref={actaRef}
-                className={`acta-imprimible ${currentSection === "acta" ? "slide-in-left" : "slide-out-right"}`}
+                className={`acta-imprimible ${
+                  currentSection === "acta"
+                    ? "slide-in-left"
+                    : "slide-out-right"
+                }`}
               >
                 {/* Sección 1: Encabezado del Acta */}
                 <div className="form-section form-section-g">
@@ -377,7 +425,9 @@ export const EditarActividadComplementaria = ({
                         theme="snow"
                         modules={quillModules}
                         value={formData.objetivos}
-                        onChange={(value) => handleQuillChange("objetivos", value)}
+                        onChange={(value) =>
+                          handleQuillChange("objetivos", value)
+                        }
                         placeholder="Describa los objetivos de la reunión..."
                       />
                     </div>
@@ -393,7 +443,9 @@ export const EditarActividadComplementaria = ({
                         theme="snow"
                         modules={quillModules}
                         value={formData.desarrollo}
-                        onChange={(value) => handleQuillChange("desarrollo", value)}
+                        onChange={(value) =>
+                          handleQuillChange("desarrollo", value)
+                        }
                         placeholder="Describa el desarrollo de la reunión..."
                       />
                     </div>
@@ -406,7 +458,9 @@ export const EditarActividadComplementaria = ({
                         theme="snow"
                         modules={quillModules}
                         value={formData.conclusiones}
-                        onChange={(value) => handleQuillChange("conclusiones", value)}
+                        onChange={(value) =>
+                          handleQuillChange("conclusiones", value)
+                        }
                         placeholder="Describa las conclusiones de la reunión..."
                       />
                     </div>
@@ -426,14 +480,16 @@ export const EditarActividadComplementaria = ({
                       </tr>
                     </thead>
                     <tbody>
-                      {formData.compromisos.map((compromiso, index) => (
-                        <tr key={index}>
+                      {formData.compromisosPlan.map((compromisoPlan, index) => (
+                        <tr key={compromisoPlan.id}> {/* Usando el ID único */}
                           <td>
                             <input
                               type="text"
-                              name="actividadDecision"
-                              value={compromiso.actividadDecision}
-                              onChange={(e) => handleChange(e, index, "compromisos")}
+                              name="planDecision"
+                              value={compromisoPlan.planDecision}
+                              onChange={(e) =>
+                                handleChange(e, index, "compromisosPlan")
+                              }
                               placeholder="Actividad o decisión"
                               required
                             />
@@ -442,8 +498,10 @@ export const EditarActividadComplementaria = ({
                             <input
                               type="date"
                               name="fecha"
-                              value={compromiso.fecha}
-                              onChange={(e) => handleChange(e, index, "compromisos")}
+                              value={compromisoPlan.fecha}
+                              onChange={(e) =>
+                                handleChange(e, index, "compromisosPlan")
+                              }
                               required
                             />
                           </td>
@@ -451,8 +509,10 @@ export const EditarActividadComplementaria = ({
                             <input
                               type="text"
                               name="responsable"
-                              value={compromiso.responsable}
-                              onChange={(e) => handleChange(e, index, "compromisos")}
+                              value={compromisoPlan.responsable}
+                              onChange={(e) =>
+                                handleChange(e, index, "compromisosPlan")
+                              }
                               placeholder="Nombre del responsable"
                               required
                             />
@@ -461,8 +521,10 @@ export const EditarActividadComplementaria = ({
                             <input
                               type="text"
                               name="firmaParticipacion"
-                              value={compromiso.firmaParticipacion}
-                              onChange={(e) => handleChange(e, index, "compromisos")}
+                              value={compromisoPlan.firmaParticipacion}
+                              onChange={(e) =>
+                                handleChange(e, index, "compromisosPlan")
+                              }
                               placeholder="Firma o participación virtual"
                               required
                             />
@@ -487,14 +549,16 @@ export const EditarActividadComplementaria = ({
                       </tr>
                     </thead>
                     <tbody>
-                      {formData.asistentes.map((asistente, index) => (
-                        <tr key={index}>
+                      {formData.asistentesPlan.map((asistentePlan, index) => (
+                        <tr key={asistentePlan.id}> {/* Usando el ID único */}
                           <td>
                             <input
                               type="text"
                               name="nombre"
-                              value={asistente.nombre}
-                              onChange={(e) => handleChange(e, index, "asistentes")}
+                              value={asistentePlan.nombre}
+                              onChange={(e) =>
+                                handleChange(e, index, "asistentesPlan")
+                              }
                               placeholder="Nombre completo"
                               readOnly={index < 2}
                               required={index >= 2}
@@ -504,8 +568,10 @@ export const EditarActividadComplementaria = ({
                             <input
                               type="text"
                               name="dependenciaEmpresa"
-                              value={asistente.dependenciaEmpresa}
-                              onChange={(e) => handleChange(e, index, "asistentes")}
+                              value={asistentePlan.dependenciaEmpresa}
+                              onChange={(e) =>
+                                handleChange(e, index, "asistentesPlan")
+                              }
                               placeholder="Dependencia o empresa"
                               readOnly={index < 2}
                               required={index >= 2}
@@ -514,8 +580,10 @@ export const EditarActividadComplementaria = ({
                           <td>
                             <select
                               name="aprueba"
-                              value={asistente.aprueba}
-                              onChange={(e) => handleChange(e, index, "asistentes")}
+                              value={asistentePlan.aprueba}
+                              onChange={(e) =>
+                                handleChange(e, index, "asistentesPlan")
+                              }
                             >
                               <option value="SÍ">SÍ</option>
                               <option value="NO">NO</option>
@@ -525,8 +593,10 @@ export const EditarActividadComplementaria = ({
                             <input
                               type="text"
                               name="observacion"
-                              value={asistente.observacion}
-                              onChange={(e) => handleChange(e, index, "asistentes")}
+                              value={asistentePlan.observacion}
+                              onChange={(e) =>
+                                handleChange(e, index, "asistentesPlan")
+                              }
                               placeholder="Observaciones"
                             />
                           </td>
@@ -534,8 +604,10 @@ export const EditarActividadComplementaria = ({
                             <input
                               type="text"
                               name="firmaParticipacion"
-                              value={asistente.firmaParticipacion}
-                              onChange={(e) => handleChange(e, index, "asistentes")}
+                              value={asistentePlan.firmaParticipacion}
+                              onChange={(e) =>
+                                handleChange(e, index, "asistentesPlan")
+                              }
                               placeholder="Firma o participación virtual"
                               readOnly={index < 2}
                               required={index >= 2}
@@ -545,7 +617,11 @@ export const EditarActividadComplementaria = ({
                       ))}
                     </tbody>
                   </table>
-                  <button type="button" className="add-row-button" onClick={addAsistente}>
+                  <button
+                    type="button"
+                    className="add-row-button"
+                    onClick={addAsistente}
+                  >
                     Agregar Asistente
                   </button>
                 </div>
@@ -556,7 +632,11 @@ export const EditarActividadComplementaria = ({
             {currentSection === "registro" && (
               <div
                 ref={registroRef}
-                className={`registro-imprimible ${currentSection === "registro" ? "slide-in-left" : "slide-out-right"}`}
+                className={`registro-imprimible ${
+                  currentSection === "registro"
+                    ? "slide-in-left"
+                    : "slide-out-right"
+                }`}
               >
                 <div className="form-section">
                   <div className="form-row">
@@ -566,7 +646,9 @@ export const EditarActividadComplementaria = ({
                         theme="snow"
                         modules={quillModules}
                         value={formData.objetivos}
-                        onChange={(value) => handleQuillChange("objetivos", value)}
+                        onChange={(value) =>
+                          handleQuillChange("objetivos", value)
+                        }
                         placeholder="Describa los objetivos de la reunión..."
                       />
                     </div>
@@ -592,15 +674,17 @@ export const EditarActividadComplementaria = ({
                       </tr>
                     </thead>
                     <tbody>
-                      {formData.asistentes.map((asistente, index) => (
-                        <tr key={index}>
+                      {formData.asistentesPlan.map((asistentePlan, index) => (
+                        <tr key={asistentePlan.id}> {/* Usando el ID único */}
                           <td>{index + 1}</td>
                           <td>
                             <input
                               type="text"
                               name="nombre"
-                              value={asistente.nombre}
-                              onChange={(e) => handleChange(e, index, "asistentes")}
+                              value={asistentePlan.nombre}
+                              onChange={(e) =>
+                                handleChange(e, index, "asistentesPlan")
+                              }
                               placeholder="Nombre completo"
                             />
                           </td>
@@ -608,8 +692,10 @@ export const EditarActividadComplementaria = ({
                             <input
                               type="text"
                               name="numeroDocumento"
-                              value={asistente.numeroDocumento}
-                              onChange={(e) => handleChange(e, index, "asistentes")}
+                              value={asistentePlan.numeroDocumento}
+                              onChange={(e) =>
+                                handleChange(e, index, "asistentesPlan")
+                              }
                               placeholder="Número de documento"
                             />
                           </td>
@@ -617,24 +703,30 @@ export const EditarActividadComplementaria = ({
                             <input
                               type="checkbox"
                               name="planta"
-                              checked={asistente.planta}
-                              onChange={(e) => handleChange(e, index, "asistentes")}
+                              checked={asistentePlan.planta}
+                              onChange={(e) =>
+                                handleChange(e, index, "asistentesPlan")
+                              }
                             />
                           </td>
                           <td>
                             <input
                               type="checkbox"
                               name="contratista"
-                              checked={asistente.contratista}
-                              onChange={(e) => handleChange(e, index, "asistentes")}
+                              checked={asistentePlan.contratista}
+                              onChange={(e) =>
+                                handleChange(e, index, "asistentesPlan")
+                              }
                             />
                           </td>
                           <td>
                             <input
                               type="text"
                               name="otro"
-                              value={asistente.otro}
-                              onChange={(e) => handleChange(e, index, "asistentes")}
+                              value={asistentePlan.otro}
+                              onChange={(e) =>
+                                handleChange(e, index, "asistentesPlan")
+                              }
                               placeholder="Otro / ¿Cuál?"
                             />
                           </td>
@@ -642,8 +734,10 @@ export const EditarActividadComplementaria = ({
                             <input
                               type="text"
                               name="dependenciaEmpresa"
-                              value={asistente.dependenciaEmpresa}
-                              onChange={(e) => handleChange(e, index, "asistentes")}
+                              value={asistentePlan.dependenciaEmpresa}
+                              onChange={(e) =>
+                                handleChange(e, index, "asistentesPlan")
+                              }
                               placeholder="Dependencia o empresa"
                             />
                           </td>
@@ -651,8 +745,10 @@ export const EditarActividadComplementaria = ({
                             <input
                               type="email"
                               name="correoElectronico"
-                              value={asistente.correoElectronico}
-                              onChange={(e) => handleChange(e, index, "asistentes")}
+                              value={asistentePlan.correoElectronico}
+                              onChange={(e) =>
+                                handleChange(e, index, "asistentesPlan")
+                              }
                               placeholder="Correo electrónico"
                             />
                           </td>
@@ -660,8 +756,10 @@ export const EditarActividadComplementaria = ({
                             <input
                               type="text"
                               name="telefonoExt"
-                              value={asistente.telefonoExt}
-                              onChange={(e) => handleChange(e, index, "asistentes")}
+                              value={asistentePlan.telefonoExt}
+                              onChange={(e) =>
+                                handleChange(e, index, "asistentesPlan")
+                              }
                               placeholder="Teléfono/Ext."
                             />
                           </td>
@@ -669,16 +767,20 @@ export const EditarActividadComplementaria = ({
                             <input
                               type="checkbox"
                               name="autorizaGrabacion"
-                              checked={asistente.autorizaGrabacion}
-                              onChange={(e) => handleChange(e, index, "asistentes")}
+                              checked={asistentePlan.autorizaGrabacion}
+                              onChange={(e) =>
+                                handleChange(e, index, "asistentesPlan")
+                              }
                             />
                           </td>
                           <td>
                             <input
                               type="text"
                               name="firmaParticipacion"
-                              value={asistente.firmaParticipacion}
-                              onChange={(e) => handleChange(e, index, "asistentes")}
+                              value={asistentePlan.firmaParticipacion}
+                              onChange={(e) =>
+                                handleChange(e, index, "asistentesPlan")
+                              }
                               placeholder="Firma o participación virtual"
                             />
                           </td>
@@ -686,14 +788,16 @@ export const EditarActividadComplementaria = ({
                       ))}
                     </tbody>
                   </table>
-                  <button type="button" className="add-row-button" onClick={addAsistente}>
+                  <button
+                    type="button"
+                    className="add-row-button"
+                    onClick={addAsistente}
+                  >
                     Agregar Asistente
                   </button>
                 </div>
               </div>
             )}
-
-            
 
             {/* Botones de Acción */}
             <div className="button-group">
@@ -705,24 +809,34 @@ export const EditarActividadComplementaria = ({
               >
                 Cancelar
               </button>
-              <button type="submit" className="submit-button" disabled={loading}>
+              <button
+                type="submit"
+                className="submit-button"
+                disabled={loading}
+              >
                 {loading && <Loader2 className="loading-spinner" />}
-                {loading ? "Guardando..." : "Actualizar Actividad"}
+                {loading ? "Guardando..." : "Actualizar Plan"}
               </button>
             </div>
           </form>
           {/* Navegación entre secciones */}
-            <div className="modal-navigation">
-              {currentSection === "acta" ? (
-                <button className="nav-button" onClick={() => setCurrentSection("registro")}>
-                  → Registro de Asistencia
-                </button>
-              ) : (
-                <button className="nav-button" onClick={() => setCurrentSection("acta")}>
-                  ← Actividades Complementarias
-                </button>
-              )}
-            </div>
+          <div className="modal-navigation">
+            {currentSection === "acta" ? (
+              <button
+                className="nav-button"
+                onClick={() => setCurrentSection("registro")}
+              >
+                → Registro de Asistencia
+              </button>
+            ) : (
+              <button
+                className="nav-button"
+                onClick={() => setCurrentSection("acta")}
+              >
+                ← Plan de Mejoramiento
+              </button>
+            )}
+          </div>
           {error && <p className="error-message">{error}</p>}
         </div>
       </div>
@@ -730,4 +844,4 @@ export const EditarActividadComplementaria = ({
   );
 };
 
-export default EditarActividadComplementaria;
+export default EditarPlanMejoramiento;

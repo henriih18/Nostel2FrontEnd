@@ -53,16 +53,30 @@ const Instructor = () => {
   if (!instructor) return <div>No se encontró el instructor</div>;
 
   return (
-    <div className="containerInstructor">
-      <h2>Perfil del Instructor</h2>
-      <div className="info">
-        <p><strong>Documento:</strong> {instructor.numeroDocente}</p>
-        <p><strong>Nombres:</strong> {instructor.nombres}</p>
-        <p><strong>Apellidos:</strong> {instructor.apellidos}</p>
-        <p><strong>Correo:</strong> {instructor.correo}</p>
-        <p><strong>Teléfono:</strong> {instructor.telefono}</p>
-        <p><strong>Área:</strong> {instructor.area}</p>
-        <button>Editar Información</button>
+    <div className="containerAprendiz containerI">
+      <div className="containerInfo">
+        <h3>Perfil del Instructor</h3>
+        <div className="info">
+          <p>
+            <strong>Documento:</strong> {instructor.numeroDocente}
+          </p>
+          <p>
+            <strong>Nombres:</strong> {instructor.nombres}
+          </p>
+          <p>
+            <strong>Apellidos:</strong> {instructor.apellidos}
+          </p>
+          <p>
+            <strong>Correo:</strong> {instructor.correo}
+          </p>
+          <p>
+            <strong>Teléfono:</strong> {instructor.telefono}
+          </p>
+          <p>
+            <strong>Área:</strong> {instructor.area}
+          </p>
+          <button>Editar Información</button>
+        </div>
       </div>
     </div>
   );

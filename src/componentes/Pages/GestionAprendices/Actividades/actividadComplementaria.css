@@ -405,7 +405,10 @@ backdrop-filter: blur(10px);
 .acta-tabla .logoActaCell {
   border: none;
   padding: 0;
+  text-align: center;
+  
 }
+
 
 .acta-tabla tfoot th,
 .acta-tabla tfoot td {

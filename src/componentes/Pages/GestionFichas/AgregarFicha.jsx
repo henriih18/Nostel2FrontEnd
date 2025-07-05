@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './AgregarFicha.css'; // Asegúrate de tener un archivo CSS para estilos
+import { toast } from 'react-toastify';
 
 
 export const AgregarFicha = () => {
@@ -17,7 +18,8 @@ export const AgregarFicha = () => {
                 const response = await axios.get(`${API_URL}/programas`);
                 setProgramas(response.data);
             } catch (error) {
-                console.error("Error cargando programas:", error);
+                /* toast.error("Error al cargar programas") */
+                /* console.error("Error cargando programas:", error); */
             }
         };
         cargarProgramas();
@@ -39,8 +41,9 @@ export const AgregarFicha = () => {
             const token = sessionStorage.getItem('token');
 
             if (!token) {
-                console.error('No hay token de autenticación');
-                setError('Sesión no válida. Por favor inicie sesión nuevamente.');
+                toast.error("Sesión no válida. Por favor inicie sesión nuevamente.")
+                /* console.error('No hay token de autenticación'); */
+                /* setError('Sesión no válida. Por favor inicie sesión nuevamente.'); */
                 setTimeout(() => {
                     navigate('/login');
                 }, 3000);
@@ -69,8 +72,9 @@ export const AgregarFicha = () => {
             // Redirigir a la lista de fichas después de agregar
             navigate('/gestion-fichas');
         } catch (error) {
-            console.error('Error al agregar ficha:', error);
-            setError('Hubo un problema al agregar la ficha. Por favor, inténtelo de nuevo.');
+            toast.error("Hubo un problema al agregar la ficha. Por favor, inténtelo de nuevo.")
+            /* console.error('Error al agregar ficha:', error); */
+            /* setError('Hubo un problema al agregar la ficha. Por favor, inténtelo de nuevo.'); */
         }
     };
 

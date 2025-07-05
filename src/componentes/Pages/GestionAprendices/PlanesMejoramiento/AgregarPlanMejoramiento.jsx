@@ -438,7 +438,8 @@ const AgregarPlanMejoramiento = () => {
       const token = sessionStorage.getItem("token");
 
       if (!token) {
-        setError("No se ha identificado al instructor");
+        toast.error("No se ha identificado al instructor")
+        /* setError("No se ha identificado al instructor"); */
         setLoading(false);
         return;
       }
@@ -454,20 +455,21 @@ const AgregarPlanMejoramiento = () => {
         }
       );
       /* setShowSuccessModal(true); */
-      toast.success("Actividad guardada con exito.")
+      toast.success("¡Plan de mejoramiento guardado exitosamente!")
 
       setTimeout(() => {
         setShowSuccessModal(false);
         navigate(`/aprendices/${idAprendiz}`);
       });
     } catch (err) {
-      console.error("Error al guardar el plan:", err);
+      /* console.error("Error al guardar el plan:", err); */
       if (err.response && err.response.status === 401) {
         setError("Sesión expirada. Por favor, inicie sesión nuevamente.");
         sessionStorage.clear();
         navigate("/login");
       } else {
-        setError(`Error: ${err.response?.data?.message || err.message}`);
+        toast.error(`Error: ${err.response?.data?.message || err.message}`)
+        /* setError(`Error: ${err.response?.data?.message || err.message}`); */
       }
     } finally {
       setLoading(false);

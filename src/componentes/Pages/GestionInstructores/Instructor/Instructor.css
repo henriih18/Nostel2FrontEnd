@@ -1,0 +1,19 @@
+.containerInstructor {
+    background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(24px);
+  border-radius: var(--border-radius-xl);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: var(--spacing-8);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.08);
+  animation: slideInUp 0.4s ease-out;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: solid;
+}
+
+.containerI {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

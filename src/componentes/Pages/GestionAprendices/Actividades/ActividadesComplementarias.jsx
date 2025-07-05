@@ -9,6 +9,10 @@ import logoSena from "../../../../assets/images/logoSena.png";
 import html2pdf from "html2pdf.js";
 import { toast } from "react-toastify";
 
+import pdfMake from "pdfmake/build/pdfmake";
+import * as pdfFonts from "pdfmake/build/vfs_fonts";
+pdfMake.vfs = pdfFonts?.default?.pdfMake?.vfs || pdfFonts?.pdfMake?.vfs;
+
 const ActividadesComplementarias = ({ idAprendiz }) => {
   const navigate = useNavigate();
   const [actividades, setActividades] = useState([]);
@@ -27,8 +31,8 @@ const ActividadesComplementarias = ({ idAprendiz }) => {
   const API_URL = import.meta.env.VITE_API_URL;
 
   // Inicializamos las referencias con useRef
-  const actaRef = useRef();
-  const registroRef = useRef();
+  /*   const actaRef = useRef();
+  const registroRef = useRef(); */
 
   useEffect(() => {
     const handleEsc = (e) => {
@@ -48,7 +52,7 @@ const ActividadesComplementarias = ({ idAprendiz }) => {
 
   useEffect(() => {
     if (!idAprendiz || isNaN(idAprendiz)) {
-      toast.error("ID de aprendiz invalido")
+      toast.error("ID de aprendiz invalido");
       /* setError("ID de aprendiz inválido."); */
       setLoading(false);
       return;
@@ -60,7 +64,7 @@ const ActividadesComplementarias = ({ idAprendiz }) => {
         const token = sessionStorage.getItem("token");
 
         if (!token) {
-          toast.error("No hay token de autenticación")
+          toast.error("No hay token de autenticación");
           /* setError("No hay token de autenticación"); */
           navigate("/login");
           return;
@@ -80,7 +84,7 @@ const ActividadesComplementarias = ({ idAprendiz }) => {
       } catch (err) {
         /* console.error("Error al cargar actividades:", err); */
         /* setError("Error al cargar las actividades complementarias."); */
-        toast.error("Error al cargar las actividades complementarias")
+        toast.error("Error al cargar las actividades complementarias");
       } finally {
         setLoading(false);
       }
@@ -121,36 +125,34 @@ const ActividadesComplementarias = ({ idAprendiz }) => {
 
   const handleAgregarActividad = () => {
     if (!idAprendiz || isNaN(idAprendiz)) {
-      toast.error("ID de aprendiz invalido. No se puede agregar actividad")
+      toast.error("ID de aprendiz invalido. No se puede agregar actividad");
       /* setError("ID de aprendiz inválido. No se puede agregar actividad."); */
       return;
     }
     navigate(`/agregar-actividad/${idAprendiz}`);
   };
 
+  const handleActividadActualizada = (actividadActualizada) => {
+    try {
+      if (!actividadActualizada?.idActividad) {
+        toast.error("ID de actividad inválido. No se pudo actualizar.");
+        return;
+      }
 
-const handleActividadActualizada = (actividadActualizada) => {
-  try {
-    if (!actividadActualizada?.idActividad) {
-      toast.error("ID de actividad inválido. No se pudo actualizar.");
-      return;
+      setActividades((prevActividades) =>
+        prevActividades.map((a) =>
+          a.idActividad === actividadActualizada.idActividad
+            ? actividadActualizada
+            : a
+        )
+      );
+      setShowEditModal(false);
+      setActividadEditar(null);
+      toast.success("Actividad complementaria actualizada con éxito.");
+    } catch (err) {
+      toast.error("Error al actualizar la actividad.");
     }
-
-    setActividades((prevActividades) =>
-      prevActividades.map((a) =>
-        a.idActividad === actividadActualizada.idActividad
-          ? actividadActualizada
-          : a
-      )
-    );
-    setShowEditModal(false);
-    setActividadEditar(null);
-    toast.success("Actividad complementaria actualizada con éxito.");
-  } catch (err) {
-    toast.error("Error al actualizar la actividad.");
-  }
-};
-
+  };
 
   const handleEditarActividad = (actividad) => {
     setActividadEditar(actividad);
@@ -162,7 +164,7 @@ const handleActividadActualizada = (actividadActualizada) => {
       const token = sessionStorage.getItem("token");
       if (!token) {
         toast.error("Sin token de autenticacion");
-        return
+        return;
       }
       setActividadAEliminar(null);
 
@@ -175,12 +177,12 @@ const handleActividadActualizada = (actividadActualizada) => {
           prev.filter((a) => a.idActividad !== idActividad)
         );
         /* setDeleteFeedback({ type: "success", message: "Eliminado con éxito." }); */
-        toast.success("Actividad eliminada con exito.");
+        toast.success("Actividad complementaria eliminada con exito.");
       } else {
-        toast.error("No se pudo eliminar la actividad.");
+        toast.error("No se pudo eliminar la actividad complementaria.");
       }
     } catch (err) {
-      toast.error("Error al eliminar la actividad.");
+      toast.error("Error al eliminar la actividad complementaria.");
     }
   };
 
@@ -190,63 +192,334 @@ const handleActividadActualizada = (actividadActualizada) => {
     return actividad.idInstructor === instructor.idInstructor;
   };
 
-  const handlePrintActa = useReactToPrint({
-    contentRef: actaRef,
-    documentTitle: `Acta_${selectedActividad?.idActividad || "default"}`,
-    pageStyle: `
-      @page {
-        size: letter portrait;
-        margin: 3cm 2.5cm 2.5cm 2.5cm;
-      }
-      @media print {
-        body * {
-          visibility: hidden;
-        }
-        .acta-imprimible, .acta-imprimible * {
-          visibility: visible;
-        }
+  /* const convertirImagenABase64 = (url) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      fetch(url)
+        .then((res) => res.blob())
+        .then((blob) => {
+          reader.onloadend = () => resolve(reader.result);
+          reader.onerror = reject;
+          reader.readAsDataURL(blob);
+        });
+    });
+  }; */
 
-        
+  const convertirImagenABase64 = (url, opacity = 0.6) => {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.crossOrigin = "anonymous"; // necesario si la imagen está en otra ruta/origen
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        canvas.width = img.width;
+        canvas.height = img.height;
 
-        .acta-imprimible {
-          position: absolute;
-        top:    0;    
-        left:   0;    
-        right:  0;    
-        bottom: 0;    
-        box-sizing: border-box;
-        padding-top:    0mm;  /* altura del logo + pequeño hueco */
-        padding-bottom: 0mm;
-        }
+        const ctx = canvas.getContext("2d");
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.globalAlpha = opacity; // Aplica opacidad al dibujar
+        ctx.drawImage(img, 0, 0);
 
-        .acta-tabla {
-        margin-top: 0;
-        
-      }
+        resolve(canvas.toDataURL("image/png"));
+      };
+      img.onerror = reject;
+      img.src = url;
+    });
+  };
 
-       .containerFooterActa {
-    position: fixed;
-    bottom: 0;            /* justo al límite del área imprimible */
-    left: 50%;
-    transform: translateX(-50%);
-    font-family: Calibri, sans-serif;
-    font-size: 12pt;
-    text-align: center;
-    z-index: 999;
+  function parseParrafosHTML(html) {
+    const div = document.createElement("div");
+    div.innerHTML = html;
+    const paragraphs = Array.from(div.querySelectorAll("p"));
+
+    // Retorna un array de objetos de texto con salto de línea entre párrafos
+    return paragraphs.map((p) => ({
+      text: p.textContent.trim(),
+      margin: [0, 0, 0, 6], // Espacio entre párrafos
+    }));
   }
 
-  .acta-tabla tbody.block-group3 {
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
-  }
+  const generarActa = async () => {
+    const logoBase64 = await convertirImagenABase64(logoSena, 0.6);
+    const acta = selectedActividad;
 
-        
-      }
-    `,
-    onAfterPrint: () => console.log("Impresión del acta completada."),
-  });
+    const docDefinition = {
+      pageSize: "LETTER",
+      pageMargins: [72, 85, 72, 72],
+      header: {
+        margin: [40, 30, 40, 0],
+        columns: [
+          { width: "*", text: "" }, // espacio izquierdo
+          {
+            image: logoBase64,
+            width: 50,
+            alignment: "center",
+            margin: [0, 0, 0, 0],
+          },
+          { width: "*", text: "" }, // espacio derecho
+        ],
+      },
+      footer: function (currentPage, pageCount) {
+        return {
+          margin: [40, 10, 40, 20],
+          columns: [
+            {
+              text: "GOR-F-084 V02",
+              alignment: "center",
+              fontSize: 12,
+              margin: [0, 5, 0, 0],
+              opacity: 0.6,
+            },
+          ],
+        };
+      },
+      content: [
+        {
+          table: {
+            widths: ["*", "*", "*", "*", "*"],
+            body: [
+              [
+                {
+                  text: `ACTA No. ${acta?.actaNumber || ""}`,
+                  colSpan: 5,
+                  bold: true,
+                  alignment: "center",
+                },
+                {},
+                {},
+                {},
+                {},
+              ],
+              [
+                {
+                  colSpan: 5,
+                  text: [
+                    { text: "NOMBRE DEL COMITÉ O DE LA REUNIÓN: ", bold: true },
+                    { text: acta?.nombreComite || "" },
+                  ],
+                },
+                {},
+                {},
+                {},
+                {},
+              ],
+              [
+                {
+                  colSpan: 2,
+                  text: [
+                    { text: "CIUDAD Y FECHA: ", bold: true },
+                    {
+                      text: `${acta?.ciudad || ""}, ${
+                        formatDate(acta?.fecha) || ""
+                      }`,
+                    },
+                  ],
+                },
 
-  const handlePrintRegistro = useReactToPrint({
+                {},
+                "",
+                {
+                  text: [
+                    { text: "HORA INICIO: ", bold: true },
+                    { text: acta?.horaInicio || "" },
+                  ],
+                },
+                {
+                  text: [
+                    { text: "HORA FIN: ", bold: true },
+                    { text: acta?.horaFin || "" },
+                  ],
+                },
+              ],
+              [
+                {
+                  colSpan: 2,
+                  text: [
+                    { text: "LUGAR Y/O ENLACE: ", bold: true },
+                    { text: acta?.lugarEnlace || "" },
+                  ],
+                },
+
+                {},
+                "",
+                {
+                  colSpan: 2,
+                  text: [
+                    { text: "DIRECCIÓN / REGIONAL / CENTRO: ", bold: true },
+                    { text: acta?.direccionRegionalCentro || "" },
+                  ],
+                },
+                {},
+              ],
+              [
+                {
+                  text: "AGENDA O PUNTOS PARA DESARROLLAR:",
+                  colSpan: 5,
+                  bold: true,
+                  alignment: "center",
+                },
+                {},
+                {},
+                {},
+                {},
+              ],
+              [
+                { colSpan: 5, stack: parseParrafosHTML(acta?.agenda || "") },
+                {},
+                {},
+                {},
+                {},
+              ],
+              [
+                {
+                  text: "OBJETIVO(S) DE LA REUNIÓN:",
+                  colSpan: 5,
+                  bold: true,
+                  alignment: "center",
+                },
+                {},
+                {},
+                {},
+                {},
+              ],
+              [
+                { colSpan: 5, stack: parseParrafosHTML(acta?.objetivos || "") },
+                {},
+                {},
+                {},
+                {},
+              ],
+              [
+                {
+                  text: "DESARROLLO DE LA REUNIÓN",
+                  colSpan: 5,
+                  bold: true,
+                  alignment: "center",
+                },
+                {},
+                {},
+                {},
+                {},
+              ],
+              [
+                {
+                  colSpan: 5,
+                  stack: parseParrafosHTML(acta?.desarrollo || ""),
+                },
+                {},
+                {},
+                {},
+                {},
+              ],
+              [
+                {
+                  text: "CONCLUSIONES",
+                  colSpan: 5,
+                  bold: true,
+                  alignment: "center",
+                },
+                {},
+                {},
+                {},
+                {},
+              ],
+              [
+                {
+                  colSpan: 5,
+                  stack: parseParrafosHTML(acta?.conclusiones || ""),
+                },
+                {},
+                {},
+                {},
+                {},
+              ],
+              [
+                {
+                  text: "ESTABLECIMIENTO Y ACEPTACIÓN DE COMPROMISOS",
+                  colSpan: 5,
+                  bold: true,
+                  alignment: "center",
+                },
+                {},
+                {},
+                {},
+                {},
+              ],
+              [
+                {
+                  text: "ACTIVIDAD / DECISIÓN",
+                  colSpan: 2,
+                  style: "tableHeader",
+                },
+                {},
+                { text: "FECHA", style: "tableHeader" },
+                { text: "RESPONSABLE", style: "tableHeader" },
+                { text: "FIRMA O PARTICIPACIÓN VIRTUAL", style: "tableHeader" },
+              ],
+              ...(acta?.compromisos || []).map((c) => [
+                { text: c.actividadDecision || "", colSpan: 2 },
+                {},
+                formatDate(c.fecha) || "",
+                c.responsable || "",
+                c.firmaParticipacion || "",
+              ]),
+              [
+                {
+                  text: "ASISTENTES Y APROBACIÓN DECISIONES",
+                  colSpan: 5,
+                  bold: true,
+                  alignment: "center",
+                },
+                {},
+                {},
+                {},
+                {},
+              ],
+              [
+                { text: "NOMBRE", style: "tableHeader" },
+                { text: "DEPENDENCIA / EMPRESA", style: "tableHeader" },
+                { text: "APRUEBA (SI/NO)", style: "tableHeader" },
+                { text: "OBSERVACIÓN", style: "tableHeader" },
+                { text: "FIRMA O PARTICIPACIÓN VIRTUAL", style: "tableHeader" },
+              ],
+              ...(acta?.asistentes || []).map((a) => [
+                a.nombre || "",
+                a.dependenciaEmpresa || "",
+                a.aprueba || "",
+                a.observacion || "",
+                a.firmaParticipacion || "",
+              ]),
+              [
+                {
+                  text: "De acuerdo con la Ley 1581 de 2012, Protección de Datos Personales, el Servicio Nacional de Aprendizaje SENA se compromete a garantizar la seguridad y protección de los datos personales que se encuentran almacenados en este documento, y les dará el tratamiento correspondiente en cumplimiento de lo establecido legalmente.",
+                  colSpan: 5,
+                  fontSize: 9,
+                  alignment: "justify",
+                },
+                {},
+                {},
+                {},
+                {},
+              ],
+            ],
+          },
+          layout: {
+            hLineWidth: () => 0.5,
+            vLineWidth: () => 0.5,
+            hLineColor: () => "#000000",
+            vLineColor: () => "#000000",
+          },
+        },
+      ],
+      styles: {
+        titulo: { fontSize: 12, bold: true },
+        tableHeader: { bold: true },
+      },
+    };
+
+    pdfMake.createPdf(docDefinition).open();
+  };
+
+  /* const handlePrintRegistro = useReactToPrint({
     contentRef: registroRef,
     documentTitle: `Registro_Asistencia_${
       selectedActividad?.idActividad || "default"
@@ -293,7 +566,192 @@ const handleActividadActualizada = (actividadActualizada) => {
       }
     `,
     onAfterPrint: () => console.log("Impresión del registro completada."),
-  });
+  }); */
+
+  const generarRegistroAsistencia = async () => {
+    const logoBase64 = await convertirImagenABase64(logoSena, 0.6);
+    const acta = selectedActividad;
+
+    // Encabezado fecha desglosada
+    const { dia, mes, anio } = formatFechaModal(acta.fecha || new Date());
+
+    // Armar filas de asistentes (máximo 15)
+    const asistentes = acta.asistentes || [];
+    const filasAsistentes = [];
+    for (let i = 0; i < asistentes.length; i++) {
+      const a = asistentes[i];
+      filasAsistentes.push([
+        { text: `${i + 1}`, alignment: "center", fontSize: 8, margin: [0, 3] },
+        { text: a.nombre || "", fontSize: 8, margin: [0, 3] },
+        { text: a.numeroDocumento || "", fontSize: 8, margin: [0, 3] },
+        { text: a.planta ? "SI" : "NO", fontSize: 8, margin: [0, 3] },
+        { text: a.contratista ? "SI" : "NO", fontSize: 8, margin: [0, 3] },
+        { text: a.otro || "", fontSize: 8, margin: [0, 3] },
+        { text: a.dependenciaEmpresa || "", fontSize: 8, margin: [0, 3] },
+        { text: a.correoElectronico || "", fontSize: 8, margin: [0, 3] },
+        { text: a.telefonoExt || "", fontSize: 8, margin: [0, 3] },
+        {
+          text: a.autorizaGrabacion ? "SÍ" : "NO",
+          fontSize: 8,
+          margin: [0, 3],
+        },
+        { text: a.firmaParticipacion || "", fontSize: 8, margin: [0, 3] },
+      ]);
+    }
+    // Luego completas hasta 15 con celdas vacías
+    for (let i = asistentes.length; i < 15; i++) {
+      filasAsistentes.push([
+        { text: `${i + 1}`, alignment: "center", fontSize: 8, margin: [0, 3] },
+        ...Array(10).fill({ text: "", fontSize: 8 }),
+      ]);
+    }
+
+    const docDefinition = {
+      pageSize: "LETTER",
+      pageOrientation: "landscape",
+      pageMargins: [60, 85, 72, 72],
+      header: {
+        margin: [40, 20, 40, 0],
+        columns: [
+          { width: "*", text: "" },
+          {
+            image: logoBase64,
+            width: 50,
+            alignment: "center",
+            opacity: 0.6,
+          },
+          { width: "*", text: "" },
+        ],
+      },
+      footer: function () {
+        return {
+          margin: [40, 0, 40, 20],
+
+          text: "GOR-F-085 V02",
+          alignment: "center",
+          fontSize: 9,
+          margin: [0, 5, 0, 0],
+          opacity: 0.6,
+        };
+      },
+      content: [
+        {
+          table: {
+            widths: [
+              25, // Nº
+              90, // NOMBRES Y APELLIDOS
+              60, // No. DOCUMENTO
+              30, // PLANTA
+              30, // CONTRATISTA
+              50, // OTRO / ¿CUÁL?
+              70, // DEPENDENCIA / EMPRESA
+              85, // CORREO ELECTRÓNICO
+              50, // TELÉFONO/EXT.
+              30, // AUTORIZA GRABACIÓN
+              65, // FIRMA O PARTICIPACIÓN VIRTUAL
+            ],
+            body: [
+              [
+                {
+                  text: `REGISTRO DE ASISTENCIA / DÍA ${dia} DEL MES DE ${mes} DEL AÑO ${anio}`,
+                  colSpan: 11,
+                  alignment: "center",
+                  fontSize: 9,
+                  bold: true,
+                },
+                ...Array(10).fill({}),
+              ],
+              [
+                {
+                  text: "OBJETIVO(S)",
+                  bold: true,
+                  margin: [2, 3, 2, 3],
+                  fontSize: 9,
+                },
+                {
+                  stack: parseParrafosHTML(acta?.objetivos || ""),
+                  colSpan: 10,
+                  fontSize: 8,
+                },
+                ...Array(9).fill({}),
+              ],
+              [
+                {
+                  text: "N°",
+                  style: "tableHeader",
+                  alignment: "center",
+                  fontSize: 8,
+                },
+                {
+                  text: "NOMBRES Y APELLIDOS",
+                  style: "tableHeader",
+                  fontSize: 8,
+                },
+                { text: "No. DOCUMENTO", style: "tableHeader", fontSize: 8 },
+                {
+                  text: "PLANTA",
+                  style: "tableHeader",
+                  alignment: "center",
+                  fontSize: 8,
+                },
+                {
+                  text: "CONTRATISTA",
+                  style: "tableHeader",
+                  alignment: "center",
+                  fontSize: 6.5,
+                },
+                { text: "OTRO ¿CUÁL?", style: "tableHeader", fontSize: 8 },
+                {
+                  text: "DEPENDENCIA / EMPRESA",
+                  style: "tableHeader",
+                  fontSize: 8,
+                },
+                {
+                  text: "CORREO ELECTRÓNICO",
+                  style: "tableHeader",
+                  fontSize: 8,
+                },
+                { text: "TELÉFONO / EXT.", style: "tableHeader", fontSize: 8 },
+                {
+                  text: "AUTORIZA GRABACIÓN",
+                  style: "tableHeader",
+                  alignment: "center",
+                  fontSize: 8,
+                },
+                {
+                  text: "FIRMA O PARTICIPACIÓN VIRTUAL",
+                  style: "tableHeader",
+                  fontSize: 8,
+                },
+              ],
+              ...filasAsistentes,
+            ],
+          },
+          layout: {
+            hLineWidth: () => 0.5,
+            vLineWidth: () => 0.5,
+            hLineColor: () => "#000000",
+            vLineColor: () => "#000000",
+          },
+        },
+        {
+          text: "De acuerdo con la Ley 1581 de 2012, Protección de Datos Personales, el Servicio Nacional de Aprendizaje SENA se compromete a garantizar la seguridad y protección de los datos personales que se encuentran almacenados en este documento, y les dará el tratamiento correspondiente en cumplimiento de lo establecido legalmente.",
+          fontSize: 8,
+          alignment: "justify",
+          margin: [40, 15, 0, 0],
+        },
+      ],
+      styles: {
+        tableHeader: {
+          bold: true,
+          fontSize: 8,
+          fillColor: "#ffffff", // sin color de fondo
+        },
+      },
+    };
+
+    pdfMake.createPdf(docDefinition).open();
+  };
 
   const handleRowClick = (actividad) => {
     setSelectedActividad(actividad);
@@ -329,12 +787,22 @@ const handleActividadActualizada = (actividadActualizada) => {
     }
   };
 
-  const getInstructorNombre = (actividad) => {
+  /* const getInstructorNombre = (actividad) => {
     if (!actividad.asistentes || actividad.asistentes.length === 0)
       return "No asignado";
     const instructorAsistente = actividad.asistentes.find(
       (asistente) => asistente.idInstructor === actividad.idInstructor
     );
+    return instructorAsistente ? instructorAsistente.nombre : "No asignado";
+  }; */
+  const getInstructorNombre = (actividad) => {
+    if (!actividad.asistentes || actividad.asistentes.length === 0)
+      return "No asignado";
+
+    const instructorAsistente = actividad.asistentes.find(
+      (asistente) => asistente.idInstructor === actividad.idInstructor
+    );
+
     return instructorAsistente ? instructorAsistente.nombre : "No asignado";
   };
 
@@ -499,7 +967,7 @@ const handleActividadActualizada = (actividadActualizada) => {
               {/* Sección de Actividades Complementarias */}
               {currentSection === "actividades" && (
                 <div
-                  ref={actaRef}
+                  
                   className={`acta-imprimible ${
                     currentSection === "actividades"
                       ? "slide-in-left"
@@ -507,14 +975,25 @@ const handleActividadActualizada = (actividadActualizada) => {
                   }`}
                 >
                   <table className="acta-tabla">
-                    <thead>
+                    {/*  <thead className="thead-container">
                       <div colSpan="5" className="logoActaCell">
-                        <img
+                        <img 
                           src={logoSena}
                           alt="Logo SENA"
                           className="registro-logo"
                         />
                       </div>
+                    </thead> */}
+                    <thead class="thead-container">
+                      <tr>
+                        <td colspan="5" class="logoActaCell">
+                          <img
+                            src={logoSena}
+                            alt="Logo SENA"
+                            className="registro-logo"
+                          />
+                        </td>
+                      </tr>
                     </thead>
 
                     <tbody>
@@ -686,7 +1165,7 @@ const handleActividadActualizada = (actividadActualizada) => {
               {/* Sección de Registro de Asistencia */}
               {currentSection === "registro" && (
                 <div
-                  ref={registroRef}
+                  
                   className={`registro-imprimible ${
                     currentSection === "registro"
                       ? "slide-in-left"
@@ -811,7 +1290,7 @@ const handleActividadActualizada = (actividadActualizada) => {
                 </button>
                 {currentSection === "actividades" ? (
                   <>
-                    <button className="submit-button" onClick={handlePrintActa}>
+                    <button className="submit-button" onClick={generarActa}>
                       Imprimir Acta
                     </button>
                   </>
@@ -819,7 +1298,7 @@ const handleActividadActualizada = (actividadActualizada) => {
                   <>
                     <button
                       className="submit-button"
-                      onClick={handlePrintRegistro}
+                      onClick={generarRegistroAsistencia}
                     >
                       Imprimir Registro
                     </button>

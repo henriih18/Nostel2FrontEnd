@@ -94,8 +94,9 @@ label {
 input[type="text"],
 textarea {
   width: 100%;
-     padding: var(--spacing-3) var(--spacing-5);
-    padding-left: var(--spacing-8);
+  
+/*      padding: var(--spacing-3) var(--spacing-5);
+ */    /* padding-left: var(--spacing-8); */
     border: 2px solid rgba(255, 255, 255, 0.2);
     border-radius: var(--border-radius);
     background: rgba(255, 255, 255, 0.4);
@@ -113,6 +114,7 @@ input[type="date"],
 input[type="time"],
 select{
   width: 100%;
+  color: var(--gray-800);
   padding: var(--spacing-3) var(--spacing-5);
   border-radius: var(--border-radius);
     background: rgba(255, 255, 255, 0.4);
@@ -391,10 +393,10 @@ margin-right:2rem;
   margin: 20px auto;
   padding: 20px;
   border-radius: 10px;
-  background-color: rgba(158, 182, 156, 0.801);
   backdrop-filter: blur(25px);
   animation: fadeIn 0.3s ease;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.25) ;
   overflow-y: auto;
 }
 
@@ -473,6 +475,7 @@ margin-right:2rem;
   width: 100%;
   padding: 6px;
   font-size: 0.875rem;
+  color: var(--gray-800);
   border: 1px solid #ddd;
   border-radius: 4px;
   box-sizing: border-box;

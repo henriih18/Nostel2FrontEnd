@@ -1,0 +1,39 @@
+.modal-container{
+    font-family: 'Arial', sans-serif;
+  max-width: 95%;
+  max-height: 90vh;
+  margin: 20px auto;
+  padding: 20px;
+  border-radius: 10px;
+  backdrop-filter: blur(25px);
+  animation: fadeIn 0.3s ease;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+  background: linear-gradient(135deg, 
+        rgba(142, 220, 144, 0.1) 0%);
+        background-color: none !important;
+}
+
+.modal-body-e {
+    
+}
+
+.form-section {
+    background: rgba(255, 255, 255, 0.25) !important;
+    box-shadow: 
+        0 8px 32px 0 rgba(0, 0, 0, 0.37),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
+}
+
+input {
+   width: 100%;
+   border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+  font-size: 0.875rem;
+  vertical-align: middle;
+  white-space: normal; /* Permitir que el texto se envuelva */
+  word-wrap: break-word; /* Asegurar que las palabras largas se rompan */
+ /*  text-align: center; */
+   
+}

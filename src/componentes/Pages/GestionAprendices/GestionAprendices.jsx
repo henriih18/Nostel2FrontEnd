@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./GestionAprendices.css";
+import { toast } from "react-toastify";
 
 export const GestionAprendices = () => {
   const [aprendices, setAprendices] = useState([]);
@@ -42,8 +43,9 @@ export const GestionAprendices = () => {
       setAprendices(response.data);
       setLoading(false);
     } catch (error) {
-      console.error("Error al obtener aprendices:", error);
-      setError("Error al cargar los aprendices.");
+      toast.error("Error al cargar los aprendices")
+      /* console.error("Error al obtener aprendices:", error); */
+      /* setError("Error al cargar los aprendices."); */
       setLoading(false);
     }
   };
@@ -57,7 +59,8 @@ export const GestionAprendices = () => {
       const response = await axios.get(`${API_URL}/fichas`, config);
       setFichas(response.data);
     } catch (error) {
-      console.error("Error al obtener fichas:", error);
+      toast.error("Error al obtener fichas")
+      /* console.error("Error al obtener fichas:", error); */
     }
   };
 

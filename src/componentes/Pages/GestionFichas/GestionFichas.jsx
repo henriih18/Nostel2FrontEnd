@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./GestionFichas.css";
+import { toast } from "react-toastify";
 
 export const GestionFichas = () => {
   const [fichas, setFichas] = useState([]);
@@ -29,8 +30,9 @@ export const GestionFichas = () => {
       const token = sessionStorage.getItem("token");
 
       if (!token) {
-        console.error("No hay token de autenticación");
-        setError("Sesión no válida. Por favor inicie sesión nuevamente.");
+        toast.error("Sesión no válida. Por favor inicie sesión nuevamente.")
+        /* console.error("No hay token de autenticación"); */
+        /* setError("Sesión no válida. Por favor inicie sesión nuevamente."); */
         setTimeout(() => {
           navigate("/login");
         }, 3000);
@@ -49,7 +51,7 @@ export const GestionFichas = () => {
       setFichas(response.data);
       setLoading(false);
     } catch (error) {
-      console.error("Error al obtener fichas:", error);
+      
       handleApiError(error);
     }
   };
@@ -57,18 +59,22 @@ export const GestionFichas = () => {
   const handleApiError = (error) => {
     if (error.response) {
       if (error.response.status === 403 || error.response.status === 401) {
-        setError("No tiene permisos para acceder a esta información.");
+        toast.warn("No tiene permisos para acceder a esta información.")
+        /* setError("No tiene permisos para acceder a esta información."); */
         localStorage.removeItem("token");
         setTimeout(() => {
           navigate("/login");
         }, 3000);
       } else {
-        setError(`Error del servidor: ${error.response.status}`);
+        toast.error(`Error del servidor: ${error.response.status}`)
+        /* setError(`Error del servidor: ${error.response.status}`); */
       }
     } else if (error.request) {
-      setError("No se pudo conectar con el servidor.");
+      toast.error("No se pudo conectar con el servidor.")
+      /* setError("No se pudo conectar con el servidor."); */
     } else {
-      setError("Error al procesar la solicitud.");
+      toast.error("Error al procesar la solicitud.")
+      /* setError("Error al procesar la solicitud."); */
     }
     setLoading(false);
   };
@@ -83,7 +89,8 @@ export const GestionFichas = () => {
         const token = sessionStorage.getItem("token");
 
         if (!token) {
-          setError("Sesión no válida. Por favor inicie sesión nuevamente.");
+          toast.error("Sesión no válida. Por favor inicie sesión nuevamente.")
+          /* setError("Sesión no válida. Por favor inicie sesión nuevamente."); */
           setTimeout(() => {
             navigate("/login");
           }, 3000);
@@ -100,8 +107,9 @@ export const GestionFichas = () => {
         await axios.delete(`${API_URL}/fichas/${idFicha}`, config);
         fetchFichas();
       } catch (error) {
-        console.error("Error al eliminar la ficha:", error);
-        setError("Error al eliminar la ficha. Por favor, inténtelo de nuevo.");
+        toast.error("Error al eliminar la ficha. Por favor, inténtelo de nuevo.")
+        /* console.error("Error al eliminar la ficha:", error); */
+        /* setError("Error al eliminar la ficha. Por favor, inténtelo de nuevo."); */
       }
     }
   };

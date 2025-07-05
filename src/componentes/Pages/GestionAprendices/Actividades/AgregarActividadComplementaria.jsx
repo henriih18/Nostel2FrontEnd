@@ -55,7 +55,7 @@ export const AgregarActividadComplementaria = () => {
         contratista: false,
         otro: "",
         dependenciaEmpresa: "",
-        aprueba: "SÍ",
+        aprueba: "",
         observacion: "",
         autorizaGrabacion: false,
         firmaParticipacion: "",
@@ -121,7 +121,7 @@ export const AgregarActividadComplementaria = () => {
               contratista: false,
               otro: "",
               dependenciaEmpresa: "Instructor",
-              aprueba: "SÍ",
+              aprueba: "",
               observacion: "",
               autorizaGrabacion: false,
               firmaParticipacion: "",
@@ -188,7 +188,7 @@ export const AgregarActividadComplementaria = () => {
               contratista: false,
               otro: "",
               dependenciaEmpresa: "Aprendiz",
-              aprueba: "SÍ",
+              aprueba: "",
               observacion: "",
               autorizaGrabacion: false,
               firmaParticipacion: "",
@@ -329,7 +329,7 @@ export const AgregarActividadComplementaria = () => {
           correoElectronico: "",
           telefonoExt: "",
           autorizaGrabacion: false,
-          aprueba: "SÍ",
+          aprueba: "",
           observacion: "",
           firmaParticipacion: "",
         },
@@ -390,6 +390,8 @@ export const AgregarActividadComplementaria = () => {
           telefonoExt: asistente.telefonoExt,
           autorizaGrabacion: asistente.autorizaGrabacion,
           firmaParticipacion: asistente.firmaParticipacion,
+          aprueba: asistente.aprueba || "", // Asegura que aprueba se copie
+        observacion: asistente.observacion || ""
         }))
       );
       setShowModal(true);
@@ -479,7 +481,7 @@ export const AgregarActividadComplementaria = () => {
         planta: asistente.planta === true,
         contratista: asistente.contratista === true,
         autorizaGrabacion: asistente.autorizaGrabacion === true,
-        aprueba: asistente.aprueba || "SÍ",
+        aprueba: asistente.aprueba || "",
         observacion: asistente.observacion || "",
       })),
     }));
@@ -518,12 +520,13 @@ export const AgregarActividadComplementaria = () => {
           },
         }
       );
-      setShowSuccessModal(true);
+      /* setShowSuccessModal(true); */
+      toast.success("¡Actividad complementaria guardada exitosamente!")
 
       setTimeout(() => {
         setShowSuccessModal(false);
         navigate(`/aprendices/${idAprendiz}`);
-      }, 2000);
+      });
     } catch (err) {
       
       if (err.response && err.response.status === 401) {
@@ -1129,13 +1132,13 @@ export const AgregarActividadComplementaria = () => {
         </div>
       )}
 
-      {showSuccessModal && (
+      {/* {showSuccessModal && (
         <div className="success-modal-overlay">
           <div className="success-modal-content">
             <h2>¡Actividad complementaria guardada exitosamente!</h2>
           </div>
         </div>
-      )}
+      )} */}
     </div>
   );
 };
