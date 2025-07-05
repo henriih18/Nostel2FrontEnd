@@ -106,7 +106,7 @@
 
 /* Información del usuario */
 .user-info {
-    background: rgba(255, 255, 255, 0.35);
+    background: rgba(255, 255, 255, 0.25);
     
     border-radius: var(--border-radius);
     padding: var(--spacing-3);

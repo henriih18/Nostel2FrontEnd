@@ -10,13 +10,16 @@
   box-shadow: 0 12px 36px rgba(0, 0, 0, 0.08);
   color: #2d3748;
   animation: slideInUp 0.4s ease-out;
+  box-shadow: 
+        0 8px 32px 0 rgba(0, 0, 0, 0.37),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
 .aboutus-title {
   font-size: 2rem;
   font-weight: bold;
   margin-bottom: 1rem;
-  background: linear-gradient(135deg, var(--gray-800), var(--primary-green));
+  background: var(--gray-800);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }

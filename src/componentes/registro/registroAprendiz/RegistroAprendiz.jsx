@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./RegistroAprendiz.css";
 import { Mail, Lock, Eye, EyeOff, AlertCircle, Loader2, Heart } from "lucide-react";
+import { toast } from "react-toastify";
 
 export const RegistroAprendiz = () => {
   const navigate = useNavigate();
@@ -10,6 +11,7 @@ export const RegistroAprendiz = () => {
   const [errores, setErrores] = useState({});
   const [loading, setLoading] = useState(false);
   const API_URL = import.meta.env.VITE_API_URL;
+  
 
 
 
@@ -129,7 +131,7 @@ export const RegistroAprendiz = () => {
     try {
       console.log("Datos enviados:", formData);
       await axios.post(`${API_URL}/aprendices/RegistroAprendiz`, formData);
-      alert("Registro exitoso.");
+      toast.success("Aprendiz registrado exitosamente");
       // Enviar correo utilizando la función de Azure
       await enviarCorreo(formData.correo);
       navigate("/login");
@@ -174,7 +176,7 @@ export const RegistroAprendiz = () => {
 
   const enviarCorreo = async (correo) => {
     if (!correo) {
-      console.error("El correo es inválido.");
+      /* console.error("El correo es inválido."); */
       return;
     }
 
@@ -187,12 +189,12 @@ export const RegistroAprendiz = () => {
       };
 
       await axios.post("https://nostel.up.railway.app/httpTrigger1", emailData);
-      console.log("Correo enviado exitosamente");
+      /* console.log("Correo enviado exitosamente"); */
     } catch (error) {
-      console.error(
+      /* console.error(
         "Error al enviar el correo:",
         error.response?.data || error.message
-      );
+      ); */
     }
   };
 

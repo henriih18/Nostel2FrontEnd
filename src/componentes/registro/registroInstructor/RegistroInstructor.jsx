@@ -14,6 +14,7 @@ export const RegistroInstructor = () => {
     correo: "",
     contrasena: "",
     telefono: "",
+    codigoSeguridad: "",
   });
 
   const [error, setError] = useState("");
@@ -48,6 +49,7 @@ export const RegistroInstructor = () => {
         correo: "",
         contrasena: "",
         telefono: "",
+        codigoSeguridad: "",
       });
       navigate("/login")
     } catch (err) {
@@ -149,7 +151,20 @@ export const RegistroInstructor = () => {
                 required
               />
             </div>
+            <div className="field-group">
+              <label>Codigo</label>
+              <input
+                type="text"
+                name="codigoSeguridad"
+                value={formData.codigoSeguridad}
+                onChange={handleChange}
+                placeholder="Codigo de registro"
+                required
+              />
+            </div>
           </div>
+
+          
         </div>
 
         <button type="submit" className="registro-button">

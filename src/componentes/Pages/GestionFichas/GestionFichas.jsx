@@ -235,6 +235,14 @@ export const GestionFichas = () => {
                   {ficha.nombrePrograma}
                 </p>
                 <div className="ficha-details-row">
+                  <span className="detail-label">Fecha de inicio:</span>
+                  <span className="detail-value">{ficha.fechaInicio}</span>
+                </div>
+                <div className="ficha-details-row">
+                  <span className="detail-label">Fecha de finalizacion:</span>
+                  <span className="detail-value">{ficha.fechaFin}</span>
+                </div>
+                <div className="ficha-details-row">
                   <span className="detail-label">Ambiente:</span>
                   <span className="detail-value">{ficha.numeroAmbiente}</span>
                 </div>
@@ -242,6 +250,7 @@ export const GestionFichas = () => {
                   <span className="detail-label">Aprendices:</span>
                   <span className="detail-value">{ficha.totalAprendices}</span>
                 </div>
+                
               </div>
               {/* <div className="card-actions">
                 <button className="action-button" title="Ver Detalles">

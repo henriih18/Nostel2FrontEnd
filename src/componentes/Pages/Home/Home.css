@@ -3,16 +3,96 @@
 .home-container {
     margin-left: 280px;
     min-height: 100vh;
-    padding: var(--spacing-6);
-    background: transparent;
+    padding: var(--spacing-6) ;
+    background: linear-gradient(135deg, 
+        rgba(142, 220, 144, 0.1) 0%);
     position: relative;
-    
+    width: 100%;
     display: flex;
     justify-content: center;
 
     align-items: center;
     
 }
+
+
+.admin-code-box {
+  position: fixed;
+  top: 20px;
+  right: 30px;
+  background: #e6f4ec;
+  border-radius: 12px;
+  padding: var(--spacing-2) var(--spacing-4);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  min-width: 220px;
+  font-family: sans-serif;
+  overflow: hidden;
+}
+
+
+
+.tiempo-texto {
+  font-size: var(--font-size-base);
+    color: var(--gray-800);
+    font-weight: 400;
+    
+   
+}
+
+/* .progreso-borde {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 4px;
+  width: 100%;
+  animation-name: barraTiempo;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+@keyframes barraTiempo {
+  0% {
+    width: 100%;
+    background-color: #4CAF50;
+  }
+  50% {
+    width: 50%;
+    background-color: #FFC107;
+  }
+  80% {
+    width: 20%;
+    background-color: #FF9800;
+  }
+  100% {
+    width: 0%;
+    background-color: #F44336;
+  }
+} */
+
+
+
+
+.titleCodigo{
+    font-size: var(--font-size-lg);
+    font-weight: 700;
+    color: var(--gray-800);
+    margin-bottom: var(--spacing-2);
+    background: linear-gradient(135deg, var(--gray-800));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.codigo-text{
+    font-size: var(--font-size-base);
+    color: var(--gray-800);
+    font-weight: 400;
+}
+
+
+
+
 
 /* Header del dashboard */
 .dashboard-header {

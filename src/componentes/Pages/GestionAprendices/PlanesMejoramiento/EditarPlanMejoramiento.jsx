@@ -44,7 +44,7 @@ export const EditarPlanMejoramiento = ({
     compromisosPlan:
       plan.compromisosPlan && plan.compromisosPlan.length > 0
         ? plan.compromisosPlan.map((comp) => ({
-            id: comp.id || generateUniqueId(), // Asegura un ID único
+            /* id: comp.id || generateUniqueId(), */ // Asegura un ID único
             planDecision: comp.planDecision || "",
             fecha: comp.fecha ? comp.fecha.split("T")[0] : "",
             responsable: comp.responsable || "",
@@ -52,7 +52,7 @@ export const EditarPlanMejoramiento = ({
           }))
         : [
             {
-              id: generateUniqueId(), // Asegura un ID único para el compromiso inicial
+              /* id: generateUniqueId(),  */// Asegura un ID único para el compromiso inicial
               planDecision: "",
               fecha: "",
               responsable: "",
@@ -62,7 +62,7 @@ export const EditarPlanMejoramiento = ({
     asistentesPlan:
       plan.asistentesPlan && plan.asistentesPlan.length > 0
         ? plan.asistentesPlan.map((asist) => ({
-            id: asist.id || generateUniqueId(), // Asegura un ID único
+            /* id: asist.id || generateUniqueId(), // Asegura un ID único */
             nombre: asist.nombre || "",
             numeroDocumento: asist.numeroDocumento || "",
             planta: asist.planta || false,
@@ -132,7 +132,7 @@ export const EditarPlanMejoramiento = ({
       asistentesPlan: [
         ...prev.asistentesPlan,
         {
-          id: generateUniqueId(), // Asegura un ID único para el nuevo asistente
+          /* id: generateUniqueId(),  */// Asegura un ID único para el nuevo asistente
           nombre: "",
           numeroDocumento: "",
           planta: false,
@@ -550,7 +550,7 @@ export const EditarPlanMejoramiento = ({
                     </thead>
                     <tbody>
                       {formData.asistentesPlan.map((asistentePlan, index) => (
-                        <tr key={asistentePlan.id}> {/* Usando el ID único */}
+                        <tr key={index}> {/* Usando el ID único */}
                           <td>
                             <input
                               type="text"
