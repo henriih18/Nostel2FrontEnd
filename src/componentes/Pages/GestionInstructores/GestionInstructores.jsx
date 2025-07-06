@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./GestionInstructores.css";
+import { toast } from "react-toastify";
 
 export const GestionInstructores = () => {
   const [instructores, setInstructores] = useState([]);
@@ -28,8 +29,8 @@ export const GestionInstructores = () => {
       const token = sessionStorage.getItem("token");
 
       if (!token) {
-        console.error("No hay token de autenticación");
-        setError("Sesión no válida. Por favor inicie sesión nuevamente.");
+        /* console.error("No hay token de autenticación"); */
+        toast.error("Sesión no válida. Por favor inicie sesión nuevamente.");
         setTimeout(() => {
           navigate("/login");
         }, 3000);
@@ -56,19 +57,19 @@ export const GestionInstructores = () => {
       setInstructores(listaInstructores);
       setLoading(false);
     } catch (error) {
-      console.error("Error al obtener instructores:", error);
+      /* console.error("Error al obtener instructores:", error); */
 
       if (error.response) {
         if (error.response.status === 403 || error.response.status === 401) {
           localStorage.removeItem("token");
           navigate("/login");
         } else {
-          setError(
-            `Error del servidor: ${error.response.status}. Inténtelo más tarde.`
+          toast.error(
+            `Error del servidor. Inténtelo más tarde.`
           );
         }
       } else {
-        setError("No se pudo conectar con el servidor. Verifique su conexión.");
+        toast.error("No se pudo conectar con el servidor. Verifique su conexión.");
       }
       setLoading(false);
     }

@@ -183,6 +183,16 @@ button:disabled {
   cursor: not-allowed;
   box-shadow: none;
 }
+
+.toast-success,
+.toast-error,
+.toast-info,
+.toast-warn,
+.toast-default {
+  margin-bottom: 10px; /* Espacio entre toasts */
+}
+
+
 .toast-success {
   /* background: linear-gradient(
     135deg,

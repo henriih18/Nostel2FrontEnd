@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./GestionProgramas.css";
+import { toast } from "react-toastify";
 
 export const GestionProgramas = () => {
   const [programas, setProgramas] = useState([]);
@@ -27,8 +28,8 @@ export const GestionProgramas = () => {
       const token = sessionStorage.getItem("token");
 
       if (!token) {
-        console.error("No hay token de autenticación");
-        setError("Sesión no válida. Por favor inicie sesión nuevamente.");
+        /* console.error("No hay token de autenticación"); */
+        toast.error("Sesión no válida. Por favor inicie sesión nuevamente.");
         setTimeout(() => {
           navigate("/login");
         }, 3000);
@@ -47,34 +48,34 @@ export const GestionProgramas = () => {
       setProgramas(respuesta.data);
       setCargando(false);
     } catch (error) {
-      console.error("Error al obtener programas:", error);
+      /* console.error("Error al obtener programas:", error); */
 
       if (error.response) {
         if (error.response.status === 403) {
-          setError(
+          toast.error(
             "No tiene permisos para acceder a esta información. Este recurso está restringido."
           );
           setTimeout(() => {
             navigate("/login");
           }, 3000);
         } else if (error.response.status === 401) {
-          setError("Sesión no válida. Por favor inicie sesión nuevamente.");
-          localStorage.removeItem("token");
+          toast.error("Sesión no válida. Por favor inicie sesión nuevamente.");
+          sessionStorage.removeItem("token");
           setTimeout(() => {
             navigate("/login");
           }, 3000);
         } else {
-          setError(
-            `Error del servidor: ${error.response.status}. Por favor, inténtelo de nuevo más tarde.`
+          toast.error(
+            `Error del servidor. Por favor, inténtelo de nuevo más tarde.`
           );
         }
       } else if (error.request) {
-        setError(
+        toast.error(
           "No se pudo conectar con el servidor. Verifique su conexión a internet."
         );
-      } else {
+      } /* else {
         setError(`Error: ${error.message}`);
-      }
+      } */
 
       setCargando(false);
     }
