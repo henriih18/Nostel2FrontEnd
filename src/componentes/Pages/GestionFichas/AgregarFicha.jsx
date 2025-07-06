@@ -70,6 +70,7 @@ export const AgregarFicha = () => {
             await axios.post(`${API_URL}/fichas`, nuevaFicha, config);
 
             // Redirigir a la lista de fichas después de agregar
+            toast.success("Ficha agregada exitosamente.")
             navigate('/gestion-fichas');
         } catch (error) {
             toast.error("Hubo un problema al agregar la ficha. Por favor, inténtelo de nuevo.")

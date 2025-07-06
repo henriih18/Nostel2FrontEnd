@@ -57,7 +57,6 @@ createRoot(document.getElementById("root")).render(
       closeButton={false}
       hideProgressBar={true}
       toastClassName={(context) => {
-        console.log("TOAST TYPE:", context?.type);
         switch (context?.type) {
           case "success":
             return "toast-success";

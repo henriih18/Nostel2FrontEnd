@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 export const AgregarPrograma = () => {
     const [nombrePrograma, setNombrePrograma] = useState('');
@@ -16,13 +17,14 @@ export const AgregarPrograma = () => {
             const token = sessionStorage.getItem('token');
 
             if (!token) {
-                console.error('No hay token de autenticación');
-                setError('Sesión no válida. Por favor inicie sesión nuevamente.');
+               /*  console.error('No hay token de autenticación'); */
+                toast.error('Sesión no válida. Por favor inicie sesión nuevamente.');
                 setTimeout(() => {
                     navigate('/login');
                 }, 3000);
                 return;
             }
+            
 
             const config = {
                 headers: {
@@ -38,13 +40,14 @@ export const AgregarPrograma = () => {
             // Redirigir a la lista de programas después de agregar
             navigate('/gestion-programas');
         } catch (error) {
-            console.error('Error al agregar programa:', error);
-            setError('Hubo un problema al agregar el programa. Por favor, inténtelo de nuevo.');
+            /* console.error('Error al agregar programa:', error); */
+            toast.error('Hubo un problema al agregar el programa. Por favor, inténtelo de nuevo.');
         }
     };
 
     return (
-        <div className="agregar-programa-container">
+        <div className="containerPrograma">
+          <div className="agregar-ficha-container programaA">
             <h2>Agregar Nuevo Programa</h2>
             <form onSubmit={manejarSubmit}>
                 <div className="form-group">
@@ -60,7 +63,9 @@ export const AgregarPrograma = () => {
                 {error && <div className="error-message">{error}</div>}
                 <button type="submit" className="submit-button">Agregar Programa</button>
             </form>
+        </div>  
         </div>
+        
     );
 };
 
