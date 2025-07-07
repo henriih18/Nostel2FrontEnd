@@ -45,7 +45,7 @@ export const AgregarComentario = ({ onComentarioAgregado }) => {
                 if (!token || !idUsuario) {
                     toast.error("No hay token de autenticación o ID de usuario disponible")
                     /* setError('No hay token de autenticación o ID de usuario disponible'); */
-                    setShowModal(true);
+                    /* setShowModal(true); */
                     navigate('/login');
                     return;
                 }
@@ -64,13 +64,13 @@ export const AgregarComentario = ({ onComentarioAgregado }) => {
             } catch (err) {
                 console.error('Error al obtener datos del instructor:', err);
                 if (err.response && err.response.status === 401) {
-                    setError('Sesión expirada. Por favor, inicie sesión nuevamente.');
-                    setShowModal(true);
+                    toast.error('Sesión expirada. Por favor, inicie sesión nuevamente.');
+                    
                     sessionStorage.clear();
                     navigate('/login');
                 } else {
-                    setError(`Error al cargar datos del instructor: ${err.response?.data?.message || err.message}`);
-                    setShowModal(true);
+                    toast.error(`Error al cargar datos del instructor.`);
+                    
                 }
             }
         };
@@ -96,7 +96,7 @@ export const AgregarComentario = ({ onComentarioAgregado }) => {
             const token = sessionStorage.getItem('token');
 
             if (!token || !idAprendiz) {
-                setError('Faltan datos de autenticación o ID de aprendiz.');
+                toast.error('Faltan datos de autenticación o ID de aprendiz.');
                 setShowModal(true);
                 setLoading(false);
                 return;
@@ -133,12 +133,12 @@ export const AgregarComentario = ({ onComentarioAgregado }) => {
         } catch (err) {
             /* console.error('Error al guardar comentario:', err); */
             if (err.response && err.response.status === 401) {
-                setError('Sesión expirada. Por favor, inicie sesión nuevamente.');
+                toast.error('Sesión expirada. Por favor, inicie sesión nuevamente.');
                 setShowModal(true);
                 sessionStorage.clear();
                 navigate('/login');
             } else {
-                setError(`Error: ${err.response?.data?.message || err.message}`);
+                /* setError(`Error: ${err.response?.data?.message || err.message}`); */
                 setShowModal(true);
             }
         } finally {
@@ -205,7 +205,7 @@ export const AgregarComentario = ({ onComentarioAgregado }) => {
                     <button
                         type="button"
                         className="cancel-button"
-                        onClick={() => navigate(`/aprendices/${idAprendiz}/comentarios`)}
+                        onClick={() => navigate(`/aprendices/${idAprendiz}`)}
                         disabled={loading || showModal}
                     >
                         Cancelar
