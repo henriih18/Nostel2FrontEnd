@@ -6,7 +6,7 @@ export const AboutUs = () => (
     <div className="aboutus-container">
     <h1 className="aboutus-title">Sobre Nosotros</h1>
     <p className="aboutus-text">
-      Nostel es un sistema integral diseñado para optimizar la gestión de aprendices, instructores, fichas y programas del SENA Colombia. Nuestro objetivo es facilitar los procesos administrativos y de seguimiento, permitiendo a los instructores registrar y consultar actas de actividades complementarias, planes de mejoramiento y comentarios de manera eficiente, mientras se gestionan las fichas y los instructores de forma centralizada.
+      Nostel es un sistema integral diseñado para optimizar la gestión de aprendices, instructores, fichas y programas del SENA. Nuestro objetivo es facilitar los procesos administrativos y de seguimiento, permitiendo a los instructores registrar y consultar actas de actividades complementarias, planes de mejoramiento y comentarios de manera eficiente, mientras se gestionan las fichas y los instructores de forma centralizada.
     </p>
 
     <h2 className="aboutus-subtitle">Misión</h2>
