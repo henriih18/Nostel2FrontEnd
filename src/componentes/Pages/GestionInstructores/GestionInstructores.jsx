@@ -179,7 +179,7 @@ export const GestionInstructores = () => {
                 <p className="instructor-area">
                   <span className="detail-label">Área:</span> {instructor.area || "Sin área asignada"}</p>
                 <div className="instructor-details-row">
-                  <span className="detail-label">Número Docente:</span>
+                  <span className="detail-label">Numero de documento:</span>
                   <span className="detail-value">{instructor.numeroDocente ?? "No disponible"}</span>
                 </div>
               </div>
