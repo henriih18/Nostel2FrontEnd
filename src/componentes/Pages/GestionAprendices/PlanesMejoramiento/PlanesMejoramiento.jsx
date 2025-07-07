@@ -593,7 +593,7 @@ const PlanesMejoramiento = ({ idAprendiz }) => {
         ]);
       }
       // Luego completas hasta 15 con celdas vacías
-      for (let i = asistentes.length; i < 15; i++) {
+      for (let i = asistentes.length; i < 12; i++) {
         filasAsistentes.push([
           { text: `${i + 1}`, alignment: "center", fontSize: 8, margin: [0, 3] },
           ...Array(10).fill({ text: "", fontSize: 8 }),
@@ -806,7 +806,13 @@ const PlanesMejoramiento = ({ idAprendiz }) => {
               >
                 <h4>{plan.nombreComite || "Sin comité"}</h4>
                 <p>
-                  <span>Fecha:</span> {formatDate(plan.fecha)}
+                  <span>Fecha Asignacion:</span> {formatDate(plan.fecha)}
+                </p>
+                <p>
+                  <span>Fecha Entrega:</span>{" "}
+                  {plan.compromisosPlan && plan.compromisosPlan.length > 0
+                    ? formatDate(plan.compromisosPlan[0].fecha)
+                    : "No definida"}
                 </p>
                 <p>
                   <span>Estado:</span> {plan.estado}

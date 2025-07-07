@@ -124,12 +124,16 @@ export const GestionFichas = () => {
       const matchesProgram = selectedProgram
         ? ficha.nombrePrograma === selectedProgram
         : true;
-      const matchesAmbiente = selectedAmbiente
-        ? ficha.numeroAmbiente === selectedAmbiente
-        : true;
+
+        const matchesAmbiente = selectedAmbiente ? ficha.numeroAmbiente === parseInt(selectedAmbiente) : true;
+      
 
       return matchesSearch && matchesProgram && matchesAmbiente;
     })
+
+    
+
+
     .sort((a, b) => {
       let compareValue = 0;
       if (sortBy === "numeroFicha") {

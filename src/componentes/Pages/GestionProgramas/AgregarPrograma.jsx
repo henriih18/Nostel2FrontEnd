@@ -10,6 +10,12 @@ export const AgregarPrograma = () => {
     const API_URL = import.meta.env.VITE_API_URL;
    
 
+    const [data, setData] = useState({
+            
+            nombrePrograma: "",
+            
+        });
+
     const manejarSubmit = async (e) => {
         e.preventDefault();
 
@@ -33,7 +39,7 @@ export const AgregarPrograma = () => {
                 }
             };
 
-            const nuevoPrograma = { nombrePrograma };
+            const nuevoPrograma = { nombrePrograma: data.nombrePrograma };
 
             await axios.post(`${API_URL}/programas`, nuevoPrograma, config);
 
@@ -43,6 +49,14 @@ export const AgregarPrograma = () => {
             /* console.error('Error al agregar programa:', error); */
             toast.error('Hubo un problema al agregar el programa. Por favor, inténtelo de nuevo.');
         }
+    };
+
+    const handleChange = (e) => {
+        const { id, value } = e.target;
+        setData(prevData => ({
+            ...prevData,
+            [id]: value
+        }));
     };
 
     return (
@@ -55,8 +69,8 @@ export const AgregarPrograma = () => {
                     <input
                         type="text"
                         id="nombrePrograma"
-                        value={nombrePrograma}
-                        onChange={(e) => setNombrePrograma(e.target.value)}
+                        value={data.nombrePrograma}
+                        onChange={handleChange}
                         required
                     />
                 </div>

@@ -599,7 +599,7 @@ const ActividadesComplementarias = ({ idAprendiz }) => {
       ]);
     }
     // Luego completas hasta 15 con celdas vacías
-    for (let i = asistentes.length; i < 15; i++) {
+    for (let i = asistentes.length; i < 12; i++) {
       filasAsistentes.push([
         { text: `${i + 1}`, alignment: "center", fontSize: 8, margin: [0, 3] },
         ...Array(10).fill({ text: "", fontSize: 8 }),
@@ -838,13 +838,14 @@ const ActividadesComplementarias = ({ idAprendiz }) => {
                 className="actividad-card"
                 onClick={() => handleRowClick(actividad)}
               >
-                <h4>
+                {/* <h4>
                   {actividad.compromisos && actividad.compromisos.length > 0
                     ? actividad.compromisos
                         .map((compromiso) => compromiso.actividadDecision)
                         .join(", ")
                     : "Sin actividad"}
-                </h4>
+                </h4> */}
+                <h4>{actividad.nombreComite || "Sin comité"}</h4>
                 <p>
                   <span>Fecha Asignación:</span> {formatDate(actividad.fecha)}
                 </p>
@@ -857,9 +858,12 @@ const ActividadesComplementarias = ({ idAprendiz }) => {
                 <p>
                   <span>Estado:</span> {getEstadoLabel(actividad.estado)}
                 </p>
-                <p>
+                {/* <p>
                   <span>Instructor:</span> {getInstructorNombre(actividad)}
-                </p>
+                </p> */}
+
+
+                
                 {esAutor(actividad) && (
                   <div
                     className="actividad-actions"

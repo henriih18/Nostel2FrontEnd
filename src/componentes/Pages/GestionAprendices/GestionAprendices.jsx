@@ -82,8 +82,11 @@ export const GestionAprendices = () => {
         aprendiz.documento?.toString().includes(busqueda);
 
       const matchesProgram = selectedProgram ? aprendiz.nombrePrograma === selectedProgram : true;
-      const matchesFicha = selectedFicha ? aprendiz.numeroFicha === selectedFicha : true;
-      const matchesAmbiente = selectedAmbiente ? aprendiz.numeroAmbiente === selectedAmbiente : true;
+      /* const matchesFicha = selectedFicha ? aprendiz.numeroFicha === selectedFicha : true;
+      const matchesAmbiente = selectedAmbiente ? aprendiz.numeroAmbiente === selectedAmbiente : true; */
+      const matchesFicha = selectedFicha ? aprendiz.numeroFicha === parseInt(selectedFicha) : true;
+const matchesAmbiente = selectedAmbiente ? aprendiz.numeroAmbiente === parseInt(selectedAmbiente) : true;
+
 
       const estadoFicha = isFichaActiva(aprendiz.numeroFicha) ? "activo" : "inactivo";
       const matchesEstado =

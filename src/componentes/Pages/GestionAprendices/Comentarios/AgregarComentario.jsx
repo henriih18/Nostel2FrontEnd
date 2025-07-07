@@ -126,7 +126,7 @@ export const AgregarComentario = ({ onComentarioAgregado }) => {
                 if (onComentarioAgregado) {
                     onComentarioAgregado(response.data);
                 } else {
-                    navigate(`/aprendices/${idAprendiz}/comentarios`);
+                    navigate(`/aprendices/${idAprendiz}`);
                 }
                 
             });
